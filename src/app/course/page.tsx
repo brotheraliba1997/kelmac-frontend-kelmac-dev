@@ -253,6 +253,7 @@ export default function Course() {
 						</div>
 					</div>
 				</div>
+				</div>
 			</section>
 
 			<section className="bg-secondary bg-[url('/images/bg/Learner.png')] bg-no-repeat bg-cover bg-center rounded-3xl overflow-hidden">
