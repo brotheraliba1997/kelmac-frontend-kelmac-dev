@@ -247,14 +247,8 @@ export default function Course() {
 											heading="QMS ISO 9001:2015 Fundamental"
 										/>
 									</div>
-									<Button
-										spanclassName="px-6"
-										className="gap-2 mx-auto rounded-full border border-white/70"
-										text="Download course curriculum"
-										icon={<IconArrowDown className="stroke-primary" />}
-										color="transparent"
-									/>
-								</div>
+
+									
 							</div>
 						</div>
 					</div>
