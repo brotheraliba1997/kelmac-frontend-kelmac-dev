@@ -1,4 +1,3 @@
-// components/Header/Header.tsx
 "use client";
 import Image from "next/image";
 import { useState } from "react";
@@ -16,10 +15,10 @@ import ResourcesMegaMenu from "./ResourcesMegaMenu";
 
 const navLinks = [
 	{ href: "/", label: "Home" },
-	{ href: "/about/overview", label: "About Us", mega: "about" },
-	{ href: "/courses/suggested", label: "Courses", mega: "courses" },
-	{ href: "#", label: "Corporate", mega: "corporate" },
-	{ href: "/resources", label: "Resources", mega: "resources" },
+	{ href: "", label: "About Us", mega: "about" },
+	{ href: "", label: "Courses", mega: "courses" },
+	{ href: "", label: "Corporate", mega: "corporate" },
+	{ href: "", label: "Resources", mega: "resources" },
 	{ href: "/contact-us", label: "Contact" },
 ];
 
@@ -49,18 +48,27 @@ export default function Header() {
 								const isActive = pathname === link.href;
 								return (
 									<div
-										key={link.href}
+										key={link.label}
 										className="relative"
 										onMouseEnter={() => link.mega && setOpenMenu(link.mega)}
 										onMouseLeave={() => link.mega && setOpenMenu(null)}
 									>
-										<Link
-											href={link.href}
-											className={`text-primary transition-colors duration-200 ${isActive ? "font-semibold" : "font-light"
-												}`}
-										>
-											{link.label}
-										</Link>
+										{link.mega ? (
+											<span
+												className={`text-primary transition-colors duration-200 cursor-pointer ${isActive ? "font-semibold" : "font-light"
+													}`}
+											>
+												{link.label}
+											</span>
+										) : (
+											<Link
+												href={link.href}
+												className={`text-primary transition-colors duration-200 ${isActive ? "font-semibold" : "font-light"
+													}`}
+											>
+												{link.label}
+											</Link>
+										)}
 										<AnimatePresence>
 											{openMenu === link.mega && (
 												<motion.div
@@ -115,7 +123,6 @@ export default function Header() {
 					</div>
 				</div>
 
-				{/* Mobile Menu Overlay */}
 				<AnimatePresence>
 					{open && (
 						<motion.div
@@ -124,7 +131,6 @@ export default function Header() {
 							exit={{ opacity: 0 }}
 							className="fixed inset-0 bg-black/90 flex flex-col items-center justify-center gap-8 text-white text-2xl z-50"
 						>
-							{/* Close Icon */}
 							<button
 								onClick={() => setOpen(false)}
 								aria-label="Close menu"

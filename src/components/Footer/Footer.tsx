@@ -15,16 +15,16 @@ import { useState } from "react";
 
 export const menuLinks = [
 	{ name: "Home", href: "/" },
-	{ name: "About us", href: "/about" },
-	{ name: "Our History", href: "/history" },
-	{ name: "Courses", href: "/courses" },
+	{ name: "About us", href: "/about/overview" },
+	{ name: "Our History", href: "/about/our-history" },
+	{ name: "Courses", href: "/course/all-courses" },
 	{ name: "Corporate", href: "/corporate" },
 ];
 
 export const resourceLinks = [
-	{ name: "Blog", href: "/blog" },
-	{ name: "Webinars", href: "/webinars" },
-	{ name: "Whitepapers", href: "/whitepapers" },
+	{ name: "Blog", href: "/resources/latest-blogs" },
+	{ name: "Webinars", href: "/resources/webinars" },
+	{ name: "Whitepapers", href: "/resources/white-papers" },
 ];
 
 export const footerLinks = [

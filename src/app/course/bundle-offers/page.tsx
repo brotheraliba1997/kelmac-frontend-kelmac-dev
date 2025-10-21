@@ -11,6 +11,8 @@ import { Tag } from "@/components/ui/common/Tag";
 import { Tabs } from "@/components/ui/common/Tabs";
 import { IconList } from "@/components/ui/common/IconList";
 import { IconBox } from "@/components/ui/common/IconBox";
+import ConfirmBooking from "@/app/course/bundle-offers/BookingConfirmationModal";
+import { useState } from "react";
 
 import BundleOverview from "./BundleOverview";
 import BundleInstructors from "./BundleInstructors";
@@ -32,6 +34,11 @@ export default function Course() {
         { id: "syllabus", label: "Syllabus Breakdown", content: <BundleSyllabus /> },
         { id: "faqs", label: "FAQs", content: <Faqs /> },
     ];
+
+    const [showConfirm, setShowConfirm] = useState(false);
+    const handleConfirm = () => {
+        console.log("Booking confirmed!");
+    };
 
     return (
         <main className="main">
@@ -110,7 +117,7 @@ export default function Course() {
                                         />
                                         <IconBox
                                             className="md:col-span-5"
-                                            icon={<IconCertificate width={32} height={32} fill="white"/>}
+                                            icon={<IconCertificate width={32} height={32} fill="white" />}
                                             subHeading="Certifications"
                                             heading="QMS ISO 9001:2015 Fundamental"
 
@@ -143,11 +150,11 @@ export default function Course() {
                 <Button
                     iconclassName="p-3 bg-primary group-hover:bg-white transition-colors duration-300"
                     spanclassName="px-4"
-                    href="/courses"
                     text="Book Now"
                     color="white"
                     icon={<IconArrowRight className="stroke-white group-hover:stroke-primary transition-colors duration-300" />}
                     className="group"
+                    onClick={() => setShowConfirm(true)}
                 />
             </div>
 
@@ -203,15 +210,23 @@ export default function Course() {
                             <br className="hidden xl:block" /> globally
                         </p>
                         <Button
-							spanclassName="px-4"
-							href="/courses"
-							text="View Certificate"
-							color="primary"
-							icon={<IconArrowRight className="text-primary" />}
-						/>
+                            spanclassName="px-4"
+                            href="/courses"
+                            text="View Certificate"
+                            color="primary"
+                            icon={<IconArrowRight className="text-primary" />}
+                        />
                     </div>
                 </div>
             </section>
+
+            {showConfirm && (
+                <ConfirmBooking
+                    onClose={() => setShowConfirm(false)}
+                    onConfirm={handleConfirm}
+                />
+            )}
+
         </main>
     );
 }

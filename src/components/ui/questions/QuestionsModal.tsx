@@ -22,12 +22,15 @@ import type {
   QuestionsModalProps,
 } from "@/data/questionTypes";
 import { Heading } from "../common/Heading";
+import { useRouter } from 'next/navigation';
+
 
 const QuestionsModal: React.FC<QuestionsModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
 }) => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState<QuestionStep>(1);
   const [showWaiting, setShowWaiting] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -58,17 +61,16 @@ const QuestionsModal: React.FC<QuestionsModalProps> = ({
       const timer = setTimeout(async () => {
         console.log("Form submitted:", formData);
 
-        // Call custom onSubmit if provided
         if (onSubmit) {
           await onSubmit(formData);
         }
 
-        handleClose();
+        router.push('course/all-courses');
       }, 2000);
 
       return () => clearTimeout(timer);
     }
-  }, [showWaiting, formData, onSubmit]);
+  }, [showWaiting, formData, onSubmit, router]);
 
   const handleClose = () => {
     setCurrentStep(1);
@@ -131,12 +133,12 @@ const QuestionsModal: React.FC<QuestionsModalProps> = ({
         <div className="bg-white shadow-md p-6 flex flex-col items-center justify-center rounded-[32px] max-w-[700px] w-full mx-4 min-h-[486px]">
           <div className="flex justify-center mb-6">
             <div
-              className="w-24 h-24 border-8 border-blue-500 border-t-transparent rounded-full animate-spin"
+              className="w-24 h-24 border-8 border-secondary border-t-transparent rounded-full animate-spin"
               style={{ animationDuration: "2s" }}
             ></div>
           </div>
           <h2
-            className="text-4xl text-gray-800 text-center mb-4"
+            className="text-4xl text-primary text-center mb-4"
             style={{ fontFamily: '"Hedvig Letters Serif", serif' }}
           >
             Please Wait A Few Seconds

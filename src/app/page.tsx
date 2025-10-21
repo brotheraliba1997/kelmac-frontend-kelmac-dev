@@ -31,8 +31,9 @@ export default function Home() {
 	const [isQuestionsModalOpen, setIsQuestionsModalOpen] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");
 	const [isSearchActive, setIsSearchActive] = useState(false);
+	const [activeCategory, setActiveCategory] = useState("all");
 	const coursesRef = useRef<HTMLDivElement>(null);
-	const searchBarRef = useRef<HTMLDivElement>(null); // Add this
+	const searchBarRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -61,17 +62,19 @@ export default function Home() {
 		}
 	};
 
-	const filteredCourses = isSearchActive && searchQuery
-		? coursesItems.filter(
-			(course) =>
-				course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				course.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				course.category.toLowerCase().includes(searchQuery.toLowerCase())
-		)
-		: coursesItems;
+	const filteredCourses = coursesItems.filter((course) => {
+		const matchesCategory = activeCategory === "all" || course.category.toLowerCase().includes(activeCategory.toLowerCase());
+		const matchesSearch = !searchQuery ||
+			course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			course.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+			course.category.toLowerCase().includes(searchQuery.toLowerCase());
+
+		return matchesCategory && matchesSearch;
+	});
 
 	const handleSearchClick = () => {
 		setIsSearchActive(true);
+		setActiveCategory("all"); // Reset category when searching
 		coursesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 	};
 
@@ -82,6 +85,12 @@ export default function Home() {
 	const clearSearch = () => {
 		setSearchQuery("");
 		setIsSearchActive(false);
+	};
+
+	const handleCategoryClick = (category: string) => {
+		setActiveCategory(category);
+		setIsSearchActive(false);
+		setSearchQuery("");
 	};
 
 	return (
@@ -169,16 +178,23 @@ export default function Home() {
 
 						{!isSearchActive && (
 							<div className="flex flex-wrap gap-3 md:gap-0 items-center justify-center mb-18">
-								<Button size="lg" text="Top Offer Courses" color="white" />
+								<Button
+									size="lg"
+									text="Top Offer Courses"
+									color={activeCategory === "all" ? "white" : "semitransparent"}
+									onClick={() => handleCategoryClick("all")}
+								/>
 								<Button
 									size="lg"
 									text="Quality Management"
-									color="semitransparent"
+									color={activeCategory === "quality" ? "white" : "semitransparent"}
+									onClick={() => handleCategoryClick("quality")}
 								/>
 								<Button
 									size="lg"
 									text="Environment health & safety"
-									color="semitransparent"
+									color={activeCategory === "environment" ? "white" : "semitransparent"}
+									onClick={() => handleCategoryClick("environment")}
 								/>
 								<Button
 									size="lg"
@@ -209,13 +225,16 @@ export default function Home() {
 							) : (
 								<div className="col-span-full text-center py-12">
 									<p className="text-xl text-white mb-4">
-										No courses found matching your search.
+										No courses found matching your {isSearchActive ? "search" : "filter"}.
 									</p>
 									<button
-										onClick={clearSearch}
+										onClick={() => {
+											clearSearch();
+											setActiveCategory("all");
+										}}
 										className="text-secondary hover:text-gray-500 text-lg"
 									>
-										Clear search and view all courses
+										Clear filters and view all courses
 									</button>
 								</div>
 							)}
@@ -328,10 +347,10 @@ export default function Home() {
 									className="w-full"
 									iconclassName="bg-transparent"
 									spanclassName="px-4 w-full text-center"
-									href="/courses"
 									text="Learn More"
 									color="transparent"
 									size="sm"
+									onClick={openModal}
 									icon={<IconArrowRight />}
 								/>
 							</div>

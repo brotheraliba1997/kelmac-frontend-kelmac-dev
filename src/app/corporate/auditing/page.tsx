@@ -1,17 +1,18 @@
 "use client";
 
-import { auditingItems, categoryItems } from "@/data/auditing";
-import { auditingFaqItems } from "@/data/auditing";
 import Button from "@/components/ui/button/Button";
 import { IconArrowRight } from "@tabler/icons-react";
-import { Heading } from "@/components/ui/common/Heading";
-import { Accordion } from "@/components/ui/common/Accordian/Accordian";
-import { PersonsIcon, Certification, Screencast, Lifebuoy, Bookmark } from "@/components/icons/icons";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
-import Image from "next/image";
+import WhyChooseUs from './whyChooseUs';
+import { AuditServicesGrid } from './auditServices';
+import { Heading } from "@/components/ui/common/Heading";
+import ApproachSlider from "@/components/ui/approach/approachSlider";
+import Image from 'next/image';
+import NewsletterSection from "@/components/Sections/Newsletter/NewsletterSection";
+import { auditingApproach } from "@/data/corporate";
+
+
 
 export default function Auditing() {
     return (
@@ -42,210 +43,89 @@ export default function Auditing() {
                 </div>
             </section>
 
-            <section className="bg-white">
-                <div className="main-container primary-py">
+            <WhyChooseUs />
+
+            <section className="py-16 bg-gray-50">
+                <div className="container mx-auto px-4">
                     <Heading
-                        subHeading="Course"
-                        heading="Our Services"
+                        heading="Audit Services"
+                        subHeading="Services"
                         headingClassName="text-primary"
                     />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                        {auditingItems.map((item) => (
-                            <div
-                                key={item.id}
-                                className="relative rounded-2xl overflow-hidden min-h-[400px] md:min-h-[450px] flex items-end transition-all duration-500 hover:scale-[1.02] cursor-pointer"
-                            >
-                                <Image
-                                    src={item.imageUrl}
-                                    alt={item.title}
-                                    fill
-                                    className="object-cover"
-                                />
-                                <div className="relative z-10 p-6 md:p-10 pb-8 md:pb-18 text-white w-full transform transition-transform duration-500 hover:-translate-y-2">
-                                    <h3 className="text-xl md:text-2xl lg:text-3xl font-[550] mb-3 md:mb-4 min-h-[60px] md:min-h-[70px] flex items-end">
-                                        {item.title}
-                                    </h3>
-                                    <p className="text-sm font-light text-white/80 leading-relaxed">
-                                        {item.description}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <AuditServicesGrid />
                 </div>
             </section>
 
-            <section className="rounded-3xl bg-white overflow-hidden pb-12">
+            <section className="bg-secondary rounded-3xl overflow-hidden">
+                <div className="primary-py main-container">
+                    <Heading
+                        subHeading="Approach"
+                        heading="Our Auditing Approach"
+                        headingClassName="text-white"
+                        subHeadingClassName="text-white"
+                        dotColor="white"
+                    />
+                    <ApproachSlider data={auditingApproach} />
+                </div>
+            </section>
+
+            <section className="main-container primary-py bg-[#DBEAFE]">
+                <Heading
+                    heading="Kelmac group Audit process"
+                    subHeading='How we deliver'
+                    headingClassName='text-primary'
+                />
+                <p className="max-w-4xl mx-auto text-center font-semibold">
+                    One of the objectives of Audit & Advisory Services (A&AS) is to maintain a constructive and transparent relationship with our clients during their audits. A&AS strives to have your continued involvement at every stage so you understand what we do and why as well as how we work to minimize disruptions of your daily activities.
+                </p>
+
+
+                <div className="mt-8 w-full">
+                    <Image
+                        src="/images/bg/auditing-process-bg.svg"
+                        alt="Learning Methodology"
+                        width={1200}
+                        height={600}
+                        className="w-full h-auto rounded-3xl object-cover"
+                    />
+                </div>
+            </section>
+
+            <section>
                 <div className="main-container primary-py">
                     <Heading
-                        subHeading="Category"
-                        heading="Explore Our Categories"
-                        headingClassName="text-primary"
+                        subHeading="Approach"
+                        heading="Enquire Now"
+                        className="text-primary"
                     />
-                    <Swiper
-                        modules={[Autoplay, Navigation, Pagination]}
-                        spaceBetween={5}
-                        slidesPerView="auto"
-                        loop={true}
-                        autoplay={{
-                            delay: 3000,
-                            disableOnInteraction: false,
-                        }}
-                        pagination={{
-                            clickable: true,
-                            bulletClass: "swiper-pagination-bullet !bg-primary",
-                            bulletActiveClass: "swiper-pagination-bullet-active !bg-secondary",
-                        }}
-                        className="!overflow-visible !pb-12"
-                    >
-                        {categoryItems.map((category, i) => (
-                            <SwiperSlide key={i} className="!w-[320px]">
-                                <div className="rounded-4xl min-h-[280px] flex flex-col items-center justify-center text-center relative overflow-hidden group cursor-pointer">
-                                    <div
-                                        className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-110"
-                                        style={{ backgroundImage: `url('${category.imageUrl}')` }}
-                                    />
-                                    <h3 className="text-3xl md:text-4xl text-white font-hedvig relative z-10">
-                                        {category.title}
-                                    </h3>
-                                </div>
-                            </SwiperSlide>
-                        ))}
-                    </Swiper>
-                </div>
-            </section>
-
-            <section className="relative bg-primary bg-[url('/images/bg/why-choose-us.png')] bg-left bg-cover bg-no-repeat overflow-hidden rounded-3xl">
-                <div className="main-container primary-py">
-                    <div className="flex flex-col lg:flex-row lg:items-start lg:gap-16">
-                        <div className="hidden lg:block lg:w-1/2"></div>
-
-                        <div className="w-full lg:w-[85%] lg:pl-0">
-                            <div className="mb-10">
-                                <div className="flex items-center justify-center lg:justify-start mb-4">
-                                    <h4 className="sub-heading text-secondary before:bg-secondary">Speciality</h4>
-                                </div>
-                                <h2 className="main-heading text-white text-center lg:text-left">
-                                    Why Choose Us
-                                </h2>
-                            </div>
-
-                            <div className="space-y-8">
-                                <div className="flex items-start gap-4 md:gap-6 text-white">
-                                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                                        <PersonsIcon />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg md:text-xl lg:text-2xl mb-2 md:mb-3">
-                                            Industry-Relevant Expertise
-                                        </h3>
-                                        <p className="text-white/80 text-base md:text-base lg:text-lg">
-                                            Our Instructors Are CQI-IRCA Certified Professionals With Years Of Industry Experience.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 md:gap-6 text-white">
-                                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                                        <Certification />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg md:text-xl lg:text-2xl mb-2 md:mb-3">
-                                            Proven Certification Success
-                                        </h3>
-                                        <p className="text-white/80 text-sm md:text-base lg:text-lg">
-                                            All Our Lead Auditor Courses Are Approved By CQI-IRCA,
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 md:gap-6 text-white">
-                                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                                        <Bookmark />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg md:text-xl lg:text-2xl mb-2 md:mb-3">
-                                            Tailored Solutions
-                                        </h3>
-                                        <p className="text-white/80 text-sm md:text-base lg:text-lg">
-                                            Emphasize Active Participation Through Case Studies,Audit Simulations
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 md:gap-6 text-white">
-                                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                                        <Screencast />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg md:text-xl lg:text-2xl mb-2 md:mb-3">
-                                            Confidential & Collaborative
-                                        </h3>
-                                        <p className="text-white/80 text-sm md:text-base lg:text-lg">
-                                            We Offer In-Person, Virtual, And Hybrid Courses
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 md:gap-6 text-white">
-                                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                                        <Lifebuoy />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg md:text-xl lg:text-2xl mb-2 md:mb-3">
-                                            Post-Training Support and Resources
-                                        </h3>
-                                        <p className="text-white/80 text-sm md:text-base lg:text-lg">
-                                            Graduates Get Access To Additional Learning Materials, Mentorship Opportunities
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section className="bg-light">
-                <div className="main-container primary-py">
-                    <Heading
-                        subHeading="FAQ"
-                        heading="Frequently Asked Questions"
-                        headingClassName="text-primary"
-                    />
-                    <Accordion items={auditingFaqItems} />
-                </div>
-            </section>
-
-            <section className="bg-primary md:bg-[url('/images/bg/corporate_hero3.png')] md:bg-center md:bg-cover md:bg-no-repeat overflow-hidden rounded-3xl">
-                <div className="main-container primary-py">
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:gap-16">
-                        <div className="w-full lg:w-1/2">
-                            <div className="space-y-4 md:space-y-6">
-                                <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-hedvig text-white leading-tight">
-                                    Contact with us
-                                </h2>
-                                <p className="text-white/90 text-base md:text-lg lg:text-xl leading-relaxed">
-                                    We'll assist you in selecting the perfect course tailored to your goals. Your
-                                    experience will guide us in making the best choice.
+                    <div>
+                        <div className="relative group cursor-pointer min-h-[400px] md:min-h-[500px] justify-stretch bg-[url('/images/bg/enquire-now.png')] bg-cover bg-center bg-no-repeat rounded-4xl overflow-hidden">
+                            <h2 className="absolute bottom-0 left-0 transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0 pointer-events-auto group-hover:pointer-events-none px-5 md:px-10 py-16 text-white font-hedvig text-4xl md:text-5xl lg:text-[64px] w-full bg-gradient-to-b from-transparent via-transparent/0 via-[0%] to-primary">
+                                Organisation
+                            </h2>
+                            <div className="absolute bottom-0 left-0 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto px-5 md:px-10 py-8 text-white w-full">
+                                <h1 className="font-hedvig text-4xl md:text-5xl lg:text-[64px] mb-6">
+                                    Organisation
+                                </h1>
+                                <p className="mb-4">
+                                    From compliance to capability, we support your organization through comprehensive auditing, strategic consulting
                                 </p>
-                                <div className="pt-2 md:pt-4">
-                                    <Button
-                                        spanclassName="px-4"
-                                        className="gap-0"
-                                        text="Enquire now"
-                                        icon={<IconArrowRight className="stroke-primary" />}
-                                        color="white"
-                                        href="/contact-us"
-                                    />
-                                </div>
+                                <Button
+                                    className="w-95 bg-white text-primary"
+                                    iconclassName="bg-primary"
+                                    spanclassName="px-4 w-full text-center"
+                                    text="Learn More"
+                                    color="transparent"
+                                    size="sm"
+                                    icon={<IconArrowRight className="stroke-white" />}
+                                />
                             </div>
                         </div>
-
-                        <div className="hidden lg:block lg:w-1/2"></div>
                     </div>
                 </div>
             </section>
+            <NewsletterSection />
+
         </main>
     );
 }

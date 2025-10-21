@@ -1,10 +1,24 @@
+"use client";
+
 import { Heading } from "@/components/ui/common/Heading";
 import { Timeline } from "@/components/ui/common/Timeline";
 import { learningTimelineItems, courses } from "@/data/learning";
-import { PersonsIcon, Certification, Screencast, Lifebuoy, Bookmark } from "@/components/icons/icons";
+import { PersonsIcon, IconCertificate, IconPolygon, Lifebuoy, Bookmark } from "@/components/icons/icons";
 import { IconArrowRight } from "@tabler/icons-react";
 import Button from "@/components/ui/button/Button";
 import { CourseCard } from "@/components/ui/course/CourseCard";
+import WhyChooseUs from './why-choose-us';
+import { ServiceCardSlider } from '@/components/ui/deliveryMethod/deliveryCard';
+import {
+    serviceCardContent,
+    corporateServices
+} from '@/data/learning';
+import Image from 'next/image';
+import Learning from "./cirriculum";
+import { learningCapabilities } from "@/data/learning";
+import NewsletterSection from "@/components/Sections/Newsletter/NewsletterSection";
+
+
 
 
 export default function Corporate() {
@@ -31,160 +45,196 @@ export default function Corporate() {
                 </div>
             </section>
 
-            <section className="bg-light">
-                <div className="main-container primary-py">
+            <WhyChooseUs />
+
+            <section className="w-full primary-py">
+                <div className="main-container">
                     <Heading
-                        subHeading="Timeline"
-                        heading="What we offer"
+                        heading={serviceCardContent.heading}
                         headingClassName="text-primary"
+                        subHeading={serviceCardContent.subHeading}
                     />
-
-                    <Timeline items={learningTimelineItems} />
                 </div>
+
+                <ServiceCardSlider
+                    services={corporateServices}
+                    {...serviceCardContent.sliderConfig}
+                    className="mb-0"
+                    buttonText={serviceCardContent.buttonText}
+                    onServiceClick={(service) => console.log('Service clicked:', service)}
+                />
             </section>
 
-            <section className="relative bg-primary bg-[url('/images/bg/learning.png')] bg-left bg-cover bg-no-repeat overflow-hidden rounded-3xl">
+            <section className="rounded-3xl bg-secondary overflow-hidden mb-10">
                 <div className="main-container primary-py">
-                    <div className="flex flex-col lg:flex-row lg:items-start lg:gap-16">
-                        <div className="hidden lg:block lg:w-1/2"></div>
+                    <div className="text-center">
+                        <Heading subHeading="Know More" heading="Learning Levels" className="text-white mx-auto max-w-5xl" subHeadingClassName="text-white" dotColor="white" />
+                    </div>
 
-                        <div className="w-full lg:w-[85%] lg:pl-0">
-                            <div className="mb-10">
-                                <div className="flex items-center justify-center lg:justify-start mb-4">
-                                    <h4 className="sub-heading text-secondary before:bg-secondary">Speciality</h4>
-                                </div>
-                                <h2 className="main-heading text-white text-center lg:text-left">
-                                    Why Choose Us
-                                </h2>
-                            </div>
-
-                            <div className="space-y-8">
-                                <div className="flex items-start gap-4 md:gap-6 text-white">
-                                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                                        <PersonsIcon />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg md:text-xl lg:text-2xl mb-2 md:mb-3">
-                                            Industry-Relevant Expertise
-                                        </h3>
-                                        <p className="text-white/80 text-base md:text-base lg:text-lg">
-                                            Our Instructors Are CQI-IRCA Certified Professionals With Years Of Industry Experience.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 md:gap-6 text-white">
-                                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                                        <Certification />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg md:text-xl lg:text-2xl mb-2 md:mb-3">
-                                            Proven Certification Success
-                                        </h3>
-                                        <p className="text-white/80 text-sm md:text-base lg:text-lg">
-                                            All Our Lead Auditor Courses Are Approved By CQI-IRCA,
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 md:gap-6 text-white">
-                                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                                        <Bookmark />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg md:text-xl lg:text-2xl mb-2 md:mb-3">
-                                            Tailored Solutions
-                                        </h3>
-                                        <p className="text-white/80 text-sm md:text-base lg:text-lg">
-                                            Emphasize Active Participation Through Case Studies,Audit Simulations
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 md:gap-6 text-white">
-                                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                                        <Screencast />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg md:text-xl lg:text-2xl mb-2 md:mb-3">
-                                            Confidential & Collaborative
-                                        </h3>
-                                        <p className="text-white/80 text-sm md:text-base lg:text-lg">
-                                            We Offer In-Person, Virtual, And Hybrid Courses
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-4 md:gap-6 text-white">
-                                    <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                                        <Lifebuoy />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg md:text-xl lg:text-2xl mb-2 md:mb-3">
-                                            Post-Training Support and Resources
-                                        </h3>
-                                        <p className="text-white/80 text-sm md:text-base lg:text-lg">
-                                            Graduates Get Access To Additional Learning Materials, Mentorship Opportunities
-                                        </p>
-                                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                        <div className="p-6 sm:p-8 rounded-[20px] bg-[url('/images/bg/learning-level-bg-1.png')] bg-cover bg-no-repeat h-64 sm:h-72 md:h-72 lg:h-80 xl:h-72">
+                            <div className="mb-4">
+                                <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-20 md:h-20 flex items-center justify-center">
+                                    <Image
+                                        src="/images/bg/learning-icon-1.svg"
+                                        alt="Foundation"
+                                        width={60}
+                                        height={60}
+                                        className="w-full h-full"
+                                    />
                                 </div>
                             </div>
+                            <h3 className="text-primary text-xl sm:text-2xl md:text-2xl font-semibold mb-3 sm:mb-4">Foundation</h3>
+                            <p className="text-primary/80 text-base sm:text-lg md:text-lg">
+                                Focus on beginner and standards/regulation
+                            </p>
+                        </div>
+
+                        <div className="p-6 sm:p-8 rounded-[20px] bg-[url('/images/bg/learning-level-bg-2.png')] bg-cover bg-no-repeat h-64 sm:h-72 md:h-72 lg:h-80 xl:h-72">
+                            <div className="mb-4">
+                                <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-20 md:h-20 flex items-center justify-center">
+                                    <Image
+                                        src="/images/bg/learning-icon-2.svg"
+                                        alt="Internal Auditor"
+                                        width={60}
+                                        height={60}
+                                        className="w-full h-full"
+                                    />
+                                </div>
+                            </div>
+                            <h3 className="text-primary text-xl sm:text-2xl md:text-2xl font-semibold mb-3 sm:mb-4">Internal Auditor</h3>
+                            <p className="text-primary/80 text-base sm:text-lg md:text-lg">
+                                Focus On Internal Audits Within Own Organization
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 gap-3">
+                        <div className="p-6 sm:p-8 rounded-[20px] bg-white h-64 sm:h-72 md:h-72 lg:h-80 xl:h-72">
+                            <div className="mb-4">
+                                <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-20 md:h-20 flex items-center justify-center">
+                                    <Image
+                                        src="/images/bg/learning-icon-3.svg"
+                                        alt="Transition"
+                                        width={60}
+                                        height={60}
+                                        className="w-full h-full"
+                                    />
+                                </div>
+                            </div>
+                            <h3 className="text-primary text-xl sm:text-2xl md:text-2xl font-semibold mb-3 sm:mb-4">Transition</h3>
+                            <p className="text-primary/80 text-base sm:text-lg md:text-lg">
+                                Focus On Understanding Of Changes In Standards, Regulations Etc
+                            </p>
+                        </div>
+
+                        <div className="p-6 sm:p-8 rounded-[20px] bg-white h-64 sm:h-72 md:h-72 lg:h-80 xl:h-72">
+                            <div className="mb-4">
+                                <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-20 md:h-20 flex items-center justify-center">
+                                    <Image
+                                        src="/images/bg/learning-icon-4.svg"
+                                        alt="Lead Auditor"
+                                        width={60}
+                                        height={60}
+                                        className="w-full h-full"
+                                    />
+                                </div>
+                            </div>
+                            <h3 className="text-primary text-xl sm:text-2xl md:text-2xl font-semibold mb-3 sm:mb-4">Lead Auditor</h3>
+                            <p className="text-primary/80 text-base sm:text-lg md:text-lg">
+                                Focus On External And Supplier/Vendor And 3rd Management System Audits
+                            </p>
+                        </div>
+
+                        <div className="p-6 sm:p-8 rounded-[20px] bg-white h-64 sm:h-72 md:h-72 lg:h-80 xl:h-72">
+                            <div className="mb-4">
+                                <div className="flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-20 md:h-20 flex items-center justify-center">
+                                    <Image
+                                        src="/images/bg/learning-icon-5.svg"
+                                        alt="Expert/Master"
+                                        width={60}
+                                        height={60}
+                                        className="w-full h-full"
+                                    />
+                                </div>
+                            </div>
+                            <h3 className="text-primary text-xl sm:text-2xl md:text-2xl font-semibold mb-3 sm:mb-4">Expert/Master</h3>
+                            <p className="text-primary/80 text-base sm:text-lg md:text-lg">
+                                Focus On Specialized Learning Courses And Development Of Auditor/Lead Auditor
+                            </p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section className="bg-lighter">
-			<div className="main-container primary-py">
-				<Heading
-					subHeading="Upcoming Courses"
-					heading="Popular Courses"
-					headingClassName="text-primary"
-				/>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-					{courses.map((course) => (
-						<CourseCard
-							key={course.id}
-							category={course.category}
-							title={course.title}
-							description={course.description}
-							hours={course.hours}
-							lessons={course.lessons}
-							mode={course.mode}
-							imageUrl={course.imageUrl}
-						/>
-					))}
-				</div>
-			</div>
-		</section>
+            <Learning />
 
-            <section className="relative bg-secondary bg-[url('/images/FooterSection.png')] bg-right bg-cover bg-no-repeat overflow-hidden rounded-3xl mt-18">
-                <div className="main-container primary-py">
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:gap-16">
-                        <div className="w-full lg:w-1/2">
-                            <div className="space-y-6 md:space-y-8">
-                                <h2 className="text-4xl md:text-5xl lg:text-6xl font-hedvig text-white leading-tight">
-                                    Contact with us
-                                </h2>
-                                <p className="text-white/90 text-base md:text-lg lg:text-xl leading-relaxed">
-                                    We'll assist you in selecting the perfect course tailored to your goals. Your
-                                    experience will guide us in making the best choice.
-                                </p>
-                                <Button
-                                    spanclassName="px-4"
-                                    className="gap-0"
-                                    text="Enquire now"
-                                    icon={<IconArrowRight className="stroke-primary" />}
-                                    color="white"
-                                    href="/contact-us"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="hidden lg:block lg:w-1/2"></div>
+            <section className="bg-white py-16 lg:py-24">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center mb-16">
+                        <Heading
+                            heading="Imagine learning that enhances a learner's career and delivers transformational learning organization's capabilities"
+                            subHeading="Learning Process"
+                            headingClassName="text-primary"
+                        />
                     </div>
+
+                    <div className="mb-16">
+                        <Image
+                            src="/images/bg/learning-bg.png"
+                            alt="Interactive classroom learning environment"
+                            width={1200}
+                            height={400}
+                            className="w-full h-96 object-cover"
+                            priority
+                        />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {learningCapabilities.map((capability) => (
+                            <div
+                                key={capability.id}
+                                className="p-8 rounded-xl hover:bg-secondary/10 cursor-pointer transition-colors duration-200 flex flex-col h-full"
+                            >
+                                <div className="flex-grow">
+                                    <h3 className="leading-tight">
+                                        <Heading
+                                            heading={capability.title}
+                                            headingClassName="text-2xl text-left text-primary"
+                                        />
+                                    </h3>
+                                    <p className="text-primary/80 leading-relaxed line-clamp-3">
+                                        {capability.description}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
             </section>
+
+            <section className="main-container primary-py">
+                <Heading
+                    heading="Learning Methodology"
+                    subHeading='Methodology'
+                    headingClassName='text-secondary'
+                    subHeadingClassName='text-primary'
+                />
+
+                <div className="mt-8 w-full">
+                    <Image
+                        src="/images/bg/corporate-image.svg"
+                        alt="Learning Methodology"
+                        width={1200}
+                        height={600}
+                        className="w-full h-auto rounded-3xl object-cover"
+                    />
+                </div>
+            </section>
+
+            <NewsletterSection />
+
         </main>
     );
 }

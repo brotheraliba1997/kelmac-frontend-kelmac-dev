@@ -65,3 +65,97 @@ export const industriesItems = [
 		imageUrl: "/images/slider/course-image-1.png",
 	},
 ];
+
+
+export interface ServiceCardData {
+    id?: string | number;
+    title: string;
+    description: string;
+    imageUrl: string;
+}
+
+export const consultingServices: ServiceCardData[] = [
+    {
+        id: 1,
+        title: "Full Service",
+        description: "From compliance to capability, we support your organization through comprehensive auditing, strategic consulting.",
+        imageUrl: "/images/bg/consulting-delivery-1.png",
+    },
+    {
+        id: 2,
+        title: "Shared Approach",
+        description: "From compliance to capability, we support your organization through comprehensive auditing, strategic consulting.",
+        imageUrl: "/images/bg/consulting-delivery-2.png",
+    },
+    {
+        id: 3,
+        title: "Bespoke ",
+        description: "From compliance to capability, we support your organization through comprehensive auditing, strategic consulting.",
+        imageUrl: "/images/bg/consulting-delivery-3.png",
+    },
+    {
+        id: 4,
+        title: "Micro Learning",
+        description: "Strategic consulting to help organizations implement effective management systems.",
+        imageUrl: "/images/bg/consulting-delivery-1.png",
+    }
+];
+
+export const serviceCardContent = {
+    heading: "Delivery Methods",
+    subHeading: "How we deliver",
+    buttonText: "Learn More",
+
+    sliderConfig: {
+        slidesPerView: { mobile: 1, tablet: 2, desktop: 3 },
+        spaceBetween: 24,
+        autoplay: { delay: 3000 },
+        navigation: true,
+        pagination: true,
+        loop: true,
+    }
+};
+
+
+export const consultingApproach = [
+    {
+        id: 1,
+        title: "Discover",
+        description:
+            "Clarify objectives, risks, obligations, and current maturity; agree the measurable outcomes.",
+        image: "/images/bg/consulting-approach-1.png",
+        knowMore: true,
+        href: "/auditing/transforming"
+
+    },
+    {
+        id: 2,
+        title: "Design",
+        description:
+            "Co-create the process architecture, controls, and documented information sized to your operations.",
+        image: "/images/bg/consulting-approach-2.png",
+        knowMore: true,
+        href: "/auditing/transforming"
+
+    },
+    {
+        id: 3,
+        title: "Develop",
+        description:
+            "Pilot, train, and coach; run live audits and management reviews to prove the design.",
+        image: "/images/bg/consulting-approach-3.png",
+        knowMore: true,
+        href: "/auditing/transforming"
+
+    },
+    {
+        id: 4,
+        title: "Assure",
+        description:
+            "Internal/supplier audits, pre-assessment, and readiness scoring aligned to certification timelines.",
+        image: "/images/bg/consulting-approach-4.png",
+        knowMore: true,
+        href: "/auditing/transforming"
+
+    },
+];

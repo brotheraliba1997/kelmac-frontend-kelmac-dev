@@ -55,7 +55,7 @@ export default function MeetingConfirmed() {
               iconPosition="after"
               size="lg"
               color="secondary"
-              href="/services"
+              href="/corporate"
               spanclassName="px-6"
               iconclassName="bg-white"
             />
