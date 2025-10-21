@@ -243,37 +243,7 @@ export default function Course() {
 										/>
 									</div>
 
-									<div className="p-4 bg-white rounded-3xl">
-										<h3 className="text-2xl font-medium text-[#EF1A23] mb-4">
-											Basic Requirements
-										</h3>
-										<IconList
-											className="space-y-3 font-medium"
-											items={[
-												{
-													icon: <IconCheckCircle />,
-													text: "Target Audience: Delegates with basic QM/MS knowledge who must audit to ISO 9001.",
-												},
-												{
-													icon: <IconCheckCircle />,
-													text: "Learning Goal: Build skill to plan, conduct, report, and follow up audits.",
-												},
-												{
-													icon: <IconCheckCircle />,
-													text: "Training Approach: Practice-led, ISO 19011-aligned; process/risk focus.",
-												},
-												{
-													icon: <IconCheckCircle />,
-													text: "Industry Relevance: Tailorable to sectors (e.g., construction, automotive).",
-												},
-												{
-													icon: <IconCheckCircle />,
-													text: "Prerequisites: ISO 9001 basics and working English.",
-												},
-											]}
-										/>
-									</div>
-								</div>
+									
 							</div>
 						</div>
 					</div>
