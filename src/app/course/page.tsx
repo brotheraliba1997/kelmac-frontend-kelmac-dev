@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Button from "@/components/ui/button/Button";
-import { IconArrowRight } from "@tabler/icons-react";
+import { IconArrowRight, IconArrowDown } from "@tabler/icons-react";
 import { CourseCard } from "@/components/ui/course/CourseCard";
 import {
 	CourseSession,
@@ -16,14 +16,12 @@ import Faqs from "./Faqs";
 import Syllabus from "./Syllabus";
 import { coursesItems } from "@/data/home";
 import {
-	IconCheckCircle,
 	IconClockCountdown,
 	IconCertificate,
 	IconBookBookmark,
 	IconScreencast,
 	IconTranslate,
 } from "@/components/icons/icons";
-import { IconList } from "@/components/ui/common/IconList";
 import { IconBox } from "@/components/ui/common/IconBox";
 import QuestionsModal from "@/components/ui/questions/QuestionsModal";
 import type { FormData } from "@/data/questionTypes";
@@ -35,17 +33,20 @@ export default function Course() {
 			label: "Mar 15-19, 2025",
 			date: "Mar 15-19, 2025",
 			time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
-			sessionBadge: "Split Week",
-			sessionBadgeType: "purple",
-			href: "/course/bundle-offers",
+			sessionBadge: "Full Week",
+			sessionBadgeType: "green",
+			href: "#",
+			seatsLeft: 4,
 		},
 		{
 			label: "Apr 8-9, 15-16, 2025",
 			date: "Apr 8-9, 15-16, 2025",
 			time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
-			sessionBadge: "Full Week",
-			sessionBadgeType: "green",
-			href: "/course/bundle-offers",
+			sessionBadge: "Split Week",
+			sessionBadgeType: "purple",
+			href: "#",
+			seatsLeft: 4,
+
 		},
 		{
 			label: "May 1-5, 2025",
@@ -53,7 +54,9 @@ export default function Course() {
 			time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
 			sessionBadge: "Weekend",
 			sessionBadgeType: "yellow",
-			href: "/course/bundle-offers",
+			href: "#",
+			seatsLeft: 4,
+
 		},
 		{
 			label: "May 1-5, 2025",
@@ -61,7 +64,9 @@ export default function Course() {
 			time: "6:00 PM - 9:00 PM (Eastern Time GMT-5)",
 			sessionBadge: "Evening",
 			sessionBadgeType: "red",
-			href: "/course/bundle-offers",
+			href: "#",
+			seatsLeft: 4,
+
 		},
 	];
 
@@ -199,12 +204,12 @@ export default function Course() {
 						</div>
 
 						<div className="lg:col-span-2">
-							<div className="bg-primary rounded-4xl overflow-hidden">
+							<div className="bg-primary rounded-4xl overflow-hidden h-150 flex flex-col">
 								<h2 className="text-3xl md:text-4xl px-4 md:px-6 pt-7 pb-4 font-hedvig font-regular text-white border-b border-secondary">
 									Course Snapshot
 								</h2>
-								<div className="px-4 md:px-6 py-4">
-									<div className="mb-5 grid grid-cols-1 md:grid-cols-5 gap-4">
+								<div className="px-4 md:px-6 py-10 flex-1 flex flex-col">
+									<div className="mb-5 grid grid-cols-1 md:grid-cols-5 gap-4 flex-1">
 										<IconBox
 											className="md:col-span-3"
 											icon={<IconClockCountdown />}
@@ -242,37 +247,13 @@ export default function Course() {
 											heading="QMS ISO 9001:2015 Fundamental"
 										/>
 									</div>
-
-									<div className="p-4 bg-white rounded-3xl">
-										<h3 className="text-2xl font-medium text-[#EF1A23] mb-4">
-											Basic Requirements
-										</h3>
-										<IconList
-											className="space-y-3 font-medium"
-											items={[
-												{
-													icon: <IconCheckCircle />,
-													text: "Target Audience: Delegates with basic QM/MS knowledge who must audit to ISO 9001.",
-												},
-												{
-													icon: <IconCheckCircle />,
-													text: "Learning Goal: Build skill to plan, conduct, report, and follow up audits.",
-												},
-												{
-													icon: <IconCheckCircle />,
-													text: "Training Approach: Practice-led, ISO 19011-aligned; process/risk focus.",
-												},
-												{
-													icon: <IconCheckCircle />,
-													text: "Industry Relevance: Tailorable to sectors (e.g., construction, automotive).",
-												},
-												{
-													icon: <IconCheckCircle />,
-													text: "Prerequisites: ISO 9001 basics and working English.",
-												},
-											]}
-										/>
-									</div>
+									<Button
+										spanclassName="px-6"
+										className="gap-2 mx-auto rounded-full border border-white/70"
+										text="Download course curriculum"
+										icon={<IconArrowDown className="stroke-primary" />}
+										color="transparent"
+									/>
 								</div>
 							</div>
 						</div>
