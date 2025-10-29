@@ -26,35 +26,44 @@ export function BlogCard({
 	className,
 }: BlogCardProps) {
 	return (
-		<div className={cn("bg-white rounded-xl overflow-hidden flex flex-col", className)}>
-			<div className="relative w-full h-52">
-				<Image
-					src={imageUrl}
-					alt={title}
-					fill
-					className="object-cover rounded-lg"
-				/>
-				<span className="absolute top-3 left-3 bg-white/93 text-primary text-sm font-normal px-3 py-1 rounded-sm ">
-					{category}
-				</span>
+		<article
+			className={cn(
+				"rounded-3xl overflow-hidden",
+				"w-full max-w-2xl mx-auto",
+				className
+			)}
+		>
+			<div className="relative w-full h-90 p-4">
+				<div className="relative w-full h-full">
+					<Image
+						src={imageUrl}
+						alt={title}
+						fill
+						className="object-cover rounded-2xl"
+					/>
+
+					<span className="absolute top-4 left-4 bg-white/80 text-primary text-sm font-medium px-4 py-2 rounded-full">
+						{category}
+					</span>
+				</div>
 			</div>
 
-			<div className="pt-4 flex flex-col flex-1">
-				<p className="mb-2">{date}</p>
-				<h3 className="text-2xl font-medium text-primary leading-normal mb-2 line-clamp-2">
+			<div className="px-5 pt-2 pb-6 flex flex-col">
+				<p className="text-gray-500 text-lg mb-6 font-normal">
+					{date}
+				</p>
+
+				<h3 className="text-3xl text-primary leading-tight mb-6 line-clamp-2">
 					{title}
 				</h3>
-				<p className="text-primary leading-relaxed mb-6 line-clamp-3">
-					{excerpt}
-				</p>
 
 				<LinkButton
 					href={href}
 					text="Read more"
 					icon={<IconArrowRight size={16} />}
-					className="text-secondary font-semibold hover:text-primary"
+					className="text-secondary font-medium self-start"
 				/>
 			</div>
-		</div>
+		</article>
 	);
 }

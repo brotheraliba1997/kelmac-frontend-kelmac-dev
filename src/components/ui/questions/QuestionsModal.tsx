@@ -65,7 +65,7 @@ const QuestionsModal: React.FC<QuestionsModalProps> = ({
           await onSubmit(formData);
         }
 
-        router.push('course/all-courses');
+        router.push('course/suggested-course');
       }, 2000);
 
       return () => clearTimeout(timer);

@@ -298,15 +298,20 @@ export default function Home() {
 						className="text-primary"
 					/>
 					<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-						<div className="relative group cursor-pointer min-h-112 md:min-h-188 justify-stretch bg-[url('/images/corporate.png')] bg-cover bg-left rounded-4xl overflow-hidden">
-							<h2 className="absolute bottom-0 left-0 transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0 pointer-events-auto group-hover:pointer-events-none px-5 md:px-10 py-16 text-white font-hedvig text-4xl md:text-5xl lg:text-[64px] w-full bg-gradient-to-b from-transparent via-transparent/0 via-[0%] to-primary">
+						<div className="relative group cursor-pointer min-h-112 md:min-h-188 justify-stretch bg-[url('/images/corporate.png')] bg-cover bg-center rounded-4xl overflow-hidden">
+							{/* Dark overlay for better text readability */}
+							<div className="absolute inset-0 bg-primary/30 group-hover:bg-primary/70 transition-all duration-500"></div>
+
+							{/* Default state - just title */}
+							<h2 className="absolute bottom-0 left-0 transition-all duration-500 ease-in-out opacity-100 group-hover:opacity-0 group-hover:translate-y-4 px-5 md:px-10 py-16 text-white font-hedvig text-4xl md:text-5xl lg:text-[64px] w-full z-10">
 								Corporate
 							</h2>
-							<div className="absolute bottom-0 left-0 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto px-5 md:px-10 py-8 text-white w-full bg-cover bg-center bg-no-repeat bg-[url('/images/designs/layer-blur.png')]">
+
+							<div className="absolute inset-0 flex flex-col justify-end transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 px-5 md:px-10 py-8 text-white z-10">
 								<h1 className="font-hedvig text-4xl md:text-5xl lg:text-[64px] mb-6">
 									Corporate
 								</h1>
-								<p className="mb-4">
+								<p className="mb-4 text-white/90">
 									From compliance to capability, we support your organization
 									through comprehensive auditing, strategic consulting
 								</p>
@@ -327,15 +332,18 @@ export default function Home() {
 							</div>
 						</div>
 
-						<div className="relative group cursor-pointer min-h-112 md:min-h-188 justify-stretch bg-[url('/images/professionals.png')] bg-cover bg-left rounded-4xl overflow-hidden">
-							<h2 className="absolute bottom-0 left-0 transition-opacity duration-500 ease-in-out opacity-100 group-hover:opacity-0 pointer-events-auto group-hover:pointer-events-none px-5 md:px-10 py-16 text-white font-hedvig text-4xl md:text-5xl lg:text-[64px] w-full bg-gradient-to-b from-transparent via-transparent/0 via-[0%] to-primary">
+						<div className="relative group cursor-pointer min-h-112 md:min-h-188 justify-stretch bg-[url('/images/professionals.png')] bg-cover bg-center rounded-4xl overflow-hidden">
+							<div className="absolute inset-0 bg-primary/30 group-hover:bg-primary/70 transition-all duration-500"></div>
+
+							<h2 className="absolute bottom-0 left-0 transition-all duration-500 ease-in-out opacity-100 group-hover:opacity-0 group-hover:translate-y-4 px-5 md:px-10 py-16 text-white font-hedvig text-4xl md:text-5xl lg:text-[64px] w-full z-10">
 								Professionals
 							</h2>
-							<div className="absolute bottom-0 left-0 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto px-5 md:px-10 py-8 text-white w-full bg-cover bg-center bg-no-repeat bg-[url('/images/designs/layer-blur.png')]">
+
+							<div className="absolute inset-0 flex flex-col justify-end transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 px-5 md:px-10 py-8 text-white z-10">
 								<h1 className="font-hedvig text-4xl md:text-5xl lg:text-[64px] mb-6">
 									Professionals
 								</h1>
-								<p className="mb-4">
+								<p className="mb-4 text-white/90">
 									From compliance to capability, we support your organization
 									through comprehensive auditing, strategic consulting
 								</p>

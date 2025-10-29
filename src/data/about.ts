@@ -63,15 +63,6 @@ export const exploreCaseItems: CardProps[] = [
 			"A collection of stories about our people, our capabilities, our research, and the ever-changing face of our firm.",
 		href: "/about/our-founder",
 	},
-	{
-		id: 5,
-		imageUrl: "/images/case/case-1.png",
-		title: "Our Latest blog.",
-		excerpt:
-			"A collection of stories about our people, our capabilities, our research, and the ever-changing face of our firm.",
-		btnText: "Read all blogs",
-		href: "/resources/latest-blogs",
-	},
 ];
 
 export const timelineItems: TimelineItem[] = [

@@ -48,7 +48,7 @@ const slides = [
 
 export default function How_we_work() {
 	return (
-		<section className="rounded-3xl bg-lighter overflow-hidden">
+		<section className="rounded-3xl bg-white overflow-hidden">
 			<div className="main-container primary-py">
 				{/* make heading text black */}
 				<Heading
@@ -69,7 +69,7 @@ export default function How_we_work() {
 				>
 					{slides.map((slide, i) => (
 						<SwiperSlide key={i} className="!w-[320px]">
-							<div className="py-12 px-7 bg-white rounded-4xl space-y-6">
+							<div className="py-12 px-7 bg-lighter rounded-4xl space-y-6">
 								{slide.icon}
 								<h3 className="text-3xl text-primary font-semibold">
 									{slide.title}

@@ -47,13 +47,12 @@ export function Timeline({
 
 							{/* content */}
 							<div
-								className={`flex flex-col md:items-center md:flex-row gap-8 md:gap-28 ${
-									shouldReverse ? "md:flex-row-reverse" : ""
-								}`}
+								className={`flex flex-col md:items-center md:flex-row gap-8 md:gap-28 ${shouldReverse ? "md:flex-row-reverse" : ""
+									}`}
 							>
 								{/* image */}
 								<div className="w-full md:w-1/2 order-1">
-									<div className="relative h-[291px] w-full rounded-3xl overflow-hidden">
+									<div className="relative aspect-video w-full rounded-3xl overflow-hidden">
 										<Image
 											src={item.imageUrl}
 											alt={item.title}

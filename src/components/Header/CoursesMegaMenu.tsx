@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Book } from "lucide-react";
 import Button from "@/components/ui/button/Button";
 import { IconArrowRight, IconBook } from "@tabler/icons-react";
 

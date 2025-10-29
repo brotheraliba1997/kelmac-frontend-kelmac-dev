@@ -28,16 +28,10 @@ export default function ApproachSlider({
   data,
   autoplayDelay = 3000,
   spaceBetween = 24,
-  slideWidthClass = "!w-[320px]"
+  slideWidthClass = "!w-[320px]",
 }: ApproachSliderProps) {
-  const getSliderData = (): SliderItem[] => {
-    if (data) return data; 
-
-    if (activeTab === "consulting") return consultingApproach;
-    return auditingApproach;
-  };
-
-  const items = getSliderData();
+  const items =
+    data || (activeTab === "consulting" ? consultingApproach : auditingApproach);
 
   return (
     <Swiper
@@ -55,33 +49,37 @@ export default function ApproachSlider({
     >
       {items.map((item, i) => (
         <SwiperSlide key={i} className={slideWidthClass}>
-          <div className="flex flex-col items-center rounded-3xl overflow-hidden h-full backdrop-blur-sm">
-            <div className="w-full">
-              <div
-                className="h-65 w-full rounded-3xl bg-cover bg-center"
-                style={{ backgroundImage: `url(${item.image})` }}
-              />
+          {/* Image section */}
+          <div
+            className="h-[260px] w-full rounded-t-3xl bg-cover bg-center"
+            style={{ backgroundImage: `url(${item.image})` }}
+          />
+
+          {/* Content section with fixed height */}
+          <div className="flex flex-col p-3 text-left h-[280px]">
+            {/* Title - fixed height */}
+            <h3 className="text-3xl text-white leading-snug mb-3 h-[80px] flex items-start">
+              <span className="line-clamp-2">{item.title}</span>
+            </h3>
+            
+            {/* Description - fixed height */}
+            <div className="flex-1 flex items-start">
+              <p className="text-white/80 text-lg leading-relaxed line-clamp-3">
+                {item.description}
+              </p>
             </div>
 
-            <div className="flex flex-col justify-between text-left p-6 w-full h-full space-y-4">
-              <div>
-                <h3 className="text-2xl text-white leading-snug min-h-[60px] flex items-center">
-                  {item.title}
-                </h3>
-                <p className="text-white/80 text-sm leading-relaxed min-h-[80px]">
-                  {item.description}
-                </p>
-              </div>
-
-              {item.knowMore && (
-                <div>
-                  <LinkButton
-                    href={item.href || "#"}
-                    text="Know more"
-                    icon={<IconArrowRight />}
-                    className="text-white"
-                  />
-                </div>
+            {/* Button - aligned at bottom */}
+            <div className="mt-auto">
+              {item.knowMore ? (
+                <LinkButton
+                  href={item.href || "#"}
+                  text="Know more"
+                  icon={<IconArrowRight />}
+                  className="text-white"
+                />
+              ) : (
+                <div className="h-10" />
               )}
             </div>
           </div>

@@ -15,10 +15,10 @@ import ResourcesMegaMenu from "./ResourcesMegaMenu";
 
 const navLinks = [
 	{ href: "/", label: "Home" },
-	{ href: "", label: "About Us", mega: "about" },
-	{ href: "", label: "Courses", mega: "courses" },
-	{ href: "", label: "Corporate", mega: "corporate" },
-	{ href: "", label: "Resources", mega: "resources" },
+	{ href: "/about", label: "About Us", mega: "about" },
+	{ href: "/courses", label: "Courses", mega: "courses" },
+	{ href: "/corporate", label: "Corporate", mega: "corporate" },
+	{ href: "/resources", label: "Resources", mega: "resources" },
 	{ href: "/contact-us", label: "Contact" },
 ];
 
@@ -45,7 +45,12 @@ export default function Header() {
 					<div className="hidden lg:block col-span-3">
 						<nav className="flex items-center justify-center gap-7">
 							{navLinks.map((link) => {
-								const isActive = pathname === link.href;
+								const isActive = pathname === link.href || 
+									(link.mega === "about" && pathname.startsWith("/about")) ||
+									(link.mega === "courses" && (pathname.startsWith("/course") || pathname.startsWith("/courses"))) ||
+									(link.mega === "corporate" && pathname.startsWith("/corporate")) ||
+									(link.mega === "resources" && (pathname.startsWith("/blog") || pathname.startsWith("/webinar") || pathname.startsWith("/whitepaper") || pathname.startsWith("/resources")));
+
 								return (
 									<div
 										key={link.label}
@@ -104,9 +109,8 @@ export default function Header() {
 							/>
 							<span className="font-medium font-inter text-sm">USA</span>
 						</button>
-
 						<Button
-							className="hidden lg:inline-flex"
+							className="hidden lg:inline-flex px-5 py-3"
 							href="/signin"
 							text="Login"
 							icon={<IconArrowRight className="stroke-primary w-5 h-5" />}

@@ -7,7 +7,7 @@ import Counter from "@/components/ui/common/Counter";
 import Image from "next/image";
 import Button from "@/components/ui/button/Button";
 import How_we_work from "@/app/about/kelmac-group/how-we-work";
-import {PersonsIcon, Lifebuoy, IconPolygon } from "@/components/icons/icons";
+import { IconChart, IconMountain, IconConnection } from "@/components/icons/icons";
 
 export default function KelmacGroup() {
 	return (
@@ -26,25 +26,31 @@ export default function KelmacGroup() {
 				</div>
 			</section>
 
-			<section>
-				<div className="main-container primary-py max-w-[1100px]">
+			<section className="primary-py">
+				{/* Heading block */}
+				<div className="max-w-[900px] mx-auto px-6 text-center">
 					<Heading
 						subHeading="Excellency"
 						heading="Practical ISO excellence—built into how you work"
 						headingClassName="text-primary"
 					/>
-					<p className="md:text-xl font-inter text-black text-center">
-						Kelmac Group® delivers ISO training, auditing, and consultancy that
-						hard-wire good practice into everyday operations—so improvement
-						lasts long after the certificate is on the wall. For nearly three
-						decades, we've supported public and private organisations across
-						sectors and jurisdictions, designing systems that reduce risk, lift
-						capability, and drive measurable performance. Headquartered in
-						Ireland, we serve clients worldwide through the Kelmac Group®
-						Academy and our consulting and audit teams.
+				</div>
+
+				{/* Paragraph block */}
+				<div className="max-w-[1100px] mx-auto px-6">
+					<p className="md:text-lg lg:text-xl font-inter-tight text-black text-center leading-relaxed">
+						Kelmac Group® delivers ISO training, auditing, and consultancy that hard-wire
+						good practice into everyday operations—so improvement lasts long after the
+						certificate is on the wall. For nearly three decades, we've supported public
+						and private organisations across sectors and jurisdictions, designing systems
+						that reduce risk, lift capability, and drive measurable performance.
+						Headquartered in Ireland, we serve clients worldwide through the Kelmac
+						Group® Academy and our consulting and audit teams.
 					</p>
 				</div>
 			</section>
+
+
 
 			<section className="bg-primary rounded-3xl overflow-hidden">
 				<div className="main-container primary-py">
@@ -181,6 +187,7 @@ export default function KelmacGroup() {
 					</div>
 				</div>
 			</section>
+
 			<section
 				className="bg-[url('/images/bg/globledelivery.png')] lg:bg-left bg-cover bg-no-repeat rounded-3xl overflow-hidden"
 			>
@@ -193,8 +200,9 @@ export default function KelmacGroup() {
 								<Heading
 									subHeading="Specialty"
 									heading="Global Delivery, Local Insight"
-									headingClassName="text-white"
+									headingClassName="text-white text-left"
 									subHeadingClassName="text-secondary"
+									wrapperClassName="text-left items-start"
 								/>
 
 								<p className="mt-4 md:text-lg font-inter text-white/90">
@@ -208,6 +216,7 @@ export default function KelmacGroup() {
 								<h3 className="mt-8 text-2xl md:text-3xl font-bold text-white">
 									How Scale Becomes Value
 								</h3>
+
 
 								<div className="space-y-6 mt-4">
 									<div className="flex items-start gap-4">
@@ -253,45 +262,47 @@ export default function KelmacGroup() {
 			</section>
 			<How_we_work />
 
-			<section className="rounded-3xl bg-[#DBEAFE] overflow-hidden">
+			<section className="rounded-3xl bg-[#F8FAFC] overflow-hidden">
 				<div className="main-container primary-py">
-					<div className="text-center">
-						<Heading subHeading="Values" heading="At Kelmac Group®, our values guide how we serve our clients and grow our people:" className="text-primary mx-auto max-w-5xl" />
+					<div className="text-center mb-12">
+						<Heading
+							heading="Principles That Guide Us"
+							subHeading="Excellency"
+							headingClassName="text-primary"
+						/>
 					</div>
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-						<div className="p-8 rounded-[20px] bg-white">
-							<div className="text-blue-400 mb-4">
-								<div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center ">
-									<PersonsIcon
-										className="text-secondary" />
+
+					<div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+						<div className="p-8 rounded-3xl bg-white border border-secondary/30 text-center">
+							<div className="flex justify-center mb-8">
+								<div className="w-16 h-16 bg-[#F2F4FB] rounded-xl flex items-center justify-center">
+									<IconChart />
 								</div>
 							</div>
-							<p className="text-black/90 text-lg">
-								We Partner With Clients To Co-Create Practical, Lasting Solutions.
+							<p className="text-gray-700 text-xl leading-relaxed">
+								Outcomes first: quality, safety, security, sustainability—compliance that accelerates performance, not paperwork.
 							</p>
 						</div>
 
-						<div className="p-8 rounded-[20px] bg-white">
-							<div className="text-blue-400 mb-4">
-								<div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center ">
-									<Lifebuoy
-										className="text-secondary" />
+						<div className="p-8 rounded-3xl bg-white border border-secondary/30 text-center">
+							<div className="flex justify-center mb-8">
+								<div className="w-16 h-16 bg-[#F2F4FB] rounded-xl flex items-center justify-center">
+									<IconMountain/>
 								</div>
 							</div>
-							<p className="text-black/90 text-lg">
-								We Adapt And Evolve With Global Standards And Business Needs.
+							<p className="text-gray-700 text-xl leading-relaxed">
+								Embedded & scalable: processes people actually use, owned locally and supported globally.
 							</p>
 						</div>
 
-						<div className="p-8 rounded-[20px] bg-white">
-							<div className="text-blue-400 mb-4">
-								<div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center ">
-									<PersonsIcon
-										className="text-secondary" />
+						<div className="p-8 rounded-3xl bg-white border border-secondary/30 text-center">
+							<div className="flex justify-center mb-8">
+								<div className="w-16 h-16 bg-[#F2F4FB] rounded-full flex items-center justify-center">
+									<IconConnection/>
 								</div>
 							</div>
-							<p className="text-black/90 text-lg">
-								We Attract, Develop, And Retain Exceptional Professionals.
+							<p className="text-gray-700 text-xl leading-relaxed">
+								Assurance you can trust: independent recognition via the CQI & IRCA ATP framework and FSSC 22000 listings; methods aligned to ISO 19011 good practice
 							</p>
 						</div>
 					</div>
@@ -350,7 +361,7 @@ export default function KelmacGroup() {
 						subHeading="Reasons"
 						headingClassName="text-white"
 						subHeadingClassName="text-white"
-						dotColor="white" 
+						dotColor="white"
 					/>
 
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 mx-18">

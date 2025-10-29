@@ -23,10 +23,10 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="main-container py-16 bg-gray-100">
-        <div className="flex flex-col lg:flex-row gap-30">
+      <section className="main-container py-8 md:py-16 bg-gray-100">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          {/* Form Section */}
           <div className="lg:w-1/2">
-
             <div className="mb-10">
               <div className="flex items-start mb-4">
                 <h4 className="sub-heading before:bg-secondary">Contact us</h4>
@@ -34,16 +34,16 @@ export default function Contact() {
               <h2 className="main-heading text-primary">Send Us Message!</h2>
             </div>
             <form className="space-y-6">
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <input
                   type="text"
                   placeholder="Full Name"
-                  className="w-1/2 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent placeholder:text-gray-500"
+                  className="w-full sm:w-1/2 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent placeholder:text-gray-500"
                 />
                 <input
                   type="text"
                   placeholder="Last name"
-                  className="w-1/2 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent placeholder:text-gray-500"
+                  className="w-full sm:w-1/2 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent placeholder:text-gray-500"
                 />
               </div>
               <input
@@ -51,26 +51,26 @@ export default function Contact() {
                 placeholder="Email Address"
                 className="w-full px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent placeholder:text-gray-500"
               />
-              <div className="flex gap-4">
-                <select className="w-1/3 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent text-gray-500 appearance-none">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <select className="w-full sm:w-1/3 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent text-gray-500 appearance-none">
                   <option>Country code</option>
                 </select>
                 <input
                   type="tel"
                   placeholder="Phone Number"
-                  className="w-2/3 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent placeholder:text-gray-500"
+                  className="w-full sm:w-2/3 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent placeholder:text-gray-500"
                 />
               </div>
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-4">
                 <input
                   type="text"
                   placeholder="Company Name"
-                  className="w-1/2 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent placeholder:text-gray-500"
+                  className="w-full sm:w-1/2 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent placeholder:text-gray-500"
                 />
                 <input
                   type="text"
                   placeholder="Your Designation"
-                  className="w-1/2 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent placeholder:text-gray-500"
+                  className="w-full sm:w-1/2 px-4 py-3 bg-white border border-[#E5E7EB] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#182E4B] focus:border-transparent placeholder:text-gray-500"
                 />
               </div>
               <textarea
@@ -89,27 +89,29 @@ export default function Contact() {
               />
             </form>
           </div>
-          <div className="lg:w-1/2">
-            <div className="bg-[#182E4B] text-white p-10 rounded-[24px] w-[500px]">
-              <div className="mb-8 text-RIGHT">
-                <h2 className="text-4xl font-hedvig mb-4">
+
+          {/* Contact Info Section */}
+          <div className="lg:w-1/2 lg:pl-8">
+            <div className="bg-[#182E4B] text-white p-6 md:p-8 lg:p-6 rounded-[24px] w-full max-w-[500px] mx-auto lg:mx-0">
+              <div className="mb-6 md:mb-8">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-hedvig mb-4 mt-2">
                   Contact Us
                 </h2>
-                <div className="w-80 h-[0.070px] bg-secondary mx-left"></div>
+                <div className="w-20 md:w-32 lg:w-80 h-[0.070px] bg-secondary"></div>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4 md:space-y-6">
                 <div className="flex items-center gap-3">
                   <img
                     src="/images/PhoneCall.png"
                     alt="Phone Icon"
                     width={24}
                     height={24}
-                    className="w-8 h-8 object-contain"
+                    className="w-6 h-6 md:w-8 md:h-8 object-contain flex-shrink-0"
                   />
                   <div>
-                    <div className="text-base text-[#94A3B8]">Phone No:</div>
-                    <div>+353 61 491224</div>
+                    <div className="text-sm md:text-base text-[#94A3B8]">Phone No:</div>
+                    <div className="text-sm md:text-base">+353 61 491224</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -118,11 +120,11 @@ export default function Contact() {
                     alt="Email Icon"
                     width={24}
                     height={24}
-                    className="w-8 h-8 object-contain"
+                    className="w-6 h-6 md:w-8 md:h-8 object-contain flex-shrink-0"
                   />
                   <div>
-                    <div className="text-base text-[#94A3B8]">Email ID:</div>
-                    <div>info@kelmacgroup.com</div>
+                    <div className="text-sm md:text-base text-[#94A3B8]">Email ID:</div>
+                    <div className="text-sm md:text-base break-all">info@kelmacgroup.com</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -131,29 +133,26 @@ export default function Contact() {
                     alt="Location Icon"
                     width={24}
                     height={24}
-                    className="w-8 h-8 object-contain mt-1"
+                    className="w-6 h-6 md:w-8 md:h-8 object-contain mt-1 flex-shrink-0"
                   />
                   <div>
-                    <div className="text-base text-[#94A3B8]">Registered Office Address</div>
-                    <div>Business Edge Limited T/A Kelmac Group®, Old Windmill, Office Suites, Lower Gerald, Griffin Street Limerick, V94 YRD7, Dublin, Ireland</div>
+                    <div className="text-sm md:text-base text-[#94A3B8]">Registered Office Address</div>
+                    <div className="text-sm md:text-base leading-relaxed">
+                      Business Edge Limited T/A Kelmac Group®, Old Windmill, Office Suites, Lower Gerald, Griffin Street Limerick, V94 YRD7, Dublin, Ireland
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div
-                className="mt-8 rounded-2xl overflow-hidden relative group"
-                style={{ marginLeft: "-2vw", marginRight: "-2vw", marginBottom: "-28px" }}
-              >
-                <div className="relative">
+              {/* Map Section */}
+              <div className="mt-6 md:mt-8 rounded-2xl overflow-hidden relative group -mx-2 md:-mx-4 lg:-mx-3 -mb-6 md:-mb-8 lg:-mb-3">
+                <div className="relative w-full h-[200px] md:h-[240px]">
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2431.8754436967313!2d-8.630720323968403!3d52.66030597983404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x485b5c7c20f20a27%3A0x3b05c9374c8d661e!2sKelmac%20Group%20Limited!5e0!3m2!1sen!2sie!4v1695481234567!5m2!1sen!2sie"
-                    width="100%"
-                    height="240"
-                    style={{ border: 0 }}
+                    className="absolute inset-0 w-full h-full border-0 rounded-2xl"
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    className="rounded-2xl w-full"
                   />
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Button
@@ -167,6 +166,7 @@ export default function Contact() {
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
