@@ -28,8 +28,7 @@ export function BlogCard({
 	return (
 		<article
 			className={cn(
-				"rounded-3xl overflow-hidden",
-				"w-full max-w-2xl mx-auto",
+				"rounded-3xl overflow-hidden w-full",
 				className
 			)}
 		>
@@ -39,7 +38,7 @@ export function BlogCard({
 						src={imageUrl}
 						alt={title}
 						fill
-						className="object-cover rounded-2xl"
+						className="object-cover rounded-2xl "
 					/>
 
 					<span className="absolute top-4 left-4 bg-white/80 text-primary text-sm font-medium px-4 py-2 rounded-full">
@@ -49,11 +48,11 @@ export function BlogCard({
 			</div>
 
 			<div className="px-5 pt-2 pb-6 flex flex-col">
-				<p className="text-gray-500 text-lg mb-6 font-normal">
+				<p className="text-gray-500 text-lg mb-3 font-normal">
 					{date}
 				</p>
 
-				<h3 className="text-3xl text-primary leading-tight mb-6 line-clamp-2">
+				<h3 className="text-3xl text-primary leading-tight mb-4 line-clamp-2">
 					{title}
 				</h3>
 

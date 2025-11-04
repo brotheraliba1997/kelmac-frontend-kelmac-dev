@@ -64,25 +64,35 @@ export default function Blogs() {
             </section>
 
             <section>
-                <div className="primary-py main-container">
+                <div style={{ width: '1200px', margin: '0 auto', padding: '80px 0' }}>
                     <Heading
                         subHeading="Timeline"
                         heading="Latest From The Blog"
                         className="text-primary"
                     />
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                        {currentBlogs.map((blog) => (
-                            <BlogCard
-                                key={blog.id}
-                                id={blog.id}
-                                imageUrl={blog.imageUrl}
-                                category={blog.category}
-                                date={blog.date}
-                                title={blog.title}
-                                excerpt={blog.excerpt}
-                                href={`/resources/latest-blogs/${blog.slug}`}
-                            />
-                        ))}
+                    <div style={{ width: '1200px', margin: '0 auto' }}>
+                        <div style={{ 
+                            display: 'grid', 
+                            gridTemplateColumns: '600px 600px', 
+                            gap: '24px',
+                            marginBottom: '32px',
+                            justifyContent: 'center'
+                        }}>
+                            {currentBlogs.map((blog) => (
+                                <div key={blog.id} style={{ width: '620px' }}>
+                                    <BlogCard
+                                        id={blog.id}
+                                        imageUrl={blog.imageUrl}
+                                        category={blog.category}
+                                        date={blog.date}
+                                        title={blog.title}
+                                        excerpt={blog.excerpt}
+                                        href={`/resources/latest-blogs/${blog.slug}`}
+                                        className="w-full"
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     {totalPages > 1 && (

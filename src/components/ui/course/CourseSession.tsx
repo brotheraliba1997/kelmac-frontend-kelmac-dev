@@ -50,7 +50,7 @@ export function CourseSession({
 			)}
 			<div className="col-span-3 space-y-4">
 				<div className="flex flex-wrap gap-3 items-center">
-					<h3 className="font-semibold text-2xl">{date}</h3>
+					<h3 className="font-semibold text-2xl text-black">{date}</h3>
 					<div className={sessionBadgeTypeClasses}>{sessionBadge}</div>
 				</div>
 				<div className="flex flex-wrap gap-3 items-center">

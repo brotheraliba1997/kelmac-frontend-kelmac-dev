@@ -11,16 +11,17 @@ import { Heading } from "@/components/ui/common/Heading";
 import { Tag } from "@/components/ui/common/Tag";
 import { Tabs } from "@/components/ui/common/Tabs";
 import Overview from "./Overview";
-import Tutors from "./Tutors";
+import Methodology from "./Methodology";
 import Faqs from "./Faqs";
+import Requirements from "./BasicRequirements";
 import Syllabus from "./Syllabus";
 import { coursesItems } from "@/data/home";
 import {
 	IconClockCountdown,
 	IconCertificate,
-	IconBookBookmark,
 	IconScreencast,
 	IconTranslate,
+	IconLocation
 } from "@/components/icons/icons";
 import { IconBox } from "@/components/ui/common/IconBox";
 import QuestionsModal from "@/components/ui/questions/QuestionsModal";
@@ -72,7 +73,8 @@ export default function Course() {
 
 	const tabs = [
 		{ id: "overview", label: "Overview", content: <Overview /> },
-		{ id: "instructors", label: "Instructors", content: <Tutors /> },
+		{ id: "methodology", label: "Methodology", content: <Methodology /> },
+		{ id: "requirements", label: "Basic Requirements", content: <Requirements /> },
 		{ id: "syllabus", label: "Syllabus Breakdown", content: <Syllabus /> },
 		{ id: "faqs", label: "FAQs", content: <Faqs /> },
 	];
@@ -204,23 +206,17 @@ export default function Course() {
 						</div>
 
 						<div className="lg:col-span-2">
-							<div className="bg-primary rounded-4xl overflow-hidden h-150 flex flex-col">
+							<div className="bg-primary rounded-4xl overflow-hidden h-180 flex flex-col">
 								<h2 className="text-3xl md:text-4xl px-4 md:px-6 pt-7 pb-4 font-hedvig font-regular text-white border-b border-secondary">
 									Course Snapshot
 								</h2>
 								<div className="px-4 md:px-6 py-10 flex-1 flex flex-col">
 									<div className="mb-5 grid grid-cols-1 md:grid-cols-5 gap-4 flex-1">
 										<IconBox
-											className="md:col-span-3"
+											className="md:col-span-5"
 											icon={<IconClockCountdown />}
 											subHeading="Duration"
-											heading="2 Days (16 hours)"
-										/>
-										<IconBox
-											className="md:col-span-2"
-											icon={<IconBookBookmark />}
-											subHeading="Lessons"
-											heading="20"
+											heading="14 hours of internal Auditor IA class"
 										/>
 										<IconBox
 											className="md:col-span-3"
@@ -233,6 +229,12 @@ export default function Course() {
 											icon={<IconTranslate />}
 											subHeading="Language"
 											heading="English"
+										/>
+										<IconBox
+											className="md:col-span-5"
+											icon={<IconLocation />}
+											subHeading="Location"
+											heading="Old Windmill Office Suites, Lower Gerald Griffin Street"
 										/>
 										<IconBox
 											className="md:col-span-3"

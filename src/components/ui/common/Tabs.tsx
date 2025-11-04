@@ -25,7 +25,7 @@ export function Tabs({ tabs, className = "" }: TabsProps) {
 	return (
 		<>
 			<section className={tabContainerClasses}>
-				<div className="bg-light rounded-[50px] inline-flex">
+				<div className="bg-light rounded-[50px] inline-flex border border-black/20">
 
 					{tabs.map((tab) => {
 						const isActive = tab.id === activeTab;
@@ -35,7 +35,7 @@ export function Tabs({ tabs, className = "" }: TabsProps) {
 								onClick={() => setActiveTab(tab.id)}
 								className={cn(
 									"cursor-pointer px-6 py-0 md:py-6 md:px-16 md:text-xl font-medium transition rounded-full",
-									isActive ? "bg-primary text-white" : "hover:text-black"
+									isActive ? "bg-primary text-white" : "hover:text-black "
 								)}
 							>
 								{tab.label}

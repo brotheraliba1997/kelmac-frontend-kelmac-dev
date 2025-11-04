@@ -26,7 +26,7 @@ export const blogItems: BlogPost[] = [
         category: "Food Safety",
         date: "24 March, 2024",
         postedBy: "John Doe",
-        title: "The Power of Employee Motivation: Boosting Productivity and Performance",
+        title: "Incentivizing Success: Strategies forRewarding Employee Achievements",
         excerpt: "Food safety is a critical concern in the food industry...",
         content: {
             introduction: "In an era where technology and creativity intertwine more intricately than ever, the role of Artificial Intelligence (AI) in the arts has become a pivotal conversation among creators and technologists alike...",
@@ -59,11 +59,11 @@ export const blogItems: BlogPost[] = [
     {
         id: 2,
         slug: "customer-motivation-productivity",
-        imageUrl: "/images/blog/blog-image-1.png",
+        imageUrl: "/images/blog/post-4.png",
         category: "Food Safety",
         date: "24 March, 2024",
         postedBy: "John Doe",
-        title: "The Power of Employee Motivation: Boosting Productivity and Performance",
+        title: "Incentivizing Success: Strategies forRewarding Employee Achievements",
         excerpt: "Food safety is a critical concern in the food industry...",
         content: {
             introduction: "In an era where technology and creativity intertwine more intricately  than ever, the role of Artificial Intelligence (AI) in the arts has  become a pivotal conversation among creators and technologists alike. As  AI continues to evolve, it transforms not only how art is made but also  reshapes the very nature of creativity. This blog explores the dynamic  intersection of AI and art, examining its implications, benefits, and  the exciting possibilities ahead.",
@@ -95,11 +95,11 @@ export const blogItems: BlogPost[] = [
     {
         id: 3,
         slug: "customer-motivation-productivity",
-        imageUrl: "/images/blog/blog-image-1.png",
+        imageUrl: "/images/blog/post-5.png",
         category: "Food Safety",
         date: "24 March, 2024",
         postedBy: "John Doe",
-        title: "The Power of Employee Motivation: Boosting Productivity and Performance",
+        title: "Incentivizing Success: Strategies forRewarding Employee Achievements",
         excerpt: "Food safety is a critical concern in the food industry...",
         content: {
             introduction: "In an era where technology and creativity intertwine more intricately  than ever, the role of Artificial Intelligence (AI) in the arts has  become a pivotal conversation among creators and technologists alike. As  AI continues to evolve, it transforms not only how art is made but also  reshapes the very nature of creativity. This blog explores the dynamic  intersection of AI and art, examining its implications, benefits, and  the exciting possibilities ahead.",
@@ -131,11 +131,11 @@ export const blogItems: BlogPost[] = [
     {
         id: 4,
         slug: "customer-motivation-productivity",
-        imageUrl: "/images/blog/blog-image-1.png",
+        imageUrl: "/images/blog/post-6.png",
         category: "Food Safety",
         date: "24 March, 2024",
         postedBy: "John Doe",
-        title: "The Power of Employee Motivation: Boosting Productivity and Performance",
+        title: "Incentivizing Success: Strategies forRewarding Employee Achievements",
         excerpt: "Food safety is a critical concern in the food industry...",
         content: {
             introduction: "In an era where technology and creativity intertwine more intricately  than ever, the role of Artificial Intelligence (AI) in the arts has  become a pivotal conversation among creators and technologists alike. As  AI continues to evolve, it transforms not only how art is made but also  reshapes the very nature of creativity. This blog explores the dynamic  intersection of AI and art, examining its implications, benefits, and  the exciting possibilities ahead.",
@@ -147,7 +147,7 @@ export const blogItems: BlogPost[] = [
                 {
                     heading: "Transforming the Creative Process",
                     content: "For artists and designers, AI serves as both a collaborator and a tool, offering new ways to engage with their crafts:",
-                    image: "/images/blog/blog-image-2.png",
+                    image: "/images/blog/post-6.png",
                     list: [
                         "Enhanced Creativity: AI can process and synthesize information at a scale impossible for humans, providing artists with a broader array of creative options and inspirations.",
                         "Efficiency and Accessibility: AI tools can reduce the time it takes to realize an artistic vision, making the creative process more efficient and accessible to novices and professionals alike.",
@@ -167,11 +167,11 @@ export const blogItems: BlogPost[] = [
     {
         id: 5,
         slug: "customer-motivation-productivity",
-        imageUrl: "/images/blog/blog-image-1.png",
+        imageUrl: "/images/blog/post-7.png",
         category: "Food Safety",
         date: "24 March, 2024",
         postedBy: "John Doe",
-        title: "The Power of Employee Motivation: Boosting Productivity and Performance",
+        title: "Incentivizing Success: Strategies forRewarding Employee Achievements",
         excerpt: "Food safety is a critical concern in the food industry...",
         content: {
             introduction: "In an era where technology and creativity intertwine more intricately  than ever, the role of Artificial Intelligence (AI) in the arts has  become a pivotal conversation among creators and technologists alike. As  AI continues to evolve, it transforms not only how art is made but also  reshapes the very nature of creativity. This blog explores the dynamic  intersection of AI and art, examining its implications, benefits, and  the exciting possibilities ahead.",
@@ -183,7 +183,7 @@ export const blogItems: BlogPost[] = [
                 {
                     heading: "Transforming the Creative Process",
                     content: "For artists and designers, AI serves as both a collaborator and a tool, offering new ways to engage with their crafts:",
-                    image: "/images/blog/blog-image-2.png",
+                    image: "/images/blog/post-6.png",
                     list: [
                         "Enhanced Creativity: AI can process and synthesize information at a scale impossible for humans, providing artists with a broader array of creative options and inspirations.",
                         "Efficiency and Accessibility: AI tools can reduce the time it takes to realize an artistic vision, making the creative process more efficient and accessible to novices and professionals alike.",
@@ -203,11 +203,11 @@ export const blogItems: BlogPost[] = [
     {
         id: 6,
         slug: "customer-motivation-productivity",
-        imageUrl: "/images/blog/blog-image-1.png",
+        imageUrl: "/images/blog/post-8.png",
         category: "Food Safety",
         date: "24 March, 2024",
         postedBy: "John Doe",
-        title: "The Power of Employee Motivation: Boosting Productivity and Performance",
+        title: "Incentivizing Success: Strategies forRewarding Employee Achievements",
         excerpt: "Food safety is a critical concern in the food industry...",
         content: {
             introduction: "In an era where technology and creativity intertwine more intricately  than ever, the role of Artificial Intelligence (AI) in the arts has  become a pivotal conversation among creators and technologists alike. As  AI continues to evolve, it transforms not only how art is made but also  reshapes the very nature of creativity. This blog explores the dynamic  intersection of AI and art, examining its implications, benefits, and  the exciting possibilities ahead.",
@@ -219,7 +219,7 @@ export const blogItems: BlogPost[] = [
                 {
                     heading: "Transforming the Creative Process",
                     content: "For artists and designers, AI serves as both a collaborator and a tool, offering new ways to engage with their crafts:",
-                    image: "/images/blog/blog-image-2.png",
+                    image: "/images/blog/post-6.png",
                     list: [
                         "Enhanced Creativity: AI can process and synthesize information at a scale impossible for humans, providing artists with a broader array of creative options and inspirations.",
                         "Efficiency and Accessibility: AI tools can reduce the time it takes to realize an artistic vision, making the creative process more efficient and accessible to novices and professionals alike.",
@@ -239,11 +239,11 @@ export const blogItems: BlogPost[] = [
     {
         id: 7,
         slug: "customer-motivation-productivity",
-        imageUrl: "/images/blog/blog-image-1.png",
+        imageUrl: "/images/blog/post    -6.png",
         category: "Food Safety",
         date: "24 March, 2024",
         postedBy: "John Doe",
-        title: "The Power of Employee Motivation: Boosting Productivity and Performance",
+        title: "Incentivizing Success: Strategies forRewarding Employee Achievements",
         excerpt: "Food safety is a critical concern in the food industry...",
         content: {
             introduction: "In an era where technology and creativity intertwine more intricately  than ever, the role of Artificial Intelligence (AI) in the arts has  become a pivotal conversation among creators and technologists alike. As  AI continues to evolve, it transforms not only how art is made but also  reshapes the very nature of creativity. This blog explores the dynamic  intersection of AI and art, examining its implications, benefits, and  the exciting possibilities ahead.",

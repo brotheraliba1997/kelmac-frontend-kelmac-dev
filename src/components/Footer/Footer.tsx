@@ -3,12 +3,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
-	IconBrandFacebookFilled,
-	IconBrandTwitterFilled,
-	IconBrandInstagramFilled,
-	IconBrandLinkedinFilled,
-	IconBrandYoutubeFilled,
-} from "@tabler/icons-react";
+	IconLinkedIn,
+	IconFacebook,
+	IconInstagram,
+	IconTwitter,
+	IconYouTube,
+} from "@/components/icons/icons";
 import NavLinks from "@/components/ui/common/NavLinks";
 import CustomSelect from "@/components/ui/form/CustomSelect";
 import { useState } from "react";
@@ -35,7 +35,7 @@ export const footerLinks = [
 ];
 
 export default function Footer() {
-	const [selected, setSelected] = useState("us");
+	const [selected, setSelected] = useState("usa");
 
 	return (
 		<footer className="font-inter">
@@ -51,30 +51,30 @@ export default function Footer() {
 								priority
 							/>
 						</Link>
-						<p className="text-lg">We are certified by industry standards.</p>
+						<p className="text-lg mt-6">We are certified by industry standards.</p>
 						<Image
-							src="/images/certified.png"
-							alt="CQI"
-							width={392}
+							src="/images/coi-irca-footer.svg"
+							alt="CQI IRCA"
+							width={250}
 							height={35}
 						/>
 					</div>
 				</div>
 
 				<div>
-					<h4 className="font-medium text-lg mb-4">Menu</h4>
+					<h4 className="text-lg mb-4 font-semibold text-primary">Menu</h4>
 					<NavLinks links={menuLinks} />
 				</div>
 
 				{/* Resources */}
 				<div>
-					<h4 className="font-medium text-lg mb-4">Resources</h4>
+					<h4 className="font-semibold text-primary text-lg mb-4">Resources</h4>
 					<NavLinks links={resourceLinks} />
 				</div>
 
 				{/* Contact */}
 				<div>
-					<h4 className="font-medium text-lg mb-4">Contact us</h4>
+					<h4 className="font-semibold text-primary text-lg mb-4">Contact us</h4>
 					<p className="mb-3">
 						<a
 							href="mailto:info@kelmacgroup.com"
@@ -84,49 +84,49 @@ export default function Footer() {
 						</a>
 					</p>
 					<CustomSelect
-						className="max-w-[170px]"
+						className="max-w-[170px] mb-3 font-semibold"
 						options={[
-							{ label: "Ireland", value: "ie" },
-							{ label: "USA", value: "us" },
+							{ label: "Ireland", value: "ireland" },
+							{ label: "USA", value: "usa" },
 							{ label: "UK", value: "uk" },
 						]}
 						value={selected}
 						onChange={(val) => setSelected(val)}
 					/>
 
-					<p className="mt-3">
+					<p className="text-sm">
 						Kelmac Group® Limited <br />
 						Old Windmill Office Suites, Lower Gerald Griffin Street <br />
 						Limerick, V94 YRD7, Ireland.
 					</p>
-					<a href="tel:+353 61 491 224" className="mt-2 font-bold">
+					<a href="tel:+35361491224" className="block mt-2 font-bold text-sm text-black">
 						+353 61 491 224
 					</a>
 				</div>
 			</div>
 
 			<div className="main-container pt-8 pb-3 text-sm">
-				© 1996 - {new Date().getFullYear()}, Kemac Group | All rights reserved.
+				© 1996 - 2023, Kemac Group | All rights reserved.
 			</div>
 
 			<div className="border-t border-[#A8B6E699] pt-4 pb-8">
 				<div className="main-container flex flex-col md:flex-row justify-between items-center gap-4">
 					{/* Social Icons */}
-					<div className="flex gap-4 text-gray-500">
+					<div className="flex gap-4">
 						<a href="#" className="hover:text-primary">
-							<IconBrandFacebookFilled className="text-secondary" size={20} />
+							<IconFacebook className="text-[#6486E6]"  />
 						</a>
 						<a href="#" className="hover:text-primary">
-							<IconBrandTwitterFilled className="text-secondary" size={20} />
+							<IconTwitter className="text-[#6486E6]"  />
 						</a>
 						<a href="#" className="hover:text-primary">
-							<IconBrandInstagramFilled className="text-secondary" size={20} />
+							<IconInstagram className="text-[#6486E6]"  />
 						</a>
 						<a href="#" className="hover:text-primary">
-							<IconBrandLinkedinFilled className="text-secondary" size={20} />
+							<IconLinkedIn className="text-[#6486E6]"  />
 						</a>
 						<a href="#" className="hover:text-primary">
-							<IconBrandYoutubeFilled className="text-secondary" size={20} />
+							<IconYouTube className="text-[#6486E6]"  />
 						</a>
 					</div>
 
@@ -135,7 +135,7 @@ export default function Footer() {
 						orientation="horizontal"
 						links={footerLinks}
 						withDivider
-						linkClassName="text-secondary underline"
+						linkClassName="text-[#6486E6] underline text-sm"
 					/>
 				</div>
 			</div>

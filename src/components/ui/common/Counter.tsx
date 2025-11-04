@@ -86,10 +86,10 @@ export default function Counter(props: CounterProps) {
           {afterText && <span className="text-[80%] text-secondary">{afterText}</span>}
         </h2>
 
-        {icon && <span className="text-secondary absolute -top-2 -right-6">{icon}</span>}
+        {icon && <span className="text-secondary absolute -top-2 -right-10">{icon}</span>}
       </div>
 
-      <p className={cn("mt-2 text-primary font-medium", labelClassName)}>{label}</p>
+      <p className={cn("mt-2 text-primary font-medium text-xl", labelClassName)}>{label}</p>
 
       {displayedSubLabel && (
         // default white text; additional/override classes can be passed via subLabelClassName or sublabelClassName

@@ -99,25 +99,25 @@ export default function Home() {
 
 			<section className="primary-py">
 				<div className=" primary-py bg-light">
-					<div className="main-container flex flex-col md:flex-row gap-12 justify-between">
+					<div className="main-container flex flex-col md:flex-row gap-40 justify-center">
 						<Counter
 							number={30}
-							icon={<IconPlus className="w-6 h-6" />}
+							icon={<IconPlus className="w-10 h-10" />}
 							label="Years Experience"
 						/>
 						<Counter
 							number={45}
-							icon={<IconPlus className="w-6 h-6" />}
+							icon={<IconPlus className="w-10 h-10" />}
 							label="Countries served"
 						/>
 						<Counter
 							number={40000}
-							icon={<IconPlus className="w-6 h-6" />}
+							icon={<IconPlus className="w-10 h-10" />}
 							label="Professionals Trained"
 						/>
 						<Counter
 							number={900}
-							icon={<IconPlus className="w-6 h-6" />}
+							icon={<IconPlus className="w-10 h-10" />}
 							label="Audits & Projects Delivered"
 						/>
 					</div>
@@ -131,8 +131,8 @@ export default function Home() {
 				<div className="main-container">
 					<Heading
 						subHeading="Courses"
-						heading="Delivering sustainable, societal impact & process based solutions"
-						headingClassName="text-white"
+						heading={<>Delivering sustainable, societal impact &<br />process based solutions</>}
+						headingClassName="text-white text-6xl"
 					/>
 
 					<div>

@@ -3,6 +3,7 @@
 import { Heading } from "@/components/ui/common/Heading";
 import { AccordionTwo } from "@/components/ui/common/Accordian/AccordianTwo";
 import { SyllabusCards } from "@/components/ui/common/SyllabusCard";
+import { IconArrowCircleUpRightblur, IconFilter } from "@/components/icons/icons";
 
 export default function Syllabus() {
 	const syllabusItems = [
@@ -14,80 +15,146 @@ export default function Syllabus() {
 				<SyllabusCards
 					cards={[
 						{
-							startTime: "08:00",
 							title: "Course Introduction",
+							hideTimeIcon: true,
 							items: [
-								"Course Logistics and Rules",
-								"Attendance and Continuous Assessment",
-								"Course Aims and Objectives",
-								"Ice Breaker Exercise",
-								"Audit Terminology Exercise",
+								{
+									text: "Course Logistics and Rules",
+									icon: <IconArrowCircleUpRightblur />,
+								},
+								{
+									text: "Attendance and Continuous Assessment",
+									icon: <IconArrowCircleUpRightblur />,
+								},
+								{
+									text: "Course Aims and Objectives",
+									icon: <IconArrowCircleUpRightblur />,
+								},
+								{
+									text: "Ice Breaker Exercise",
+									icon: <IconFilter className=" text-secondary size-10" />,
+									className: "text-secondary font-semibold",
+								},
+								{
+									text: "Ice Breaker Exercise",
+									icon: <IconArrowCircleUpRightblur />,
+								},
+								{
+									text: "Audit Terminology Exercise",
+									icon: <IconArrowCircleUpRightblur />,
+								},
 							],
 						},
 						{
-							startTime: "08:45",
 							title: "Session 1",
+							hideTimeIcon: true,
 							items: [
-								"Introduction and Objectives",
-								"Quality Management System and Its Be...",
-								"Introduction to ISO 9001:201...",
-								"Process Based Approach ...",
-								"PDCA ...",
-								"Session 1 - Learner Evaluation",
+								{
+									text: "Introduction and Objectives",
+								},
+								{
+									text: "Quality Management System and Its Be...",
+								},
+								{
+									text: "Introduction to ISO 9001:201...",
+								},
+								{
+									text: "Process Based Approach ...",
+								},
+								{
+									text: "PDCA ...",
+								},
+								{
+									text: "Session 1 - Learner Evaluation",
+								},
 							],
-							breakTime: "10:15",
-							breakLabel: "Tea/Coffee",
 						},
 						{
 							startTime: "10:30",
 							title: "Session 2",
 							items: [
-								"Introduction and Objectives",
-								"Audit Terminology",
-								"Management System Audit Types",
-								"SO 9001:2015 Internal Auditing and Internal Audit Program",
-								"Process based internal auditing/Tools",
-								"Principles of auditing",
-								"Audit Lifecycle Exercise",
+								{
+									text: "Introduction and Objectives",
+								},
+								{
+									text: "Audit Terminology",
+								},
+								{
+									text: "Management System Audit Types",
+								},
+								{
+									text: "SO 9001:2015 Internal Auditing and Internal Audit Program",
+								},
+								{
+									text: "Process based internal auditing/Tools",
+								},
+								{
+									text: "Principles of auditing",
+								},
+								{
+									text: "Audit Lifecycle Exercise",
+								},
 							],
-							breakTime: "12:30",
-							breakLabel: "Lunch",
 						},
 						{
 							startTime: "13:15",
 							title: "Session 2-Continued",
 							items: [
-								"Desired Auditor Behaviours",
-								"Audit Team/Auditee Roles throughout the Audit Lifecycle",
-								"Session 2 - Learner Evaluation",
-								"SO 9001:2015 Internal Auditing and Internal Audit Program",
+								{
+									text: "Desired Auditor Behaviours",
+								},
+								{
+									text: "Audit Team/Auditee Roles throughout the Audit Lifecycle",
+								},
+								{
+									text: "Session 2 - Learner Evaluation",
+								},
+								{
+									text: "SO 9001:2015 Internal Auditing and Internal Audit Program",
+								},
 							],
 						},
 						{
 							startTime: "14:15",
 							title: "Session 3",
 							items: [
-								"Introduction and Objectives",
-								"Internal QMS Audit Planning workflow",
-								"Initiating the Audit/Audit Objectives, Scope, Criteria",
-								"Initial contact with Process owner",
-								"Audit Feasibility",
-								"Audit Working Documents",
+								{
+									text: "Introduction and Objectives",
+								},
+								{
+									text: "Internal QMS Audit Planning workflow",
+								},
+								{
+									text: "Initiating the Audit/Audit Objectives, Scope, Criteria",
+								},
+								{
+									text: "Initial contact with Process owner",
+								},
+								{
+									text: "Audit Feasibility",
+								},
+								{
+									text: "Audit Working Documents",
+								},
 							],
-							breakTime: "15:15",
-							breakLabel: "Tea/Coffee",
 						},
 						{
 							startTime: "15:30",
 							title: "Session 3-Continued",
 							items: [
-								"Case Study - Audit Plan",
-								"Case Study - Audit Checklist",
-								"Initiating the Audit/Audit Objectives, Scope, Criteria",
-								"Session 3 - Learner Evaluation",
+								{
+									text: "Case Study - Audit Plan",
+								},
+								{
+									text: "Case Study - Audit Checklist",
+								},
+								{
+									text: "Initiating the Audit/Audit Objectives, Scope, Criteria",
+								},
+								{
+									text: "Session 3 - Learner Evaluation",
+								},
 							],
-							breakTime: "17:30",
-							breakLabel: "End of first day",
 						},
 					]}
 				/>
@@ -104,11 +171,21 @@ export default function Syllabus() {
 							startTime: "08:00",
 							title: "Session 4",
 							items: [
-								"Introduction and Objectives",
-								"Internal Audit Opening Meeting",
-								"Session 4 - Learner Evaluation",
-								"Ice Breaker Exercise",
-								"Audit Terminology Exercise",
+								{
+									text: "Introduction and Objectives",
+								},
+								{
+									text: "Internal Audit Opening Meeting",
+								},
+								{
+									text: "Session 4 - Learner Evaluation",
+								},
+								{
+									text: "Ice Breaker Exercise",
+								},
+								{
+									text: "Audit Terminology Exercise",
+								},
 							],
 							breakTime: "09:30",
 							breakLabel: "Tea/Coffee",
@@ -117,11 +194,21 @@ export default function Syllabus() {
 							startTime: "09:45",
 							title: "Session 5",
 							items: [
-								"Communication during the Audit",
-								"Collecting and Verifying Information",
-								"Techniques to Obtain Objective Evidence",
-								"Case Study – Document Review",
-								"Session 5 - Learners Evaluation",
+								{
+									text: "Communication during the Audit",
+								},
+								{
+									text: "Collecting and Verifying Information",
+								},
+								{
+									text: "Techniques to Obtain Objective Evidence",
+								},
+								{
+									text: "Case Study – Document Review",
+								},
+								{
+									text: "Session 5 - Learners Evaluation",
+								},
 							],
 							breakTime: "12:15",
 							breakLabel: "Lunch",
@@ -130,11 +217,21 @@ export default function Syllabus() {
 							startTime: "10:30",
 							title: "Session 6",
 							items: [
-								"Generating Audit Findings and Reporting Non-Conformity",
-								"Final Audit Team Meeting",
-								"Audit Findings Exercise",
-								"Audit Report",
-								"Audit Conclusion Exercise",
+								{
+									text: "Generating Audit Findings and Reporting Non-Conformity",
+								},
+								{
+									text: "Final Audit Team Meeting",
+								},
+								{
+									text: "Audit Findings Exercise",
+								},
+								{
+									text: "Audit Report",
+								},
+								{
+									text: "Audit Conclusion Exercise",
+								},
 							],
 							breakTime: "15:00",
 							breakLabel: "Tea/Coffee",
@@ -143,13 +240,27 @@ export default function Syllabus() {
 							startTime: "13:15",
 							title: "Session 6-Continued",
 							items: [
-								"Closing/Exit Meeting",
-								"Audit Follow up",
-								"Session 2 - Learner Evaluation",
-								"Correction/Corrective Actions",
-								"Closing/Exit Meeting and C/CA Exercise",
-								"Session 6 - Learner Evaluation",
-								"16:30 Course review and Questions",
+								{
+									text: "Closing/Exit Meeting",
+								},
+								{
+									text: "Audit Follow up",
+								},
+								{
+									text: "Session 2 - Learner Evaluation",
+								},
+								{
+									text: "Correction/Corrective Actions",
+								},
+								{
+									text: "Closing/Exit Meeting and C/CA Exercise",
+								},
+								{
+									text: "Session 6 - Learner Evaluation",
+								},
+								{
+									text: "16:30 Course review and Questions",
+								},
 							],
 							breakTime: "16:30",
 							breakLabel: "End of second day",
@@ -159,6 +270,7 @@ export default function Syllabus() {
 			),
 		},
 	];
+
 	return (
 		<section className="bg-primary rounded-4xl mt-12 overflow-hidden">
 			<div className="main-container primary-py">
