@@ -1,98 +1,125 @@
+"use client";
+
 import { Heading } from "@/components/ui/common/Heading";
 import { IconList } from "@/components/ui/common/IconList";
-import { IconBookFilled, IconCheck } from "@/components/icons/icons";
-import Button from "@/components/ui/button/Button";
-import { IconArrowDown } from "@tabler/icons-react";
+import { IconBookFilled } from "@/components/icons/icons";
+import { Course } from "@/types/course";
 
-export default function Overview() {
+interface OverviewProps {
+  course?: Course;
+}
 
-	const keyBenefits = [
-		"Globally recognized International Qualification with CQI-IRCA",
-		"Digital course material access provided prior to and up to 12 months post-delivery of the class including score including view access to relevant ISO standards",
-		"The renowned Kelmac Group Academy learning pathways to master a skill and advance your career, master a skill or achieve a certification",
-		"Our course material is instructionally designed, industry focus, based upon best International Auditor practice compared to other competitors low quality",
-		"The ultimate Auditor/Lead auditor course where we focus primarily on audit application, on average 30% more compared to other providers to better prepare you for your Auditor/Lead Auditor role",
-		"Trusted by Certification Bodies/Registrars, Regulators, Consultants and household industry players",
-		"Independent Training Organization that is not afraid to illustrate how the ISO conformity assessment standards are intended to be applied",
-		"Delivered by local, leading and practicing Experts who have made a 30+ year career from educating, coaching and mentoring future and exiting Auditor/Lead Auditors",
-		"The Kelmac Group Academy renowned customer service from enquiry to gaining your desired International qualification and advance your career"
-	];
+export default function Overview({ course }: OverviewProps) {
+  const learningPoints = course?.details?.whatYouWillLearn
+    ? course.details.whatYouWillLearn.map((text) => ({
+        icon: <IconBookFilled />,
+        text,
+      }))
+    : [
+        {
+          icon: <IconBookFilled />,
+          text: "Interpretation of ISO 9001:2015 requirements",
+        },
+        {
+          icon: <IconBookFilled />,
+          text: "Audit planning, execution, reporting, and follow-up.",
+        },
+        {
+          icon: <IconBookFilled />,
+          text: "Identifying nonconformities and evaluating corrective actions.",
+        },
+        {
+          icon: <IconBookFilled />,
+          text: "Leading audit teams and managing audit programs.",
+        },
+        {
+          icon: <IconBookFilled />,
+          text: "Preparing for CQI-IRCA Lead Auditor registration.",
+        },
+      ];
 
-	return (
-		<section className="bg-light mt-12">
-			<div className="main-container primary-py">
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-					{/* Left Content */}
-					<div>
-						<Heading
-							className="text-start"
-							wrapperClassName="justify-start"
-							subHeading="Overview"
-							heading="Course overview"
-							headingClassName="text-primary"
-						/>
-						<p className="md:text-2xl text-gray-700 leading-relaxed">
-							This intensive, instructor-led program turns ISO 9001 from theory into
-							evidence-driven internal auditing. Across two focused days, you'll
-							learn to map processes and risks to audit trails, select meaningful
-							samples, and use interview techniques that surface controls, gaps, and
-							improvement opportunities. You'll practice grading nonconformities,
-							distinguishing symptoms from root causes, and evaluating corrective
-							actions for effectiveness, not just closure. Guided by ISO 19011
-							principles and realistic case work, you'll produce concise,
-							decision-ready reports that support management review and continual
-							improvement. The result: credible assurance that your QMS delivers on
-							requirements and stakeholder needs—plus practical tools and habits you
-							can apply immediately in your own organization.
-						</p>
-					</div>
+  return (
+    <section className="bg-light mt-12">
+      <div className="main-container primary-py">
+        <Heading
+          className="text-start"
+          wrapperClassName="justify-start"
+          subHeading="Overview"
+          heading="Course Overview"
+          headingClassName="text-primary"
+        />
+        <p className="md:text-xl">
+          {course?.overview ||
+            "The CQI-IRCA Certified ISO 9001:2015 Lead Auditor Training Course is a comprehensive 5-day program designed to equip professionals with the knowledge and practical skills needed to conduct and lead effective quality management system (QMS) audits. Aligned with the latest ISO 9001:2015 standard and ISO 19011:2018 audit guidelines, this course provides in-depth training on auditing principles, practices, and techniques. Participants will gain hands-on experience through case studies, group activities, and role-play exercises, helping them to plan, conduct, report, and follow up audits with confidence. The course also prepares delegates for the CQI-IRCA certification exam and supports their journey toward becoming registered Lead Auditors."}
+        </p>
 
-					{/* Right Image with Download Button */}
-					<div className="relative max-w-xl mx-auto lg:mx-8">
-						<div
-							className="h-96 lg:h-[650px] rounded-3xl bg-cover bg-center bg-no-repeat relative"
-							style={{ backgroundImage: "url('/images/bg/overview.png')" }}
-						>
-							<div className="absolute bottom-6 left-1/2 transform -translate-x-1/2">
-								<Button
-									text="Download course curriculum"
-									color="white"
-									size="lg"
-									icon={<IconArrowDown className="w-4 h-4" />}
-									iconclassName="bg-gray-800 text-white"
-									spanclassName="px-8 whitespace-nowrap"
-									className="rounded-full"
-								/>
-							</div>
-						</div>
-					</div>
-				</div>
+        <h5 className="text-2xl md:text-3xl font-semibold text-black mt-6 mb-4">
+          What You’ll Learn
+        </h5>
+        <IconList
+          className="text-lg md:text-xl text-black"
+          items={learningPoints}
+        />
 
-				{/* Major Key Benefits Section */}
-				<div className="mt-16">
-					<Heading
-						className="text-start"
-						wrapperClassName="justify-start"
-						heading="Major key benefits"
-						headingClassName="text-primary text-4xl mb-8 ml-2"
-					/>
+        {course?.details?.requirements &&
+          course.details.requirements.length > 0 && (
+            <>
+              <h5 className="text-2xl md:text-3xl font-semibold text-black mt-8 mb-4">
+                Requirements
+              </h5>
+              <IconList
+                className="text-lg md:text-xl text-black"
+                items={course.details.requirements.map((req) => ({
+                  icon: <IconBookFilled />,
+                  text: req,
+                }))}
+              />
+            </>
+          )}
 
-					<div className="space-y-4">
-						{keyBenefits.map((benefit, index) => (
-							<div key={index} className="bg-white rounded-xl p-5 shadow-[0_2px_8px_0_rgba(0,0,0,0.04)]">
-								<div className="flex items-center gap-4">
-									<div className=" w-8 h-8 flex items-center justify-center">
-										<IconCheck className="w-10 h-10 text-white" />
-									</div>
-									<p className="text-primary text-xl leading-relaxed">
-										{benefit}
-									</p>
-								</div>
-							</div>
-						))}
-					</div>
-				</div>
-			</div>
-		</section>
-	);
+        {course?.details?.targetAudience &&
+          course.details.targetAudience.length > 0 && (
+            <>
+              <h5 className="text-2xl md:text-3xl font-semibold text-black mt-8 mb-4">
+                Who Should Attend
+              </h5>
+              <IconList
+                className="text-lg md:text-xl text-black"
+                items={course.details.targetAudience.map((audience) => ({
+                  icon: <IconBookFilled />,
+                  text: audience,
+                }))}
+              />
+            </>
+          )}
+
+        {course?.details?.features && course.details.features.length > 0 && (
+          <>
+            <h5 className="text-2xl md:text-3xl font-semibold text-black mt-8 mb-4">
+              Course Features
+            </h5>
+            <IconList
+              className="text-lg md:text-xl text-black"
+              items={course.details.features.map((feature) => ({
+                icon: <IconBookFilled />,
+                text: feature,
+              }))}
+            />
+          </>
+        )}
+
+        <p className="mt-6 font-bold md:text-xl text-lg text-black">
+          This course is ideal for quality professionals, auditors, consultants,
+          and anyone responsible for maintaining or evaluating QMS performance.
+          Upon successful completion, participants will receive a{" "}
+          <span className="text-secondary">
+            {course?.snapshot?.certificate
+              ? "Certificate of Completion"
+              : "CQI-IRCA Certified Lead Auditor Certificate"}
+          </span>
+          .
+        </p>
+      </div>
+    </section>
+  );
 }
