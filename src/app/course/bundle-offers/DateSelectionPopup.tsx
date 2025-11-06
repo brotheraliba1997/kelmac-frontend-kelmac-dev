@@ -1,8 +1,9 @@
-'use client';
+"use client";
 import { useState } from "react";
 import { Clock, X } from "lucide-react";
 import { Iconcheckmark } from "@/components/icons/icons";
 import { Heading } from "@/components/ui/common/Heading";
+import Link from "next/link";
 
 interface DateOption {
   date: string;
@@ -15,11 +16,31 @@ interface DateSelectionPopupProps {
 }
 
 const dateOptions: DateOption[] = [
-  { date: "Apr 8-9, 15-16, 2025", time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)", type: "Full Week" },
-  { date: "Mar 15-19, 2025", time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)", type: "" },
-  { date: "May 1-5, 2025", time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)", type: "Weekend" },
-  { date: "May 1-5, 2025", time: "5:00 PM - 9:00 PM (Eastern Time GMT-5)", type: "Evening" },
-  { date: "May 1-5, 2025", time: "6:00 PM - 9:00 PM (Eastern Time GMT-5)", type: "Evening" },
+  {
+    date: "Apr 8-9, 15-16, 2025",
+    time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
+    type: "Full Week",
+  },
+  {
+    date: "Mar 15-19, 2025",
+    time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
+    type: "",
+  },
+  {
+    date: "May 1-5, 2025",
+    time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
+    type: "Weekend",
+  },
+  {
+    date: "May 1-5, 2025",
+    time: "5:00 PM - 9:00 PM (Eastern Time GMT-5)",
+    type: "Evening",
+  },
+  {
+    date: "May 1-5, 2025",
+    time: "6:00 PM - 9:00 PM (Eastern Time GMT-5)",
+    type: "Evening",
+  },
 ];
 
 function getBadgeStyles(type: string) {
@@ -31,7 +52,9 @@ function getBadgeStyles(type: string) {
   return "bg-purple-100 text-purple-600";
 }
 
-export default function DateSelectionPopup({ onClose }: DateSelectionPopupProps) {
+export default function DateSelectionPopup({
+  onClose,
+}: DateSelectionPopupProps) {
   const [selectedOption, setSelectedOption] = useState<string>(
     "Mar 15-19, 2025 9:00 AM - 4:30 PM (Eastern Time GMT-5)"
   );
@@ -59,10 +82,6 @@ export default function DateSelectionPopup({ onClose }: DateSelectionPopupProps)
           </button>
         </div>
 
-
-
-
-
         <div className="bg-secondary rounded-b-2xl p-5 space-y-2 w-full">
           {dateOptions.map((option, index) => {
             const uniqueKey = `${option.date} ${option.time}`;
@@ -72,35 +91,61 @@ export default function DateSelectionPopup({ onClose }: DateSelectionPopupProps)
               <div
                 key={index}
                 onClick={() => handleDateSelect(option.date, option.time)}
-                className={`relative rounded-xl p-5 cursor-pointer transition-all duration-200 ${isSelected
-                  ? "bg-primary text-white shadow-lg"
-                  : "bg-white text-gray-900 hover:shadow-md"
-                  }`}
+                className={`relative rounded-xl p-5 cursor-pointer transition-all duration-200 ${
+                  isSelected
+                    ? "bg-primary text-white shadow-lg"
+                    : "bg-white text-gray-900 hover:shadow-md"
+                }`}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 space-y-2">
-                    <div className="flex items-center gap-3 flex-wrap">
-                      <h3 className={`text-xl font-semibold ${isSelected ? "text-white" : "text-gray-900"}`}>
-                        {option.date}
-                      </h3>
-                      {option.type && (
-                        <span className={`px-3 py-1 rounded-md text-xs font-medium ${isSelected ? "bg-white/20 text-white" : getBadgeStyles(option.type)
-                          }`}>
-                          {option.type}
+                <Link
+                  href="/registration/basicinfo"
+                  onClick={onClose}
+                  className="block"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1 space-y-2">
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <h3
+                          className={`text-xl font-semibold ${
+                            isSelected ? "text-white" : "text-gray-900"
+                          }`}
+                        >
+                          {option.date}
+                        </h3>
+                        {option.type && (
+                          <span
+                            className={`px-3 py-1 rounded-md text-xs font-medium ${
+                              isSelected
+                                ? "bg-white/20 text-white"
+                                : getBadgeStyles(option.type)
+                            }`}
+                          >
+                            {option.type}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <Clock
+                          className={`w-4 h-4 ${
+                            isSelected ? "text-white/80" : "text-gray-400"
+                          }`}
+                        />
+                        <span
+                          className={`text-sm font-medium ${
+                            isSelected ? "text-white/90" : "text-gray-600"
+                          }`}
+                        >
+                          {option.time}
                         </span>
-                      )}
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <Clock className={`w-4 h-4 ${isSelected ? "text-white/80" : "text-gray-400"}`} />
-                      <span className={`text-sm font-medium ${isSelected ? "text-white/90" : "text-gray-600"}`}>
-                        {option.time}
-                      </span>
-                    </div>
+                    {isSelected && (
+                      <Iconcheckmark className="w-6 h-6 text-white" />
+                    )}
                   </div>
-
-                  {isSelected && <Iconcheckmark className="w-6 h-6 text-white" />}
-                </div>
+                </Link>
               </div>
             );
           })}

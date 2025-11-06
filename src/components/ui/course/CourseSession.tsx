@@ -22,10 +22,13 @@ export function CourseSession({
 	time = "9:00 AM - 4:30 PM (Eastern Time (GMT-5))",
 	sessionBadge = "Split Week",
 	sessionBadgeType = "purple",
-	href = "#",
+	href = "/registration/basicinfo",
 	className = "",
 	seatsLeft,
 }: CourseSessionProps) {
+
+
+	
 	const CourseSessionClasses = cn(
 		"bg-white rounded-xl p-4 md:p-7 grid grid-cols-1 md:grid-cols-4 items-center justify-center shadow-[0_15px_30px_0_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_0_rgba(0,0,0,0.08)] transition-shadow duration-300",
 		className
