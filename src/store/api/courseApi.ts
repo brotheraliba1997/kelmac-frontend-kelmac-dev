@@ -55,12 +55,7 @@ export const courseApi = createApi({
         return `/courses${queryString ? `?${queryString}` : ""}`;
       },
       providesTags: (result) =>
-        result
-          ? [
-              ...result.data.map(({ _id }) => ({
-                type: "Course" as const,
-                id: _id,
-              })),
+        result? [...result.data.map(({ _id }) => ({type: "Course" as const, id: _id,})),
               { type: "Courses" as const, id: "LIST" },
             ]
           : [{ type: "Courses" as const, id: "LIST" }],
@@ -106,7 +101,7 @@ export const courseApi = createApi({
   }),
 });
 
-// Export hooks for usage in functional components
+
 export const {
   useGetCourseBySlugQuery,
   useGetCourseByIdQuery,
