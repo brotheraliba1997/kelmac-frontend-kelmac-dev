@@ -1,6 +1,7 @@
 "use client";
 import { IconArrowRight, IconCalender } from "@/components/icons/icons";
 import { Heading } from "@/components/ui/common/Heading";
+import axios from "axios";
 import { useState, useRef, useEffect } from "react";
 
 interface RegistrationCompleteProps {
@@ -49,7 +50,41 @@ const generateMockData = (): RegistrationCompleteProps => {
 };
 
 export default function RegistrationComplete() {
-	const [data] = useState<RegistrationCompleteProps>(generateMockData());
+	// const [data] = useState<RegistrationCompleteProps>(generateMockData());
+
+	  const [data, setData] = useState<any | null>(null);
+	    const [loading, setLoading] = useState(true);
+
+
+
+	   useEffect(() => {
+    const fetchSchedule = async () => {
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/class-schedule/690f8bc0d9a9675662aa65e7`);
+        const s = res.data;
+
+        // Map _id to id string
+        
+
+        setData(s);
+      } catch (err) {
+        console.error("Failed to fetch schedule:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSchedule();
+  }, []);
+
+
+  
+
+
+  
+
+
+
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedSession, setSelectedSession] = useState(data.courseDate);
 	const dropdownRef = useRef<HTMLDivElement>(null);
@@ -98,7 +133,7 @@ export default function RegistrationComplete() {
 							>
 								<IconCalender width={22} height={22} className="mr-2" />
 								<div className="flex flex-col leading-tight">
-									<span className="text-lg font-semibold">{selectedSession}</span>
+									{/* <span className="text-lg font-semibold">{selectedSession}</span> */}
 									<span className="text-sm text-white/80">{data.courseName}</span>
 								</div>
 
@@ -128,7 +163,7 @@ export default function RegistrationComplete() {
 
 								{isOpen && (
 									<div className="absolute top-full right-0 bg-white rounded-lg shadow-xl text-black w-64 overflow-hidden animate-fadeIn z-50">
-										{sessions.map((session, idx) => (
+										{/* {sessions.map((session, idx) => (
 											<button
 												key={idx}
 												onClick={() => handleSelect(session)}
@@ -140,7 +175,7 @@ export default function RegistrationComplete() {
 											>
 												{session}
 											</button>
-										))}
+										))} */}
 									</div>
 								)}
 							</div>
@@ -208,7 +243,7 @@ export default function RegistrationComplete() {
 								</div>
 								<div className="flex mb-4">
 									<dt className="text-black/80 font-medium w-49">Date:</dt>
-									<dd className="text-primary font-semibold">{selectedSession}</dd>
+									{/* <dd className="text-primary font-semibold">{selectedSession}</dd> */}
 								</div>
 								<div className="flex mb-4">
 									<dt className="text-black/80 font-medium w-49">Time:</dt>
