@@ -7,7 +7,7 @@
 Create `.env.local` in the project root:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
 ```
 
 ### Step 2: Verify Backend is Running

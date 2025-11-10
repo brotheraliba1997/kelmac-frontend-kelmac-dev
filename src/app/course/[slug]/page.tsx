@@ -28,12 +28,12 @@ import type { FormData } from "@/data/questionTypes";
 import { useState, useRef, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useGetCourseBySlugQuery } from "@/store/api/courseApi";
+import ConfirmBooking from "../bundle-offers/BookingConfirmationModal";
 
 export default function CoursePage() {
   const params = useParams();
   const slug = params.slug as string;
 
-  // Use RTK Query hook to fetch course data
   const {
     data: course,
     isLoading: loading,
@@ -43,7 +43,6 @@ export default function CoursePage() {
     skip: !slug, // Skip the query if slug is not available
   });
 
-  // Convert RTK Query error to user-friendly message
   const error = isError
     ? apiError && "status" in apiError
       ? `Error: ${apiError.status}`
@@ -145,7 +144,10 @@ export default function CoursePage() {
     setSearchQuery("");
     setIsSearchActive(false);
   };
-
+  const [showConfirm, setShowConfirm] = useState(false);
+  const handleConfirm = () => {
+    console.log("Booking confirmed!");
+  };
   // Loading state
   if (loading) {
     return (
@@ -218,7 +220,7 @@ export default function CoursePage() {
             <Button
               iconclassName="p-0 bg-primary"
               spanclassName="px-2"
-              href="/courses"
+              onClick={() => setShowConfirm(true)}
               text="Book Now"
               color="white"
               icon={<IconArrowRight className="stroke-white " />}
@@ -425,6 +427,15 @@ export default function CoursePage() {
           isOpen={isQuestionsModalOpen}
           onClose={() => setIsQuestionsModalOpen(false)}
           onSubmit={handleQuestionSubmit}
+        />
+      )}
+
+      {showConfirm && (
+        <ConfirmBooking
+          timetable={course.timeTable}
+          courseId={course.id}
+          onClose={() => setShowConfirm(false)}
+          onConfirm={handleConfirm}
         />
       )}
     </main>

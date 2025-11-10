@@ -88,7 +88,7 @@ export default function BasicInfo({
         <div className="main-container primary-py">
           <div className="text-white md:w-[85%] lg:w-[62%]">
             <h1 className="text-4xl md:text-6xl font-hedvig leading-snug">
-              Registration Formsss
+              Registration Forms
             </h1>
             <div className="mt-4 flex items-center">
               <div

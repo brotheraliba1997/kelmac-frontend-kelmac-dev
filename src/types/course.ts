@@ -25,6 +25,14 @@ export interface CourseSession {
   updatedAt: string;
 }
 
+export interface Booking {
+  id: any;
+  courseId: string;
+  studentId: string;
+  timeTableId: string;
+  status: string;
+}
+
 export interface SessionTopic {
   title: string;
   description: string;
@@ -56,7 +64,15 @@ export interface CourseFaq {
   answer: string;
 }
 
+export interface CourseTimeTable {
+  id: string;
+  date: string;
+  description: string;
+  time: string;
+}
+
 export interface Course {
+  id: any;
   _id: string;
   title: string;
   slug: string;
@@ -82,6 +98,7 @@ export interface Course {
   isFeatured: boolean;
   isBestseller: boolean;
   isNew: boolean;
+  timeTable: CourseTimeTable[];
   createdAt: string;
   updatedAt: string;
 }

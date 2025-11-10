@@ -370,7 +370,7 @@ const { data: course, isLoading: loading } = useGetCourseBySlugQuery(slug);
 Make sure `.env.local` is configured:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
 ```
 
 ## Debugging with Redux DevTools

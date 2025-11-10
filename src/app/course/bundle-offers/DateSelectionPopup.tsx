@@ -13,6 +13,13 @@ interface DateOption {
 
 interface DateSelectionPopupProps {
   onClose: () => void;
+  courseId: string;
+  timetable: {
+    id: string;
+    date: string;
+    description: string;
+    time: string;
+  }[];
 }
 
 const dateOptions: DateOption[] = [
@@ -54,14 +61,23 @@ function getBadgeStyles(type: string) {
 
 export default function DateSelectionPopup({
   onClose,
+  timetable,
+  courseId,
 }: DateSelectionPopupProps) {
-  const [selectedOption, setSelectedOption] = useState<string>(
-    "Mar 15-19, 2025 9:00 AM - 4:30 PM (Eastern Time GMT-5)"
-  );
+  const [selectedOption, setSelectedOption] = useState<string>("");
 
   const handleDateSelect = (date: string, time: string) => {
     const uniqueKey = `${date} ${time}`;
     setSelectedOption(uniqueKey);
+  };
+  const formattedDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const options: Intl.DateTimeFormatOptions = {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    };
+    return date.toLocaleDateString(undefined, options);
   };
 
   return (
@@ -83,7 +99,7 @@ export default function DateSelectionPopup({
         </div>
 
         <div className="bg-secondary rounded-b-2xl p-5 space-y-2 w-full">
-          {dateOptions.map((option, index) => {
+          {timetable.map((option: any, index: number) => {
             const uniqueKey = `${option.date} ${option.time}`;
             const isSelected = selectedOption === uniqueKey;
 
@@ -99,7 +115,11 @@ export default function DateSelectionPopup({
               >
                 <Link
                   href="/registration/basicinfo"
-                  onClick={onClose}
+                  onClick={() => {
+                    localStorage.setItem("selectedCourseId", courseId);
+                    localStorage.setItem("selectedTimetableId", option.id);
+                    onClose();
+                  }}
                   className="block"
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -110,17 +130,19 @@ export default function DateSelectionPopup({
                             isSelected ? "text-white" : "text-gray-900"
                           }`}
                         >
-                          {option.date}
+                          {formattedDate(option.date)}
                         </h3>
-                        {option.type && (
+                        {option.description && (
                           <span
                             className={`px-3 py-1 rounded-md text-xs font-medium ${
                               isSelected
                                 ? "bg-white/20 text-white"
-                                : getBadgeStyles(option.type)
+                                : getBadgeStyles(
+                                    option.description.split(",")[0]
+                                  )
                             }`}
                           >
-                            {option.type}
+                            {option.description.split(",")[0]}
                           </span>
                         )}
                       </div>

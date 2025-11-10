@@ -181,7 +181,7 @@ export default function Course() {
             <Button
               iconclassName="p-0 bg-primary"
               spanclassName="px-2"
-            //   href="/courses"
+              //   href="/courses"
               text="Book Now"
               color="white"
               icon={<IconArrowRight className="stroke-white " />}
@@ -355,7 +355,6 @@ export default function Course() {
               text="View Certificate"
               color="primary"
               icon={<IconArrowRight className="text-primary" />}
-			 
             />
           </div>
         </div>
@@ -373,6 +372,15 @@ export default function Course() {
         <ConfirmBooking
           onClose={() => setShowConfirm(false)}
           onConfirm={handleConfirm}
+          courseId={"course.id"}
+          timetable={[
+            {
+              id: "690fd1f2f69ec50177092041",
+              date: "2025-11-06T13:44:37.064Z",
+              description: "Full Week , Weekend Per day",
+              time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
+            },
+          ]}
         />
       )}
     </main>

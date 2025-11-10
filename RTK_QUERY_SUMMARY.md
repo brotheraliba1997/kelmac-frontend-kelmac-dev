@@ -151,14 +151,14 @@ const { data: course, isLoading, isError } = useGetCourseBySlugQuery(slug);
 
 ```env
 # .env.local
-NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
 ```
 
 ### API Base URL
 
 Configured in `src/store/api/courseApi.ts`:
 ```typescript
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1`;
 ```
 
 ## 📊 Example Usage in Components

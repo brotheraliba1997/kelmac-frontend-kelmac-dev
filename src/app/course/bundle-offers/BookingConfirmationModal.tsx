@@ -9,9 +9,21 @@ import DateSelectionPopup from "@/app/course/bundle-offers/DateSelectionPopup";
 interface ConfirmBookingProps {
   onClose: () => void;
   onConfirm: () => void;
+  courseId: string;
+  timetable: {
+    id: string;
+    date: string;
+    description: string;
+    time: string;
+  }[];
 }
 
-export default function ConfirmBooking({ onClose, onConfirm }: ConfirmBookingProps) {
+export default function ConfirmBooking({
+  onClose,
+  onConfirm,
+  courseId,
+  timetable,
+}: ConfirmBookingProps) {
   const [mounted, setMounted] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
@@ -94,7 +106,8 @@ export default function ConfirmBooking({ onClose, onConfirm }: ConfirmBookingPro
               Before You Confirm Your Booking
             </h2>
             <p className="text-gray-600 text-base">
-              Please review and confirm the following to complete your enrollment.
+              Please review and confirm the following to complete your
+              enrollment.
             </p>
           </div>
 
@@ -196,7 +209,13 @@ export default function ConfirmBooking({ onClose, onConfirm }: ConfirmBookingPro
         </div>
       </div>
 
-      {showPopup && <DateSelectionPopup onClose={handlePopupClose} />}
+      {showPopup && (
+        <DateSelectionPopup
+          courseId={courseId}
+          timetable={timetable}
+          onClose={handlePopupClose}
+        />
+      )}
     </>,
     document.body
   );

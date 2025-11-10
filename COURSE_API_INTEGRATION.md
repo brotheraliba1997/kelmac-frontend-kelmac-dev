@@ -67,12 +67,12 @@ GET /api/v1/courses/slug/complete-executive-mastery-all-access
 
 1. Create a `.env.local` file in the project root:
 ```bash
-NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
 ```
 
 2. For production, update with your production API URL:
 ```bash
-NEXT_PUBLIC_API_URL=https://api.yourdomain.com
+NEXT_PUBLIC_API_BASE_URL=https://api.yourdomain.com
 ```
 
 ## Usage
@@ -187,7 +187,7 @@ Test the integration:
 
 Before deploying:
 
-1. Set `NEXT_PUBLIC_API_URL` environment variable in your hosting platform
+1. Set `NEXT_PUBLIC_API_BASE_URL` environment variable in your hosting platform
 2. Test with production API endpoint
 3. Verify all course slugs work correctly
 4. Test loading and error states

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRegisterInterpreterMutation } from "@/store/api/authApi";
+import { useCreateBookingMutation } from "@/store/api/courseApi";
 import React, { useState } from "react";
 
 import { toast } from "react-hot-toast";
@@ -22,7 +23,7 @@ export default function LearnerForm() {
   const [formData, setFormData] = useState<any>({
     firstName: "",
     lastName: "",
-    password:"",
+    password: "",
     company: "",
     jobTitle: "",
     emailAddress: "",
@@ -32,6 +33,8 @@ export default function LearnerForm() {
   });
 
   const [registerInterpreter, { isLoading }] = useRegisterInterpreterMutation();
+  const [createBooking, { isLoading: isBookingLoading }] =
+    useCreateBookingMutation();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -64,30 +67,42 @@ export default function LearnerForm() {
       }
     }
 
-    try {
-      await registerInterpreter({
-        ...formData,
-        email: formData.emailAddress,
-        role: { id: 2 },
-        status: { id: 1 },
-      }).unwrap();
+    // try {
+    const data = await registerInterpreter({
+      ...formData,
+      email: formData.emailAddress,
+      role: { id: 2 },
+      status: { id: 1 },
+    });
 
-      toast.success("Registration successful! Please check your email.");
-      setFormData({
-        firstName: "",
-        lastName: "",
-        password: "",
-        company: "",
-        jobTitle: "",
-        emailAddress: "",
-        phoneNumber: "",
-        country: "",
-        industry: "",
-      });
-    } catch (error: any) {
-      console.error("Registration error:", error);
-      toast.error(error?.data?.message || "Registration failed.");
+    const courseId = localStorage.getItem("selectedCourseId") || "";
+    const timetableId = localStorage.getItem("selectedTimetableId") || "";
+
+    console.log("Registered user data:", data);
+    if (data?.data?.user?.id) {
+      await createBooking({
+        courseId: courseId,
+        studentId: data?.data?.user?.id,
+        timeTableId: timetableId,
+      }).unwrap();
     }
+
+    toast.success("Registration successful! Please check your email.");
+    setFormData({
+      firstName: "",
+      lastName: "",
+      password: "",
+      company: "",
+      jobTitle: "",
+      emailAddress: "",
+      phoneNumber: "",
+      country: "",
+      industry: "",
+    });
+    // } catch (error: any) {
+    //   console.error("Registration error:", error);
+    //   toast.error(error?.data?.message || "Registration failed.");
+    // }
   };
 
   return (
@@ -121,7 +136,6 @@ export default function LearnerForm() {
           />
         </div>
 
-
         <div>
           <label className="block text-sm font-medium text-black mb-1">
             Password
@@ -136,8 +150,6 @@ export default function LearnerForm() {
           />
         </div>
       </div>
-
-      
 
       {/* Company + Job Title */}
       <div className="grid grid-cols-2 gap-4">

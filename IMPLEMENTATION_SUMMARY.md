@@ -8,7 +8,7 @@ The course detail page has been successfully integrated with the backend API to 
 
 1. **`src/lib/api.ts`**
    - API configuration and fetch utility
-   - Base URL: `${NEXT_PUBLIC_API_URL}/api/v1`
+   - Base URL: `${NEXT_PUBLIC_API_BASE_URL}/api/v1`
    - Custom error handling with `ApiError` class
    - Generic `fetchApi<T>()` function for type-safe requests
 
@@ -112,7 +112,7 @@ GET /api/v1/courses/slug/complete-executive-mastery-all-access
 
 1. **Create `.env.local` file:**
 ```bash
-NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
 ```
 
 2. **Install dependencies** (if needed):
