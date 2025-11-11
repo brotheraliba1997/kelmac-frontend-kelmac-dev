@@ -2,7 +2,7 @@
 
 import Button from "@/components/ui/button/Button";
 import { IconArrowRight, IconLock } from "@/components/icons/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface CourseFeesSummaryProps {
   certificationFee?: number;
@@ -28,9 +28,14 @@ export default function CourseFeesSummary({
   className = "",
 }: CourseFeesSummaryProps) {
   const [couponCode, setCouponCode] = useState("");
-  const selectedCourse = JSON.parse(
-    localStorage.getItem("selectedCourse") || "{}"
-  );
+
+ 
+
+
+     const selectedCourse = JSON.parse(
+      localStorage.getItem("selectedCourse") || "{}"
+    );
+
   // Safe calculations with fallback values
   const regularFee = selectedCourse?.price || 0;
   const discountedPrice = selectedCourse?.discountedPrice || regularFee;

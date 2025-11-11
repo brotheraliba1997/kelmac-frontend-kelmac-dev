@@ -8,6 +8,7 @@ import { IconCalender, IconLock } from "@/components/icons/icons";
 import { IconArrowRight } from "@tabler/icons-react";
 import { Heading } from "@/components/ui/common/Heading";
 import { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 interface Course {
   name: string;
@@ -81,6 +82,16 @@ export default function BasicInfo({
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const auth = useSelector((state: any) => state.auth);
+
+  console.log(auth, "Learner=>");
+
+  useEffect(() => {
+    if (auth?.user !== null && auth?.token !== null) {
+      router.push("/registration/payment");
+    }
   }, []);
 
   return (

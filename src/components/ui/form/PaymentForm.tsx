@@ -31,8 +31,12 @@ export default function PaymentForm() {
   console.log(courseId, "courseId");
   const { data, error, refetch } = useGetCourseByIdQuery(courseId);
 
+  console.log(data, "refetch");
+
   const timetableId = localStorage.getItem("selectedTimetableId") || "";
   console.log(timetableId, "timetableId");
+
+  // 2️⃣ Find date/time from timeTable
 
   const handlePay = async () => {
     console.log("Initiating payment...", stripe, elements);
@@ -46,41 +50,39 @@ export default function PaymentForm() {
       const res: any = await createPayment({
         courseId,
         // userId: auth?.user?.id,
-        userId: "690151185818ae0f575dc16f",
+        userId: auth?.user?.id,
         amount: data?.price,
         currency: data?.currency,
         metadata: {},
       }).unwrap();
 
-      // 2️⃣ Find date/time from timeTable
-      const DateAndTime = data?.timeTable?.find(
-        (item: any) => item?.id === "691231b111f6e236f9f5ed4f"
+      const DateAndTime: any = data?.timeTable?.find(
+        (item: any) => item?.id === timetableId
       );
 
-      if (!DateAndTime) {
-        console.error("Date and time not found!");
-        return;
-      }
+      console.log(DateAndTime, "DateAndTime");
 
-      // Format time → pick start time with AM/PM intact
-      // e.g. "9:00 AM - 5:00 PM" → "9:00 AM"
+      const formatted = {
+        date: new Date(DateAndTime?.date).toISOString().split("T")[0], // "2025-11-17"
+        time: DateAndTime?.time
+          .split("-")[0]
+          .trim()
+          .replace("AM", "")
+          .replace("PM", "")
+          .trim(),
+      };
 
-      const formattedTime = DateAndTime.time
-        .split("-")[0]
-        .trim()
-        .replace(/\s?(AM|PM)/i, "");
+      const [hour, minute] = formatted.time.split(":").map(Number);
+      const timeWithZero = `${hour < 10 ? "0" + hour : hour}:${minute}`;
 
-      console.log(formattedTime);
-
-      // 3️⃣ Create schedule on backend
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/class-schedule`,
         {
-          course: "6912ae5accfc0ef6b06dc64b",
+          course: courseId,
           instructor: (data?.instructor as any)?.id,
           students: auth?.user?.id,
-          date: DateAndTime?.date,
-          time: formattedTime,
+          date: formatted?.date,
+          time: timeWithZero,
           duration: data?.sessions?.[0]?.duration,
           securityKey: "a6d2b99a-f81a-4cb5-a123-984e07fd9e33",
           status: "scheduled",
