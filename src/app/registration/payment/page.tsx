@@ -41,9 +41,6 @@ export default function payemntInfo({
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY! // 👈 your Stripe public key
   );
 
-
- 
-
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -53,9 +50,6 @@ export default function payemntInfo({
   const handleNext = () => {
     router.push("/payment");
   };
-
-
-
 
   const total =
     course.regularFee +

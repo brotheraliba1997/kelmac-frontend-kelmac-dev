@@ -78,6 +78,10 @@ export default function LearnerForm() {
     const courseId = localStorage.getItem("selectedCourseId") || "";
     const timetableId = localStorage.getItem("selectedTimetableId") || "";
 
+
+    console.log(courseId, "courseId")
+  
+
     console.log("Registered user data:", data);
     if (data?.data?.user?.id) {
       await createBooking({

@@ -77,14 +77,6 @@ export default function RegistrationComplete() {
     fetchSchedule();
   }, []);
 
-
-  
-
-
-  
-
-
-
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedSession, setSelectedSession] = useState(data.courseDate);
 	const dropdownRef = useRef<HTMLDivElement>(null);

@@ -12,6 +12,7 @@ import { useCreatePaymentIntentMutation } from "@/store/api/stripeApi";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useRegisterInterpreterMutation } from "@/store/api/authApi";
+import { useGetCourseByIdQuery } from "@/store/api/courseApi";
 import { useSelector } from "react-redux";
 
 export default function PaymentForm() {
@@ -19,88 +20,109 @@ export default function PaymentForm() {
 
   const auth = useSelector((state: any) => state?.auth);
 
-
-
   const [createPayment, { isLoading, isSuccess, isError }] =
     useCreatePaymentIntentMutation();
 
   const stripe = useStripe();
   const elements = useElements();
 
+  const courseId = localStorage.getItem("selectedCourseId") || "";
+
+  const { data, error, refetch } = useGetCourseByIdQuery(
+    "691231b111f6e236f9f5ed4c"
+  );
+
+  const timetableId = localStorage.getItem("selectedTimetableId") || "";
+  console.log(timetableId, "timetableId");
+
   const handlePay = async () => {
     if (!stripe || !elements) {
       console.error("Stripe or Elements not loaded");
       return;
     }
+
     try {
+      // 1️⃣ Create payment intent
       const res: any = await createPayment({
-        courseId: "69014cbd0fce61265374b155",
+        courseId: "6912ae5accfc0ef6b06dc64b",
         userId: auth?.user?.id,
-        amount: 1000,
-        currency: "usd",
+        amount: data?.price,
+        currency: data?.currency,
         metadata: {},
       }).unwrap();
 
+      // 2️⃣ Find date/time from timeTable
+      const DateAndTime = data?.timeTable?.find(
+        (item: any) => item?.id === "691231b111f6e236f9f5ed4f"
+      );
+
+      if (!DateAndTime) {
+        console.error("Date and time not found!");
+        return;
+      }
+
+      
+       
+
+      // Format time → pick start time with AM/PM intact
+      // e.g. "9:00 AM - 5:00 PM" → "9:00 AM"
+
+      const formattedTime = DateAndTime.time
+        .split("-")[0]
+        .trim()
+        .replace(/\s?(AM|PM)/i, "");
+
+      console.log({
+        date: formattedDate,
+        time: formattedTime,
+      });
+
+      console.log(formattedTime)
+
+      // 3️⃣ Create schedule on backend
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/class-schedule`,
         {
-          course: "671018fabc123456789ef013",
-          instructor: "671018fabc123456789ef014",
+          course: "6912ae5accfc0ef6b06dc64b",
+          instructor: (data?.instructor as any)?.id,
           students: auth?.user?.id,
-          date: "2025-11-05",
-          time: "15:30",
-          duration: 60,
-          googleMeetLink: "https://meet.google.com/xyz-1234-abc",
+          date: DateAndTime?.date,
+          time: formattedTime,
+          duration: data?.sessions?.[0]?.duration,
           securityKey: "a6d2b99a-f81a-4cb5-a123-984e07fd9e33",
           status: "scheduled",
           progress: 0,
         }
       );
 
+      // 4️⃣ Confirm payment with Stripe
       const clientSecret = res.clientSecret;
-      console.log("Client Secret:", clientSecret);
-
-      // Get CardElement
       const cardElement = elements.getElement(CardElement);
+
       if (!cardElement) {
         console.error(
-          "CardElement not found! Make sure it's mounted inside <Elements>."
+          "CardElement not found! Make sure it's inside <Elements>."
         );
         return;
       }
 
-      // 2️⃣ Confirm payment with Stripe
       const result = await stripe.confirmCardPayment(clientSecret, {
         payment_method: { card: cardElement },
       });
 
       if (result.error) {
         console.error("Payment failed:", result.error.message);
-        // setStatus(`❌ ${result.error.message}`);
+        // Optionally: setStatus(`❌ ${result.error.message}`);
       } else if (
         result.paymentIntent &&
         result.paymentIntent.status === "succeeded"
       ) {
-        console.log("Payment succeeded:", result);
-
-        // Optional: Notify backend about success
-        /*
-      await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/payment/confirm`,
-        {
-          paymentIntentId: result.paymentIntent.id,
-          courseId: "69014cbd0fce61265374b155",
-          userId: "6911ec768e2abd75f6c55472",
-          amount: 1000,
-        }
-      );
-      */
-
-        // setStatus('✅ Payment successful!');
+        console.log("✅ Payment succeeded:", result.paymentIntent);
+        // Optionally notify backend or update UI
       }
     } catch (err: any) {
       console.error("Error in payment process:", err);
-      // setStatus('⚠️ Payment failed.');
+      // Optionally: setStatus("⚠️ Payment failed.");
     }
   };
 
