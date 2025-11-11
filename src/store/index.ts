@@ -6,6 +6,7 @@ export {
   useGetCourseBySlugQuery,
   useGetCourseByIdQuery,
   useGetAllCoursesQuery,
+  useGetCategoriesQuery,
   useCreateCourseMutation,
   useUpdateCourseMutation,
   useDeleteCourseMutation,

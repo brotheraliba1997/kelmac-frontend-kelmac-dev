@@ -1,6 +1,6 @@
 // RTK Query API slice for courses
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Booking, Course } from "@/types/course";
+import { Booking, Course, Category } from "@/types/course";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
@@ -15,7 +15,7 @@ export const courseApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Course", "Courses"],
+  tagTypes: ["Course", "Courses", "Category", "Categories"],
   endpoints: (builder) => ({
     // Get course by slug
     getCourseBySlug: builder.query<Course, string>({
@@ -63,7 +63,40 @@ export const courseApi = createApi({
             ]
           : [{ type: "Courses" as const, id: "LIST" }],
     }),
-
+    getCategories: builder.query<
+      {
+        data: Category[];
+        hasNextPage: boolean;
+        page: number;
+        limit: number;
+        total: number;
+      },
+      {
+        page?: number;
+        limit?: number;
+        search?: string;
+        isActive?: boolean;
+        isFeatured?: boolean;
+      } | void
+    >({
+      query: (params) => {
+        if (!params) return "/categories";
+        const queryString = new URLSearchParams(
+          params as Record<string, string>
+        ).toString();
+        return `/categories${queryString ? `?${queryString}` : ""}`;
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map(({ _id }) => ({
+                type: "Category" as const,
+                id: _id,
+              })),
+              { type: "Categories" as const, id: "LIST" },
+            ]
+          : [{ type: "Categories" as const, id: "LIST" }],
+    }),
     // Create a new course (if needed)
     createCourse: builder.mutation<Course, Partial<Course>>({
       query: (courseData) => ({
@@ -116,6 +149,7 @@ export const {
   useGetCourseBySlugQuery,
   useGetCourseByIdQuery,
   useGetAllCoursesQuery,
+  useGetCategoriesQuery,
   useCreateCourseMutation,
   useCreateBookingMutation,
   useUpdateCourseMutation,

@@ -40,6 +40,24 @@ export interface SessionTopic {
   order: number;
 }
 
+export interface Category {
+  _id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  icon?: string; // Icon URL or icon class name
+  image?: string; // Category image URL
+  color?: string; // Hex color for UI
+  subcategories: string[]; // Array of subcategory names
+  courseCount: number; // Number of courses in this category
+  order: number; // Display order
+  isActive: boolean;
+  isFeatured: boolean;
+  deletedAt?: Date;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface CourseSnapshot {
   totalLectures: number;
   totalDuration: number;
