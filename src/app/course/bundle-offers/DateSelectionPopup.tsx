@@ -4,6 +4,7 @@ import { Clock, X } from "lucide-react";
 import { Iconcheckmark } from "@/components/icons/icons";
 import { Heading } from "@/components/ui/common/Heading";
 import Link from "next/link";
+import { Course } from "@/types/course";
 
 interface DateOption {
   date: string;
@@ -13,7 +14,7 @@ interface DateOption {
 
 interface DateSelectionPopupProps {
   onClose: () => void;
-  courseId: string;
+  course: Course;
   timetable: {
     id: string;
     date: string;
@@ -62,7 +63,7 @@ function getBadgeStyles(type: string) {
 export default function DateSelectionPopup({
   onClose,
   timetable,
-  courseId,
+  course,
 }: DateSelectionPopupProps) {
   const [selectedOption, setSelectedOption] = useState<string>("");
 
@@ -116,7 +117,14 @@ export default function DateSelectionPopup({
                 <Link
                   href="/registration/basicinfo"
                   onClick={() => {
-                    localStorage.setItem("selectedCourseId", courseId);
+                    localStorage.setItem(
+                      "selectedCourse",
+                      JSON.stringify({
+                        id: course.id,
+                        discountedPrice: course.discountedPrice,
+                        price: course.price,
+                      })
+                    );
                     localStorage.setItem("selectedTimetableId", option.id);
                     onClose();
                   }}

@@ -3,6 +3,7 @@ import Button from "@/components/ui/button/Button";
 import { useRouter } from "next/navigation";
 import Stepper from "../stepper";
 import LearnerForm from "@/components/ui/form/LearnerForm";
+import CourseFeesSummary from "@/components/ui/course/CourseFeesSummary";
 import { IconCalender, IconLock } from "@/components/icons/icons";
 import { IconArrowRight } from "@tabler/icons-react";
 import { Heading } from "@/components/ui/common/Heading";
@@ -161,90 +162,15 @@ export default function BasicInfo({
             <LearnerForm />
           </div>
 
-          <div className="w-full lg:w-1/3 flex flex-col items-center">
-            <div className="w-full bg-gray-100 p-6 rounded-xl shadow flex flex-col">
-              <h3 className="text-lg font-semibold mb-4 text-black">
-                Course Fee Summary
-              </h3>
-
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-black">Regular Fee:</span>
-                  <span className="text-black">
-                    ${course.regularFee.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-black">Certifications Fee:</span>
-                  <span className="text-black">
-                    ${course.certificationFee.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-black">Examinations Fee:</span>
-                  <span className="text-black">
-                    ${course.examinationFee.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-black">Discount:</span>
-                  <span className="text-black">
-                    -${course.discount.toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-black">
-                    Tax ({course.taxPercent}%):
-                  </span>
-                  <span className="text-green-500">
-                    $
-                    {(
-                      (course.regularFee +
-                        course.certificationFee +
-                        course.examinationFee -
-                        course.discount) *
-                      (course.taxPercent / 100)
-                    ).toFixed(2)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-black">Coupon Applied:</span>
-                  <span className="text-black">
-                    -${course.couponDiscount.toFixed(2)}
-                  </span>
-                </div>
-
-                <div className="flex justify-between mt-2 border-t border-gray-300 font-semibold pt-2">
-                  <span className="text-black">TOTAL</span>
-                  <span className="text-black">${total.toFixed(2)}</span>
-                </div>
-              </div>
-
-              <input
-                type="text"
-                placeholder="Enter Coupon Code"
-                className="w-full mt-6 p-3 border border-gray-300 rounded-full bg-white shadow-sm focus:ring-2 focus:ring-secondary focus:outline-none placeholder-gray-400"
-              />
-
-              <div className="mt-4">
-                <Button
-                  spanclassName="px-15"
-                  className="gap-3 justify-center items-center w-full"
-                  text="Continue to payment"
-                  href="/registration/payment"
-                  icon={<IconArrowRight className="stroke-primary" />}
-                  color="primary"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center mt-3 space-x-2 w-full">
-              <IconLock width={16} height={16} className="text-secondary" />
-              <p className="text-secondary text-sm">
-                Your information is secure and encrypted.
-              </p>
-            </div>
-          </div>
+          <CourseFeesSummary
+            certificationFee={99}
+            examinationFee={99}
+            taxRate={10}
+            showCouponInput={true}
+            showContinueButton={true}
+            continueButtonText="Continue to payment"
+            continueButtonHref="/registration/payment"
+          />
         </div>
       </section>
     </div>

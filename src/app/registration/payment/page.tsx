@@ -9,6 +9,7 @@ import { Heading } from "@/components/ui/common/Heading";
 import { useState, useRef, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
+import CourseFeesSummary from "@/components/ui/course/CourseFeesSummary";
 
 interface Course {
   name: string;
@@ -44,7 +45,7 @@ export default function payemntInfo({
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedSession, setSelectedSession] = useState(course.date);
+  const [selectedSession, setSelectedSession] = useState(course?.date);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleNext = () => {
@@ -169,8 +170,16 @@ export default function payemntInfo({
               <PaymentForm />
             </Elements>
           </div>
-
-          <div className="w-full lg:w-1/3 flex flex-col items-center">
+          <CourseFeesSummary
+            certificationFee={99}
+            examinationFee={99}
+            taxRate={10}
+            showCouponInput={true}
+            showContinueButton={true}
+            continueButtonText="Pay & Confirm"
+            continueButtonHref="/registration/confirmation"
+          />
+          {/* <div className="w-full lg:w-1/3 flex flex-col items-center">
             <div className="w-full bg-gray-100 p-6 rounded-xl shadow flex flex-col">
               <h3 className="text-lg font-semibold mb-4 text-black">
                 Course Fee Summary
@@ -252,7 +261,7 @@ export default function payemntInfo({
                 Your information is secure and encrypted.
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </div>

@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import {
   IconVisa,
@@ -25,17 +24,18 @@ export default function PaymentForm() {
 
   const stripe = useStripe();
   const elements = useElements();
-
-  const courseId = localStorage.getItem("selectedCourseId") || "";
-
-  const { data, error, refetch } = useGetCourseByIdQuery(
-    "691231b111f6e236f9f5ed4c"
+  const course: any = JSON.parse(
+    localStorage.getItem("selectedCourse") || "{}"
   );
+  const courseId = course?.id || "";
+  console.log(courseId, "courseId");
+  const { data, error, refetch } = useGetCourseByIdQuery(courseId);
 
   const timetableId = localStorage.getItem("selectedTimetableId") || "";
   console.log(timetableId, "timetableId");
 
   const handlePay = async () => {
+    console.log("Initiating payment...", stripe, elements);
     if (!stripe || !elements) {
       console.error("Stripe or Elements not loaded");
       return;
@@ -44,8 +44,9 @@ export default function PaymentForm() {
     try {
       // 1️⃣ Create payment intent
       const res: any = await createPayment({
-        courseId: "6912ae5accfc0ef6b06dc64b",
-        userId: auth?.user?.id,
+        courseId,
+        // userId: auth?.user?.id,
+        userId: "690151185818ae0f575dc16f",
         amount: data?.price,
         currency: data?.currency,
         metadata: {},
@@ -61,9 +62,6 @@ export default function PaymentForm() {
         return;
       }
 
-      
-       
-
       // Format time → pick start time with AM/PM intact
       // e.g. "9:00 AM - 5:00 PM" → "9:00 AM"
 
@@ -72,9 +70,7 @@ export default function PaymentForm() {
         .trim()
         .replace(/\s?(AM|PM)/i, "");
 
-  
-
-      console.log(formattedTime)
+      console.log(formattedTime);
 
       // 3️⃣ Create schedule on backend
       await axios.post(

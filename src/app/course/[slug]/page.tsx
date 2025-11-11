@@ -433,7 +433,7 @@ export default function CoursePage() {
       {showConfirm && (
         <ConfirmBooking
           timetable={course.timeTable}
-          courseId={course.id}
+          course={course}
           onClose={() => setShowConfirm(false)}
           onConfirm={handleConfirm}
         />

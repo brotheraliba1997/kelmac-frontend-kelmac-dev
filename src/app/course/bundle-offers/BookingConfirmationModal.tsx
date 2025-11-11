@@ -5,11 +5,12 @@ import { createPortal } from "react-dom";
 import Button from "@/components/ui/button/Button";
 import { IconArrowRight, IconX } from "@tabler/icons-react";
 import DateSelectionPopup from "@/app/course/bundle-offers/DateSelectionPopup";
+import { Course } from "@/types/course";
 
 interface ConfirmBookingProps {
   onClose: () => void;
   onConfirm: () => void;
-  courseId: string;
+  course: Course;
   timetable: {
     id: string;
     date: string;
@@ -21,7 +22,7 @@ interface ConfirmBookingProps {
 export default function ConfirmBooking({
   onClose,
   onConfirm,
-  courseId,
+  course,
   timetable,
 }: ConfirmBookingProps) {
   const [mounted, setMounted] = useState(false);
@@ -211,7 +212,7 @@ export default function ConfirmBooking({
 
       {showPopup && (
         <DateSelectionPopup
-          courseId={courseId}
+          course={course}
           timetable={timetable}
           onClose={handlePopupClose}
         />

@@ -2,6 +2,7 @@
 
 import { useRegisterInterpreterMutation } from "@/store/api/authApi";
 import { useCreateBookingMutation } from "@/store/api/courseApi";
+import { Course } from "@/types/course";
 import React, { useState } from "react";
 
 import { toast } from "react-hot-toast";
@@ -75,17 +76,14 @@ export default function LearnerForm() {
       status: { id: 1 },
     });
 
-    const courseId = localStorage.getItem("selectedCourseId") || "";
+    const course: any = JSON.parse(
+      localStorage.getItem("selectedCourse") || "{}"
+    );
+
     const timetableId = localStorage.getItem("selectedTimetableId") || "";
-
-
-    console.log(courseId, "courseId")
-  
-
-    console.log("Registered user data:", data);
     if (data?.data?.user?.id) {
       await createBooking({
-        courseId: courseId,
+        courseId: course?.id,
         studentId: data?.data?.user?.id,
         timeTableId: timetableId,
       }).unwrap();

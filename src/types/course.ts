@@ -99,6 +99,7 @@ export interface Course {
   isBestseller: boolean;
   isNew: boolean;
   timeTable: CourseTimeTable[];
+  discountedPrice: number;
   createdAt: string;
   updatedAt: string;
 }
