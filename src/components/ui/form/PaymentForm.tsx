@@ -72,10 +72,7 @@ export default function PaymentForm() {
         .trim()
         .replace(/\s?(AM|PM)/i, "");
 
-      console.log({
-        date: formattedDate,
-        time: formattedTime,
-      });
+  
 
       console.log(formattedTime)
 
