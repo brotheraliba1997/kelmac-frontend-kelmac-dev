@@ -67,8 +67,10 @@ const generateMockData = (): RegistrationCompleteProps => {
 export default function RegistrationComplete() {
   // const [data] = useState<RegistrationCompleteProps>(generateMockData());
 
-  const [data, setData] = useState<any | null>(null);
+  const [data, setData] = useState<any | []>([]);
   const [loading, setLoading] = useState(true);
+
+  const [selectedSession, setSelectedSession] = useState(data?.course);
 
   useEffect(() => {
     const fetchSchedule = async () => {
@@ -76,15 +78,14 @@ export default function RegistrationComplete() {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/class-schedule/690f8bc0d9a9675662aa65e7`
         );
-        // const res = await axios.get(
-        //   `http://localhost:5000/api/v1/class-schedule/690f8bc0d9a9675662aa65e7`
-        // );
-
-        const s = res.data;
-
-        // Map _id to id string
+        const s = res?.data;
 
         setData(s);
+
+        // Update selectedSession after data is loaded
+        setSelectedSession(s.course);
+
+        console.log(s, "check");
       } catch (err) {
         console.error("Failed to fetch schedule:", err);
       } finally {
@@ -96,7 +97,7 @@ export default function RegistrationComplete() {
   }, []);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedSession, setSelectedSession] = useState(data.courseDate);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const sessions = [
@@ -148,7 +149,7 @@ export default function RegistrationComplete() {
                 <div className="flex flex-col leading-tight">
                   {/* <span className="text-lg font-semibold">{selectedSession}</span> */}
                   <span className="text-sm text-white/80">
-                    {data.courseName}
+                    {data.course?.title}
                   </span>
                 </div>
 
@@ -239,7 +240,7 @@ export default function RegistrationComplete() {
               headingClassName="text-primary"
             />
             <p className="text-lg text-primary mb-4 font-semibold">
-              User ID # {data.userId}
+              User ID # {data.id}
             </p>
             <p className=" text-black">
               A confirmation email has been sent to your registered email
@@ -256,41 +257,39 @@ export default function RegistrationComplete() {
                 <div className="flex mb-4">
                   <dt className="text-black/80 font-medium w-49">Course:</dt>
                   <dd className="text-primary font-semibold">
-                    {data.courseName}
+                    {data.course?.title}
                   </dd>
                 </div>
                 <div className="flex mb-4">
                   <dt className="text-black/80 font-medium w-49">Date:</dt>
-                  {/* <dd className="text-primary font-semibold">{selectedSession}</dd> */}
+                  <dd className="text-primary font-semibold">{data?.date}</dd>
                 </div>
                 <div className="flex mb-4">
                   <dt className="text-black/80 font-medium w-49">Time:</dt>
-                  <dd className="text-primary font-semibold">
-                    {data.courseTime}
-                  </dd>
+                  <dd className="text-primary font-semibold">{data.time}</dd>
                 </div>
                 <div className="flex mb-4">
                   <dt className="text-black/80 font-medium w-49">Location:</dt>
                   <dd className="text-primary font-semibold">
-                    {data.location}
+                    {data.googleMeetLink}
                   </dd>
                 </div>
-                <div className="flex mb-4">
+                {/* <div className="flex mb-4">
                   <dt className="text-black/80 font-medium w-49">
                     Participant:
                   </dt>
                   <dd className="text-primary font-semibold">
                     {data.participantName}
                   </dd>
-                </div>
-                <div className="flex mb-4">
+                </div> */}
+                {/* <div className="flex mb-4">
                   <dt className="text-black/80 font-medium w-49">
                     Attendance:
                   </dt>
                   <dd className="text-primary font-semibold">
                     {data.attendance}
                   </dd>
-                </div>
+                </div> */}
               </dl>
             </div>
 
@@ -304,7 +303,7 @@ export default function RegistrationComplete() {
                     Payment Method:
                   </dt>
                   <dd className="text-primary font-semibold">
-                    {data.paymentMethod}
+                    {/* {data.paymentMethod} */}
                   </dd>
                 </div>
                 <div className="flex mb-4">
@@ -312,11 +311,11 @@ export default function RegistrationComplete() {
                     Amount Paid:
                   </dt>
                   <dd className="text-primary font-semibold">
-                    $
+                    {/* $
                     {displayAmountPaid.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 2,
-                    })}
+                    })} */}
                   </dd>
                 </div>
                 <div className="flex mb-4">
@@ -324,7 +323,7 @@ export default function RegistrationComplete() {
                     Transaction Date:
                   </dt>
                   <dd className="text-primary font-semibold">
-                    {data.transactionDate}
+                    {/* {data.transactionDate} */}
                   </dd>
                 </div>
               </dl>

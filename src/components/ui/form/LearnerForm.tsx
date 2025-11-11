@@ -84,7 +84,7 @@ export default function LearnerForm() {
     if (data?.data?.user?.id) {
       await createBooking({
         courseId: course?.id,
-        studentId: data?.data?.user?.id,
+        studentId: data?.data?.user?.id, 
         timeTableId: timetableId,
       }).unwrap();
     }
