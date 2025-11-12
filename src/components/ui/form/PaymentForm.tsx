@@ -301,16 +301,19 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
         };
 
         const [hour, minute] = formatted.time.split(":").map(Number);
-        const timeWithZero = `${hour < 10 ? "0" + hour : hour}:${minute}`;
+        const timeWithZero = `${hour < 10 ? "0" + hour : hour}:${
+          minute < 10 ? "0" + minute : minute
+        }`;
 
         // 3️⃣ Create class schedule
+
         try {
           await axios.post(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}/class-schedule`,
             {
               course: courseId,
-              // instructor: (data?.instructor as any)?.id,
-              intructor: "6903c027053f3ed74ac25eb9",
+              instructor: (data?.instructor as any)?.id,
+              // instructor: data?.instructor?.id,
               students: auth?.user?.id,
               date: formatted?.date,
               time: timeWithZero,
@@ -329,12 +332,14 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
         const clientSecret = res.clientSecret;
         const cardElement = elements.getElement(CardElement);
 
-        if (!cardElement) {
+           if (!cardElement) {
           throw new Error(
             "Card information not found. Please refresh the page."
           );
         }
 
+
+     
         const result = await stripe.confirmCardPayment(clientSecret, {
           payment_method: {
             card: cardElement,
