@@ -16,8 +16,6 @@ const token =
       : null
     : null;
 
-
-    
 const initialState = {
   user,
   token,
@@ -41,6 +39,16 @@ const slice = createSlice({
     setLoading: (state, action) => {
       state.isLoadingUser = action.payload;
     },
+    setAuthData: (state, action) => {
+      const { user, token } = action.payload;
+      state.user = user;
+      state.token = token;
+      state.isAdmin = user.role?.id === 1 || user.role === 1;
+      state.isStudent = user.role?.id === 2 || user.role === 2;
+      state.isInstructor = user.role?.id === 3 || user.role === 3;
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", JSON.stringify(token));
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -54,7 +62,28 @@ const slice = createSlice({
           state.token = payload.token;
           localStorage.setItem("user", JSON.stringify(payload.user));
           localStorage.setItem("token", JSON.stringify(payload.token));
-          console.log(payload.token, "payload.token") // Corrected from 'tokens'
+          console.log(payload.token, "payload.token"); // Corrected from 'tokens'
+        }
+      )
+      .addMatcher(
+        authAPI.endpoints.RegisterInterpreter.matchFulfilled,
+        (state, { payload }) => {
+          if (payload.user && payload.token) {
+            state.user = payload.user;
+            state.isAdmin =
+              payload.user.role?.id === 1 || payload.user.role === 1;
+            state.isStudent =
+              payload.user.role?.id === 2 || payload.user.role === 2;
+            state.isInstructor =
+              payload.user.role?.id === 3 || payload.user.role === 3;
+            state.token = payload.token;
+            localStorage.setItem("user", JSON.stringify(payload.user));
+            localStorage.setItem("token", JSON.stringify(payload.token));
+            console.log(
+              "User auto-authenticated after registration:",
+              payload.user
+            );
+          }
         }
       )
 
@@ -68,11 +97,9 @@ const slice = createSlice({
       .addMatcher(authAPI.endpoints.loginUser.matchRejected, (state) => {
         state.auth = null;
       });
-
-   
   },
 });
 
-export const { logout, setLoading } = slice.actions;
+export const { logout, setLoading, setAuthData } = slice.actions;
 
 export default slice.reducer;

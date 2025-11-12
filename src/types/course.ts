@@ -42,6 +42,7 @@ export interface SessionTopic {
 
 export interface Category {
   _id: string;
+  id: string;
   name: string;
   slug: string;
   description?: string;
@@ -97,7 +98,7 @@ export interface Course {
   subtitle: string;
   description: string;
   instructor: string;
-  category: string;
+  category: Category;
   subcategories: string[];
   topics: string[];
   overview: string;

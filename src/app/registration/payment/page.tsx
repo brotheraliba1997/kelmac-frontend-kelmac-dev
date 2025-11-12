@@ -2,7 +2,7 @@
 import Button from "@/components/ui/button/Button";
 import { useRouter } from "next/navigation";
 import Stepper from "../stepper";
-import PaymentForm from "@/components/ui/form/PaymentForm";
+import PaymentForm, { PaymentFormRef } from "@/components/ui/form/PaymentForm";
 import { IconCalender, IconLock } from "@/components/icons/icons";
 import { IconArrowRight } from "@tabler/icons-react";
 import { Heading } from "@/components/ui/common/Heading";
@@ -46,6 +46,7 @@ export default function payemntInfo({
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState(course?.date);
+  const paymentFormRef = useRef<PaymentFormRef>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleNext = () => {
@@ -110,7 +111,6 @@ export default function payemntInfo({
                   </span>
                   <span className="text-sm text-white/80">{course.name}</span>
                 </div>
-
                 <button
                   onClick={toggleDropdown}
                   className="ml-4 flex items-center bg-white text-black text-sm px-4 py-2 rounded-full hover:bg-white/80 transition"
@@ -167,7 +167,7 @@ export default function payemntInfo({
               headingClassName="text-primary text-left"
             />
             <Elements stripe={stripePromise}>
-              <PaymentForm />
+              <PaymentForm ref={paymentFormRef} />
             </Elements>
           </div>
           <CourseFeesSummary
@@ -178,6 +178,7 @@ export default function payemntInfo({
             showContinueButton={true}
             continueButtonText="Pay & Confirm"
             continueButtonHref="/registration/confirmation"
+            onFormSubmit={() => paymentFormRef.current?.submitPayment()}
           />
           {/* <div className="w-full lg:w-1/3 flex flex-col items-center">
             <div className="w-full bg-gray-100 p-6 rounded-xl shadow flex flex-col">

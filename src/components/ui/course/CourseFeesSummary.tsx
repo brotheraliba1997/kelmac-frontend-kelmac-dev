@@ -13,6 +13,7 @@ interface CourseFeesSummaryProps {
   continueButtonText?: string;
   continueButtonHref?: string;
   onContinue?: () => void;
+  onFormSubmit?: () => void;
   className?: string;
 }
 
@@ -25,16 +26,14 @@ export default function CourseFeesSummary({
   continueButtonText = "Continue to payment",
   continueButtonHref = "/registration/payment",
   onContinue,
+  onFormSubmit,
   className = "",
 }: CourseFeesSummaryProps) {
   const [couponCode, setCouponCode] = useState("");
 
- 
-
-
-     const selectedCourse = JSON.parse(
-      localStorage.getItem("selectedCourse") || "{}"
-    );
+  const selectedCourse = JSON.parse(
+    localStorage.getItem("selectedCourse") || "{}"
+  );
 
   // Safe calculations with fallback values
   const regularFee = selectedCourse?.price || 0;
@@ -46,7 +45,10 @@ export default function CourseFeesSummary({
   const total = subtotal + taxAmount;
 
   const handleContinue = () => {
-    if (onContinue) {
+    if (onFormSubmit) {
+      // Call the form submit function instead of navigation
+      onFormSubmit();
+    } else if (onContinue) {
       onContinue();
     }
   };
@@ -108,8 +110,8 @@ export default function CourseFeesSummary({
               spanclassName="px-15"
               className="gap-3 justify-center items-center w-full"
               text={continueButtonText}
-              href={onContinue ? undefined : continueButtonHref}
-              onClick={onContinue ? handleContinue : undefined}
+              href={onFormSubmit || onContinue ? undefined : continueButtonHref}
+              onClick={onFormSubmit || onContinue ? handleContinue : undefined}
               icon={<IconArrowRight className="stroke-primary" />}
               color="primary"
             />

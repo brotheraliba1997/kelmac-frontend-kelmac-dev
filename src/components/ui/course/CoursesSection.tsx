@@ -83,13 +83,14 @@ export default function CoursesSection({
   });
 
   const courses = coursesData?.data || [];
+  console.log("Categories used in CoursesSection:", categoriesData?.data);
 
   // Transform API categories to match component format
   const apiCategories =
     categoriesData?.data?.map((cat: Category) => ({
       key: cat.slug,
       label: cat.name,
-      value: cat.slug,
+      value: cat.id,
     })) || [];
 
   // Use API categories if available, otherwise use prop categories
@@ -216,17 +217,19 @@ export default function CoursesSection({
           {showCategoryFilters && !isSearchActive && (
             <div className="flex flex-wrap gap-3 md:gap-0 items-center justify-center mb-18">
               {categories.map((category) => (
-                <Button
-                  key={category.key}
-                  size="lg"
-                  text={category.label}
-                  color={
-                    activeCategory === category.value
-                      ? "white"
-                      : "semitransparent"
-                  }
-                  onClick={() => handleCategoryClick(category.value)}
-                />
+                <>
+                  <Button
+                    key={category.key}
+                    size="lg"
+                    text={category.label}
+                    color={
+                      activeCategory === category.value
+                        ? "white"
+                        : "semitransparent"
+                    }
+                    onClick={() => handleCategoryClick(category.value)}
+                  />
+                </>
               ))}
 
               {showSearchBar && (

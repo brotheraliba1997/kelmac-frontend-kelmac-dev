@@ -2,7 +2,7 @@
 import Button from "@/components/ui/button/Button";
 import { useRouter } from "next/navigation";
 import Stepper from "../stepper";
-import LearnerForm from "@/components/ui/form/LearnerForm";
+import LearnerForm, { LearnerFormRef } from "@/components/ui/form/LearnerForm";
 import CourseFeesSummary from "@/components/ui/course/CourseFeesSummary";
 import { IconCalender, IconLock } from "@/components/icons/icons";
 import { IconArrowRight } from "@tabler/icons-react";
@@ -40,6 +40,7 @@ export default function BasicInfo({
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState(course.date);
+  const learnerFormRef = useRef<LearnerFormRef>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleNext = () => {
@@ -170,7 +171,7 @@ export default function BasicInfo({
               heading="Learner Information"
               headingClassName="text-primary text-left"
             />
-            <LearnerForm />
+            <LearnerForm ref={learnerFormRef} />
           </div>
 
           <CourseFeesSummary
@@ -181,6 +182,7 @@ export default function BasicInfo({
             showContinueButton={true}
             continueButtonText="Continue to payment"
             continueButtonHref="/registration/payment"
+            onFormSubmit={() => learnerFormRef.current?.submitForm()}
           />
         </div>
       </section>
