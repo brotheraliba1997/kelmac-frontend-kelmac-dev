@@ -30,10 +30,17 @@ export default function CourseFeesSummary({
   className = "",
 }: CourseFeesSummaryProps) {
   const [couponCode, setCouponCode] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState<any>({});
 
-  const selectedCourse = JSON.parse(
-    localStorage.getItem("selectedCourse") || "{}"
-  );
+  useEffect(() => {
+    // Only access localStorage on the client side
+    if (typeof window !== "undefined") {
+      const course = JSON.parse(
+        localStorage.getItem("selectedCourse") || "{}"
+      );
+      setSelectedCourse(course);
+    }
+  }, []);
 
   // Safe calculations with fallback values
   const regularFee = selectedCourse?.price || 0;

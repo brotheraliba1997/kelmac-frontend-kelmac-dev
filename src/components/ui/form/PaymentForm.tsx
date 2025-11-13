@@ -57,18 +57,23 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
     const elements = useElements();
 
     const [courseId, setSelectedCourse] = useState("");
+    const [timetableId, setTimetableId] = useState("");
 
     useEffect(() => {
-      const course: any = JSON.parse(
-        localStorage.getItem("selectedCourse") || "{}"
-      );
-      const courseId = course?.id || "";
-      setSelectedCourse(courseId);
+      if (typeof window !== "undefined") {
+        const course: any = JSON.parse(
+          localStorage.getItem("selectedCourse") || "{}"
+        );
+        const courseId = course?.id || "";
+        setSelectedCourse(courseId);
+
+        const ttId = localStorage.getItem("selectedTimetableId") || "";
+        setTimetableId(ttId);
+      }
     }, []);
 
     const { data, error, refetch } = useGetCourseByIdQuery(courseId);
 
-    const timetableId = localStorage.getItem("selectedTimetableId") || "";
     console.log(timetableId, "timetableId");
 
     // Validation functions
