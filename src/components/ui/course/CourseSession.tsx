@@ -27,11 +27,19 @@ export type CourseSessionProps = {
     description: string;
     time: string;
   };
+  timetableId?: string;
+  setTimetableId?: React.Dispatch<React.SetStateAction<string>>;
+  showConfirm?: boolean;
+  setShowConfirm?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function CourseSession({
   timetable,
   course,
+  timetableId,
+  setTimetableId,
+  showConfirm,
+  setShowConfirm,
   // label = "CourseSession",
   // date = "Mar 15-19, 2025",
   // time = "9:00 AM - 4:30 PM (Eastern Time (GMT-5))",
@@ -42,8 +50,12 @@ export function CourseSession({
   className = "",
   seatsLeft,
 }: CourseSessionProps) {
+  const isSelected = timetableId === timetable?.id;
+
   const CourseSessionClasses = cn(
-    "bg-white rounded-xl p-4 md:p-7 grid grid-cols-1 md:grid-cols-4 items-center justify-center shadow-[0_15px_30px_0_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_0_rgba(0,0,0,0.08)] transition-shadow duration-300",
+    "bg-white rounded-xl p-4 md:p-7 grid grid-cols-1 md:grid-cols-4 items-center justify-center shadow-[0_15px_30px_0_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_0_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer",
+    isSelected &&
+      "border-2 border-primary bg-primary/5 shadow-[0_20px_40px_0_rgba(0,0,0,0.12)]",
     className
   );
   // const colorMap = {
@@ -101,14 +113,20 @@ export function CourseSession({
       })
     );
     localStorage.setItem("selectedTimetableId", timetable.id);
-    if (auth?.user?.id) {
-      router.push("/registration/payment");
-    } else {
-      router.push("/registration/basicinfo");
-    }
+
+    setShowConfirm?.(true);
+    // if (auth?.user?.id) {
+    //   router.push("/registration/payment");
+    // } else {
+    //   router.push("/registration/basicinfo");
+    // }
   };
+
   return (
-    <div className={CourseSessionClasses + " relative"}>
+    <div
+      onClick={() => setTimetableId?.(timetable.id)}
+      className={CourseSessionClasses + " relative"}
+    >
       {seatsLeft && (
         <div className="absolute top-0 right-0 bg-[#EF4A6A] text-white px-3 py-1 rounded-bl-xl rounded-tr-xl text-lg">
           {seatsLeft < 10 ? `0${seatsLeft}` : seatsLeft} seats left
@@ -126,7 +144,6 @@ export function CourseSession({
           >
             {/* {getBadgeStyles()} */}
             {description.split(",")[0]}
-
             {/* {getBadgeStyles(description.split(",")[0])} */}
           </div>
         </div>
@@ -143,11 +160,19 @@ export function CourseSession({
           Book Now
           <IconArrowRight size={16} />
         </button> */}
-        <Button
+        {/* <Button
           className="text-primary"
           onClick={handleClick}
           text="Book Now"
           icon={<IconArrowRight size={16} />}
+        /> */}
+        <Button
+          iconclassName="p-0 bg-primary"
+          spanclassName="px-2"
+          onClick={handleClick}
+          text="Book Now"
+          color="white"
+          icon={<IconArrowRight className="stroke-white " />}
         />
         {/* <LinkButton
           className="text-primary"

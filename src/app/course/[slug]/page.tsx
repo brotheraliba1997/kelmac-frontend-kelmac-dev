@@ -93,7 +93,7 @@ export default function CoursePage() {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const coursesRef = useRef<HTMLDivElement>(null);
   const searchBarRef = useRef<HTMLDivElement>(null);
-
+  const [timetableId, setTimetableId] = useState<string>("");
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -244,6 +244,10 @@ export default function CoursePage() {
                 {course.timeTable && course.timeTable.length > 0 ? (
                   course.timeTable.map((session, index) => (
                     <CourseSession
+                      timetableId={timetableId}
+                      setTimetableId={setTimetableId}
+                      showConfirm={showConfirm}
+                      setShowConfirm={setShowConfirm}
                       key={index}
                       timetable={session}
                       course={course}

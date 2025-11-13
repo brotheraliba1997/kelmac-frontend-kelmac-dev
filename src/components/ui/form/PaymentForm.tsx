@@ -66,15 +66,12 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
         );
         const courseId = course?.id || "";
         setSelectedCourse(courseId);
-
         const ttId = localStorage.getItem("selectedTimetableId") || "";
         setTimetableId(ttId);
       }
     }, []);
 
     const { data, error, refetch } = useGetCourseByIdQuery(courseId);
-
-    console.log(timetableId, "timetableId");
 
     // Validation functions
     const validateCardholderName = (name: string): string | null => {
@@ -269,13 +266,19 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
       }
 
       setIsSubmitting(true);
+      const regularFee = data?.price || 0;
+      const discountedPrice = data?.discountedPrice || regularFee;
+      // const discount = regularFee - discountedPrice;
 
+      const subtotal = discountedPrice + 99 + 99;
+      const taxAmount = (subtotal * 10) / 100;
+      const total = subtotal + taxAmount;
       try {
         // 1️⃣ Create payment intent
         const res: any = await createPayment({
           courseId,
           userId: auth?.user?.id,
-          amount: data?.price,
+          amount: total,
           currency: data?.currency || "usd",
           metadata: {
             cardholderName: formData.cardholderName,

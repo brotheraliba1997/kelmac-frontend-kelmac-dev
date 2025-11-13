@@ -1,10 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Clock, X } from "lucide-react";
 import { Iconcheckmark } from "@/components/icons/icons";
 import { Heading } from "@/components/ui/common/Heading";
 import Link from "next/link";
 import { Course } from "@/types/course";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 interface DateOption {
   date: string;
@@ -67,9 +69,9 @@ export default function DateSelectionPopup({
 }: DateSelectionPopupProps) {
   const [selectedOption, setSelectedOption] = useState<string>("");
 
-  const handleDateSelect = (date: string, time: string) => {
-    const uniqueKey = `${date} ${time}`;
-    setSelectedOption(uniqueKey);
+  const handleDateSelect = (id: string) => {
+    // const uniqueKey = `${date} ${time}`;
+    setSelectedOption(id);
   };
   const formattedDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -80,6 +82,23 @@ export default function DateSelectionPopup({
     };
     return date.toLocaleDateString(undefined, options);
   };
+
+  const auth = useSelector((state: any) => state?.auth);
+
+  // Load selected timetable ID from localStorage on mount
+  useEffect(() => {
+    const savedTimetableId = localStorage.getItem("selectedTimetableId");
+    if (savedTimetableId) {
+      setSelectedOption(savedTimetableId);
+    }
+  }, []);
+
+  // const router = useRouter();
+  // if (auth?.user?.id) {
+  //   router.push("/registration/payment");
+  // } else {
+  //   router.push("/registration/basicinfo");
+  // }
 
   return (
     <div className="fixed inset-0 z-[10000] bg-black/50 backdrop-blur-sm flex items-center justify-center p-6">
@@ -101,13 +120,13 @@ export default function DateSelectionPopup({
 
         <div className="bg-secondary rounded-b-2xl p-5 space-y-2 w-full">
           {timetable.map((option: any, index: number) => {
-            const uniqueKey = `${option.date} ${option.time}`;
-            const isSelected = selectedOption === uniqueKey;
+            // const uniqueKey = `${option.date} ${option.time}`;
+            const isSelected = selectedOption === option.id;
 
             return (
               <div
                 key={index}
-                onClick={() => handleDateSelect(option.date, option.time)}
+                onClick={() => handleDateSelect(option.id)}
                 className={`relative rounded-xl p-5 cursor-pointer transition-all duration-200 ${
                   isSelected
                     ? "bg-primary text-white shadow-lg"
@@ -115,10 +134,13 @@ export default function DateSelectionPopup({
                 }`}
               >
                 <Link
-                  href="/registration/basicinfo"
+                  href={
+                    auth?.user?.id
+                      ? "/registration/payment"
+                      : "/registration/basicinfo"
+                  }
                   onClick={() => {
-                    if (!course) return; 
-
+                    if (!course) return;
                     localStorage.setItem(
                       "selectedCourse",
                       JSON.stringify({
