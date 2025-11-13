@@ -240,10 +240,10 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
       }
 
       if (!stripe || !elements) {
-        setErrors({
-          general: "Stripe is not properly loaded. Please refresh the page.",
-        });
-        toast.error("Payment system not ready. Please refresh the page.");
+        // setErrors({
+        //   general: "Stripe is not properly loaded. Please refresh the page.",
+        // });
+        // toast.error("Payment system not ready. Please refresh the page.");
         return;
       }
 
@@ -313,7 +313,6 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
             {
               course: courseId,
               instructor: (data?.instructor as any)?.id,
-              // instructor: data?.instructor?.id,
               students: auth?.user?.id,
               date: formatted?.date,
               time: timeWithZero,
@@ -332,14 +331,12 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
         const clientSecret = res.clientSecret;
         const cardElement = elements.getElement(CardElement);
 
-           if (!cardElement) {
+        if (!cardElement) {
           throw new Error(
             "Card information not found. Please refresh the page."
           );
         }
 
-
-     
         const result = await stripe.confirmCardPayment(clientSecret, {
           payment_method: {
             card: cardElement,

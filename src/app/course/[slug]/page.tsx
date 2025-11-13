@@ -241,9 +241,20 @@ export default function CoursePage() {
                 headingClassName="text-primary"
               />
               <div className="space-y-4">
-                {course.timeTable.map((session, index) => (
-                  <CourseSession key={index} {...session} />
-                ))}
+                {course.timeTable && course.timeTable.length > 0 ? (
+                  course.timeTable.map((session, index) => (
+                    <CourseSession
+                      key={index}
+                      timetable={session}
+                      course={course}
+                      {...session}
+                    />
+                  ))
+                ) : (
+                  <p className="text-gray-600">
+                    No sessions available at this time.
+                  </p>
+                )}
               </div>
             </div>
 
@@ -430,7 +441,7 @@ export default function CoursePage() {
         />
       )}
 
-      {showConfirm && (
+      {showConfirm && course && course.timeTable && (
         <ConfirmBooking
           timetable={course.timeTable}
           course={course}
