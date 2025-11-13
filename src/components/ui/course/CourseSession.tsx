@@ -6,10 +6,10 @@ import { IconClock } from "@/components/icons/icons";
 import { Tag } from "@/components/ui/common/Tag";
 
 export type CourseSessionProps = {
-  label: string;
-  date: string;
-  time: string;
-  href: string;
+  label?: string;
+  date?: string;
+  time?: string;
+  href?: string;
   className?: string;
   sessionBadge?: string;
   sessionBadgeType?: "purple" | "green" | "yellow" | "red";
