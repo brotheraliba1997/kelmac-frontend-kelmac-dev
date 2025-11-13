@@ -1,5 +1,5 @@
 "use client";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import {
   IconVisa,
   IconMastercard,
@@ -55,14 +55,18 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
 
     const stripe = useStripe();
     const elements = useElements();
-    const course: any = JSON.parse(
-      localStorage.getItem("selectedCourse") || "{}"
-    );
-    const courseId = course?.id || "";
-    console.log(courseId, "courseId");
-    const { data, error, refetch } = useGetCourseByIdQuery(courseId);
 
-    console.log(data, "refetch");
+    const [courseId, setSelectedCourse] = useState("");
+
+    useEffect(() => {
+      const course: any = JSON.parse(
+        localStorage.getItem("selectedCourse") || "{}"
+      );
+      const courseId = course?.id || "";
+      setSelectedCourse(courseId);
+    }, []);
+
+    const { data, error, refetch } = useGetCourseByIdQuery(courseId);
 
     const timetableId = localStorage.getItem("selectedTimetableId") || "";
     console.log(timetableId, "timetableId");
@@ -332,14 +336,12 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
         const clientSecret = res.clientSecret;
         const cardElement = elements.getElement(CardElement);
 
-           if (!cardElement) {
+        if (!cardElement) {
           throw new Error(
             "Card information not found. Please refresh the page."
           );
         }
 
-
-     
         const result = await stripe.confirmCardPayment(clientSecret, {
           payment_method: {
             card: cardElement,

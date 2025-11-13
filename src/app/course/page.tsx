@@ -372,7 +372,7 @@ export default function Course() {
         <ConfirmBooking
           onClose={() => setShowConfirm(false)}
           onConfirm={handleConfirm}
-          courseId={{}}
+          // courseId={{}}
           timetable={[
             {
               id: "690fd1f2f69ec50177092041",
