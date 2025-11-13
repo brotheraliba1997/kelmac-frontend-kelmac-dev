@@ -14,7 +14,7 @@ interface DateOption {
 
 interface DateSelectionPopupProps {
   onClose: () => void;
-  course: Course;
+  course?: Course;
   timetable: {
     id: string;
     date: string;
@@ -117,6 +117,8 @@ export default function DateSelectionPopup({
                 <Link
                   href="/registration/basicinfo"
                   onClick={() => {
+                    if (!course) return; 
+
                     localStorage.setItem(
                       "selectedCourse",
                       JSON.stringify({

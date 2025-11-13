@@ -10,8 +10,8 @@ import { Course } from "@/types/course";
 interface ConfirmBookingProps {
   onClose: () => void;
   onConfirm: () => void;
-  course: Course;
-  timetable: {
+  course?: Course;
+  timetable?: {
     id: string;
     date: string;
     description: string;
@@ -213,7 +213,8 @@ export default function ConfirmBooking({
       {showPopup && (
         <DateSelectionPopup
           course={course}
-          timetable={timetable}
+          timetable={timetable || []} 
+         
           onClose={handlePopupClose}
         />
       )}
