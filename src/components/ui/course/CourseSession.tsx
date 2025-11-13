@@ -20,7 +20,7 @@ export type CourseSessionProps = {
   sessionBadgeType?: "purple" | "green" | "yellow" | "red";
   seatsLeft?: number;
   description?: string;
-  course: Course;
+  course?: Course;
   timetable?: {
     id: string;
     date: string;
@@ -90,6 +90,8 @@ export function CourseSession({
   const auth = useSelector((state: any) => state?.auth);
   const router = useRouter();
   const handleClick = () => {
+    if (!course || !timetable) return;
+
     localStorage.setItem(
       "selectedCourse",
       JSON.stringify({
