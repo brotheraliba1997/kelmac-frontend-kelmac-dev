@@ -18,9 +18,9 @@ import { coursesItems } from "@/data/home";
 import {
   IconClockCountdown,
   IconCertificate,
-  IconBookBookmark,
   IconScreencast,
   IconTranslate,
+  IconLocation,
 } from "@/components/icons/icons";
 import { IconBox } from "@/components/ui/common/IconBox";
 import QuestionsModal from "@/components/ui/questions/QuestionsModal";
@@ -241,35 +241,29 @@ export default function CoursePage() {
                 headingClassName="text-primary"
               />
               <div className="space-y-4">
-                {sessions.map((session, index) => (
+                {course.timeTable.map((session, index) => (
                   <CourseSession key={index} {...session} />
                 ))}
               </div>
             </div>
 
             <div className="lg:col-span-2">
-              <div className="bg-primary rounded-4xl overflow-hidden h-150 flex flex-col">
+              <div className="bg-primary rounded-4xl overflow-hidden h-180 flex flex-col">
                 <h2 className="text-3xl md:text-4xl px-4 md:px-6 pt-7 pb-4 font-hedvig font-regular text-white border-b border-secondary">
                   Course Snapshot
                 </h2>
                 <div className="px-4 md:px-6 py-10 flex-1 flex flex-col">
                   <div className="mb-5 grid grid-cols-1 md:grid-cols-5 gap-4 flex-1">
                     <IconBox
-                      className="md:col-span-3"
+                      className="md:col-span-5"
                       icon={<IconClockCountdown />}
                       subHeading="Duration"
-                      heading={`${course.snapshot.totalDuration} hours`}
-                    />
-                    <IconBox
-                      className="md:col-span-2"
-                      icon={<IconBookBookmark />}
-                      subHeading="Lessons"
-                      heading={course.snapshot.totalLectures.toString()}
+                      heading={`${course.snapshot.totalDuration} hours of internal Auditor IA class`}
                     />
                     <IconBox
                       className="md:col-span-3"
                       icon={<IconScreencast />}
-                      subHeading="Skill Level"
+                      subHeading="Delivery method"
                       heading={course.snapshot.skillLevel}
                     />
                     <IconBox
@@ -279,10 +273,16 @@ export default function CoursePage() {
                       heading={course.snapshot.language}
                     />
                     <IconBox
+                      className="md:col-span-5"
+                      icon={<IconLocation />}
+                      subHeading="Location"
+                      heading="Old Windmill Office Suites, Lower Gerald Griffin Street"
+                    />
+                    <IconBox
                       className="md:col-span-3"
                       icon={<IconTranslate />}
-                      subHeading="Students"
-                      heading={course.snapshot.enrolledStudents.toString()}
+                      subHeading="Instructor"
+                      heading="Gerald"
                     />
                     <IconBox
                       className="md:col-span-5"
@@ -293,10 +293,10 @@ export default function CoursePage() {
                           height={32}
                         />
                       }
-                      subHeading="Certificate"
+                      subHeading="Certifications"
                       heading={
                         course.snapshot.certificate
-                          ? "Included"
+                          ? "QMS ISO 9001:2015 Fundamental"
                           : "Not Included"
                       }
                     />

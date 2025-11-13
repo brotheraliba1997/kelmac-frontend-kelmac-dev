@@ -57,10 +57,23 @@ export default function AllCoursesPage() {
 
   // Get unique categories from API data
   const availableCategories = categories.map((cat: Category) => ({
-    id: cat._id,
+    id: cat.id,
     name: cat.name,
     slug: cat.slug,
   }));
+
+  // Debug logging
+  useEffect(() => {
+    console.log("Selected Category:", selectedCategory);
+    console.log("Available Categories:", availableCategories);
+    console.log("Courses Data:", coursesData);
+    console.log("Query params:", {
+      page: 1,
+      limit: 50,
+      ...(selectedCategory !== "" ? { category: selectedCategory } : {}),
+      ...(debouncedSearch !== "" ? { search: debouncedSearch } : {}),
+    });
+  }, [selectedCategory, availableCategories, debouncedSearch, coursesData]);
 
   const visibleCourses = courses.slice(0, visibleCount);
   const hasMoreCourses = visibleCount < courses.length;
@@ -70,6 +83,7 @@ export default function AllCoursesPage() {
   };
 
   const handleCategorySelect = (categoryId: string) => {
+    console.log("Selecting category:", categoryId);
     setSelectedCategory(categoryId === selectedCategory ? "" : categoryId);
     setVisibleCount(6); // Reset visible count when filtering
   };
@@ -135,7 +149,6 @@ export default function AllCoursesPage() {
                     <Search className="w-5 h-5 md:w-6 md:h-6 text-white stroke-[2.5]" />
                   </div>
                 </button>
-
                 <input
                   type="text"
                   placeholder="Find your course"
@@ -148,6 +161,9 @@ export default function AllCoursesPage() {
               {/* Category Filter */}
               {!categoriesLoading && availableCategories.length > 0 && (
                 <div className="text-center">
+                  <p className="text-white/80 text-sm mb-3">
+                    Filter by category:
+                  </p>
                   <div className="flex flex-wrap justify-center gap-3">
                     {availableCategories.map((category) => (
                       <button
@@ -160,6 +176,7 @@ export default function AllCoursesPage() {
                         }`}
                       >
                         {category.name}
+                        {selectedCategory === category.id && " ✓"}
                       </button>
                     ))}
                     {(searchQuery || selectedCategory) && (
@@ -179,9 +196,9 @@ export default function AllCoursesPage() {
 
           <div id="courses-section">
             {/* Search Results Info */}
-            {(searchQuery || selectedCategory) && !coursesLoading && (
+            {/* {(searchQuery || selectedCategory) && !coursesLoading && (
               <div className="text-center text-white mb-8">
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 inline-block">
+                <div className="bg-white/10 flex items-center justify-around backdrop-blur-sm rounded-2xl p-6">
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <Filter className="w-5 h-5" />
                     <span className="text-lg font-medium">Search Results</span>
@@ -213,7 +230,7 @@ export default function AllCoursesPage() {
                   </p>
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* Loading State */}
             {(coursesLoading || categoriesLoading) && (
@@ -346,7 +363,7 @@ export default function AllCoursesPage() {
                   <div
                     className="rounded-4xl min-h-[280px] flex flex-col items-center justify-center text-center relative overflow-hidden group cursor-pointer transition-transform hover:scale-105"
                     onClick={() => {
-                      handleCategorySelect(category.id);
+                      handleCategorySelect(category.slug);
                       // Scroll to courses section
                       document
                         .getElementById("courses-section")
