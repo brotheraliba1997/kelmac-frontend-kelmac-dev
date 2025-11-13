@@ -2,14 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { authAPI } from "@/store/api/authApi";
 import { userAPI } from "@/store/api/userApi";
 
-const user =
+export const user =
   typeof window !== "undefined"
     ? localStorage.getItem("user")
       ? JSON.parse(localStorage.getItem("user"))
       : null
     : null;
 
-const token =
+export const token =
   typeof window !== "undefined"
     ? localStorage.getItem("token")
       ? JSON.parse(localStorage.getItem("token"))

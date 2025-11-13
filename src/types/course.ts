@@ -89,6 +89,12 @@ export interface CourseTimeTable {
   description: string;
   time: string;
 }
+export interface User {
+  id?: string;
+  _id?: string;
+  firstName: string;
+  lastName: string;
+}
 
 export interface Course {
   id: any;
@@ -97,7 +103,7 @@ export interface Course {
   slug: string;
   subtitle: string;
   description: string;
-  instructor: string;
+  instructor: User;
   category: Category;
   subcategories: string[];
   topics: string[];
