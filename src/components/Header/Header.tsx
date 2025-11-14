@@ -22,6 +22,7 @@ const navLinks = [
   { href: "/corporate", label: "Corporate", mega: "corporate" },
   { href: "/resources", label: "Resources", mega: "resources" },
   { href: "/contact-us", label: "Contact" },
+  { href: "/dashboard", label: "Dashboard" },
 ];
 
 export default function Header() {

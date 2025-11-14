@@ -29,15 +29,29 @@ export default function UserDashboard() {
   console.log("Class Schedule Data:", data);
 
   const classes = (data as any)?.data || [];
-  const totalEntries = (data as any)?.total || classes.length;
+  const newClasses = classes.flatMap((cls: any) =>
+    ["10:00", "12:00", "02:00", "04:00", "06:00"].map((x) => ({
+      ...cls,
+      time: x,
+    }))
+  );
+  // const totalEntries = (data as any)?.total || classes.length;
+  const totalEntries = newClasses.length;
   const totalPages = Math.ceil(totalEntries / pageSize);
 
   const columns = [
     {
       displayName: "Course",
       displayField: (e: any) => (
-        <div className="fw-semibold text-capitalize">
-          {e?.course?.title || "—"}
+        <div className="d-flex align-items-center gap-2">
+          <div>
+            <div className="fw-semibold text-capitalize text-gray-800">
+              {e?.course?.title || "—"}
+            </div>
+            <div className="text-xs text-gray-500">
+              {e?.course?.category?.name || "Course"}
+            </div>
+          </div>
         </div>
       ),
       searchable: true,
@@ -46,34 +60,61 @@ export default function UserDashboard() {
     {
       displayName: "Instructor",
       displayField: (e: any) => (
-        <div className="fw-medium text-primary">
-          {e?.instructor?.firstName
-            ? `${e.instructor.firstName} ${e.instructor.lastName}`
-            : "—"}
+        <div className="d-flex align-items-center gap-2">
+          <span className="fw-medium text-gray-700">
+            {e?.instructor?.firstName
+              ? `${e.instructor.firstName} ${e.instructor.lastName}`
+              : "—"}
+          </span>
         </div>
       ),
       searchable: true,
     },
+
     {
       displayName: "Student",
-      displayField: (e: any) => (
-        <div className="fw-medium text-primary">
-          {e?.students?.find((x: any) => x.id === auth?.user?.id)?.firstName
-            ? `${
-                e?.students?.find((x: any) => x.id === auth?.user?.id)
-                  ?.firstName
-              } ${
-                e?.students?.find((x: any) => x.id === auth?.user?.id)?.lastName
-              }`
-            : "—"}
-        </div>
-      ),
+      displayField: (e: any) => {
+        const student = e?.students?.find((x: any) => x.id === auth?.user?.id);
+        return (
+          <div className="d-flex align-items-center gap-2">
+            <span className="fw-medium text-gray-700">
+              {student?.firstName
+                ? `${student.firstName} ${student.lastName}`
+                : "—"}
+            </span>
+          </div>
+        );
+      },
       searchable: true,
     },
     {
       displayName: "Date",
       displayField: (e: any) => (
-        <span className="badge bg-light text-dark">{e?.date || "—"}</span>
+        <div className="d-flex flex-column">
+          <span className="inline-flex items-center px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 font-medium text-sm">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 me-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            {e?.date
+              ? new Date(e.date).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })
+              : "—"}
+          </span>
+        </div>
       ),
       searchable: true,
     },
@@ -81,7 +122,23 @@ export default function UserDashboard() {
     {
       displayName: "Time",
       displayField: (e: any) => (
-        <span className="badge bg-info text-dark">{e?.time || "—"}</span>
+        <span className="inline-flex items-center px-3 py-1.5 rounded-lg bg-cyan-50 text-cyan-700 font-medium text-sm">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4 me-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          {e?.time || "—"}
+        </span>
       ),
       searchable: true,
     },
@@ -89,7 +146,23 @@ export default function UserDashboard() {
     {
       displayName: "Duration",
       displayField: (e: any) => (
-        <span className="badge bg-secondary">{e?.duration || 0} min</span>
+        <span className="inline-flex items-center px-3 py-1.5 rounded-lg bg-purple-50 text-purple-700 font-semibold text-sm">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-4 w-4 me-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13 10V3L4 14h7v7l9-11h-7z"
+            />
+          </svg>
+          {e?.duration || 0} min
+        </span>
       ),
       searchable: false,
     },
@@ -97,59 +170,75 @@ export default function UserDashboard() {
     {
       displayName: "Meet Link",
       displayField: (e: any) => (
-        <a
-          href={e?.googleMeetLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-decoration-none text-primary fw-medium"
-        >
-          {e?.googleMeetLink ? "Join Meeting" : "—"}
-        </a>
+        <div>
+          {e?.googleMeetLink ? (
+            <a
+              href={e.googleMeetLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-sm transition-all duration-200 shadow-sm hover:shadow-md text-decoration-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                />
+              </svg>
+              Join Meeting
+            </a>
+          ) : (
+            <span className="inline-flex items-center px-3 py-2 bg-gray-100 text-gray-400 rounded-lg font-medium text-sm">
+              No Link
+            </span>
+          )}
+        </div>
       ),
       searchable: false,
     },
 
     {
       displayName: "Status",
-      displayField: (e: any) =>
-        e?.status === "scheduled" ? (
-          <span className="badge bg-success">Scheduled</span>
-        ) : e?.status === "cancelled" ? (
-          <span className="badge bg-danger">Cancelled</span>
-        ) : (
-          <span className="badge bg-warning text-dark">{e?.status || "—"}</span>
-        ),
+      displayField: (e: any) => {
+        if (e?.status === "scheduled") {
+          return (
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-green-100 text-green-700 font-semibold text-xs uppercase tracking-wide">
+              <span className="w-2 h-2 bg-green-500 rounded-full me-2 animate-pulse"></span>
+              Scheduled
+            </span>
+          );
+        } else if (e?.status === "cancelled") {
+          return (
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-red-100 text-red-700 font-semibold text-xs uppercase tracking-wide">
+              <span className="w-2 h-2 bg-red-500 rounded-full me-2"></span>
+              Cancelled
+            </span>
+          );
+        } else if (e?.status === "completed") {
+          return (
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 font-semibold text-xs uppercase tracking-wide">
+              <span className="w-2 h-2 bg-blue-500 rounded-full me-2"></span>
+              Completed
+            </span>
+          );
+        } else {
+          return (
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-yellow-100 text-yellow-700 font-semibold text-xs uppercase tracking-wide">
+              <span className="w-2 h-2 bg-yellow-500 rounded-full me-2"></span>
+              {e?.status || "Pending"}
+            </span>
+          );
+        }
+      },
       searchable: true,
     },
-
-    // {
-    //   displayName: "Actions",
-    //   displayField: (e: any) => (
-    //     <div className="d-flex gap-3">
-    //       <FaEye
-    //         className="text-primary"
-    //         style={{ cursor: "pointer" }}
-    //         //   onClick={() => handleView?.(e)}
-    //         title="View"
-    //       />
-
-    //       <Link href={`/dashboard/class-schedule/${e?.id}`}>
-    //         <FaEdit
-    //           className="text-success"
-    //           style={{ cursor: "pointer" }}
-    //           title="Edit"
-    //         />
-    //       </Link>
-
-    //       <FaTrash
-    //         className="text-danger"
-    //         style={{ cursor: "pointer" }}
-    //         //   onClick={() => handleDelete?.(e)}
-    //         title="Delete"
-    //       />
-    //     </div>
-    //   ),
-    // },
   ];
 
   return (
@@ -186,7 +275,7 @@ export default function UserDashboard() {
             <Table
               title="Class Schedules"
               columns={columns}
-              dataSource={classes ?? []}
+              dataSource={newClasses ?? []}
               isLoading={isLoading}
               totalPages={totalPages}
               totalEntries={totalEntries}

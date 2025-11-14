@@ -24,10 +24,16 @@ interface PaymentFormProps {}
 
 interface PaymentFormData {
   cardholderName: string;
+  cardNumber: string;
+  expiryDate: string;
+  cvv: string;
 }
 
 interface FormErrors {
   cardholderName?: string;
+  cardNumber?: string;
+  expiryDate?: string;
+  cvv?: string;
   general?: string;
 }
 
@@ -36,6 +42,9 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
     const [selectedMethod, setSelectedMethod] = useState("credit");
     const [formData, setFormData] = useState<PaymentFormData>({
       cardholderName: "",
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
     });
     const [errors, setErrors] = useState<FormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,23 +84,135 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
       return null;
     };
 
+    const validateCardNumber = (cardNumber: string): string | null => {
+      const cleanNumber = cardNumber.replace(/\s/g, "");
+      if (!cleanNumber) return "Card number is required";
+      if (!/^\d{13,19}$/.test(cleanNumber))
+        return "Card number must be 13-19 digits";
+
+      // List of valid Stripe test card numbers
+      const validTestCards = [
+        "4242424242424242", // Visa
+        "4000056655665556", // Visa (debit)
+        "5555555555554444", // Mastercard
+        "2223003122003222", // Mastercard (2-series)
+        "5200828282828210", // Mastercard (debit)
+        "378282246310005", // American Express
+        "371449635398431", // American Express
+        "6011111111111117", // Discover
+        "6011000990139424", // Discover
+        "3056930009020004", // Diners Club
+        "36227206271667", // Diners Club (14 digit)
+        "3566002020360505", // JCB
+        "6200000000000005", // UnionPay
+      ];
+
+      // Check if it's a known test card first
+      if (validTestCards.includes(cleanNumber)) {
+        return null; // Valid test card
+      }
+
+      // Basic Luhn algorithm check for other cards
+      const luhnCheck = (num: string) => {
+        let sum = 0;
+        let shouldDouble = false;
+        for (let i = num.length - 1; i >= 0; i--) {
+          let digit = parseInt(num.charAt(i), 10);
+          if (shouldDouble) {
+            digit *= 2;
+            if (digit > 9) digit -= 9;
+          }
+          sum += digit;
+          shouldDouble = !shouldDouble;
+        }
+        return sum % 10 === 0;
+      };
+
+      if (!luhnCheck(cleanNumber)) {
+        return "Invalid card number. For testing, use: 4242 4242 4242 4242";
+      }
+      return null;
+    };
+
+    const validateExpiryDate = (expiryDate: string): string | null => {
+      if (!expiryDate) return "Expiry date is required";
+
+      const regex = /^(0[1-9]|1[0-2])\/\d{2}$/;
+      if (!regex.test(expiryDate)) return "Expiry date must be in MM/YY format";
+
+      const [month, year] = expiryDate.split("/");
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear() % 100;
+      const currentMonth = currentDate.getMonth() + 1;
+
+      const expYear = parseInt(year, 10);
+      const expMonth = parseInt(month, 10);
+
+      if (
+        expYear < currentYear ||
+        (expYear === currentYear && expMonth < currentMonth)
+      ) {
+        return "Card has expired";
+      }
+
+      return null;
+    };
+
+    const validateCVV = (cvv: string): string | null => {
+      if (!cvv) return "CVV is required";
+      if (!/^\d{3,4}$/.test(cvv)) return "CVV must be 3 or 4 digits";
+      return null;
+    };
+
     const validateForm = (): FormErrors => {
       const newErrors: FormErrors = {};
 
       const nameError = validateCardholderName(formData.cardholderName);
       if (nameError) newErrors.cardholderName = nameError;
 
-      // Card validation is handled by Stripe CardElement
+      const cardError = validateCardNumber(formData.cardNumber);
+      if (cardError) newErrors.cardNumber = cardError;
+
+      const expiryError = validateExpiryDate(formData.expiryDate);
+      if (expiryError) newErrors.expiryDate = expiryError;
+
+      const cvvError = validateCVV(formData.cvv);
+      if (cvvError) newErrors.cvv = cvvError;
 
       return newErrors;
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target;
+      let formattedValue = value;
+
+      // Format card number with spaces
+      if (name === "cardNumber") {
+        formattedValue = value
+          .replace(/\s/g, "")
+          .replace(/(\d{4})/g, "$1 ")
+          .trim();
+        if (formattedValue.length > 19)
+          formattedValue = formattedValue.slice(0, 19);
+      }
+
+      // Format expiry date
+      if (name === "expiryDate") {
+        formattedValue = value
+          .replace(/\D/g, "")
+          .replace(/(\d{2})(\d)/, "$1/$2");
+        if (formattedValue.length > 5)
+          formattedValue = formattedValue.slice(0, 5);
+      }
+
+      // Format CVV
+      if (name === "cvv") {
+        formattedValue = value.replace(/\D/g, "").slice(0, 4);
+      }
 
       setFormData((prev) => ({
         ...prev,
-        [name]: value,
+        [name]: formattedValue,
       }));
 
       // Clear error when user starts typing
@@ -252,6 +373,9 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
           // Reset form on success
           setFormData({
             cardholderName: "",
+            cardNumber: "",
+            expiryDate: "",
+            cvv: "",
           });
 
           // Optionally redirect to success page
@@ -388,31 +512,62 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
               </div>
 
               <div>
-                <label className={labelClass}>Card Details*</label>
-                <div className="w-full border rounded-lg p-3 bg-white border-gray-300 focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all">
-                  <CardElement
-                    options={{
-                      style: {
-                        base: {
-                          fontSize: '14px',
-                          color: '#1f2937',
-                          '::placeholder': {
-                            color: '#9ca3af',
-                          },
-                          fontFamily: 'system-ui, -apple-system, sans-serif',
-                        },
-                        invalid: {
-                          color: '#ef4444',
-                          iconColor: '#ef4444',
-                        },
-                      },
-                      hidePostalCode: true,
-                    }}
+                <label className={labelClass}>Card Number*</label>
+                <input
+                  type="text"
+                  name="cardNumber"
+                  value={formData.cardNumber}
+                  onChange={handleInputChange}
+                  placeholder="XXXX XXXX XXXX XXXX"
+                  className={inputClass(!!errors.cardNumber)}
+                  maxLength={19}
+                />
+                {errors.cardNumber && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.cardNumber}
+                  </p>
+                )}
+                {!errors.cardNumber && (
+                  <p className="text-gray-500 text-xs mt-1">
+                    💳 For testing: 4242 4242 4242 4242 (Visa) or 5555 5555 5555
+                    4444 (Mastercard)
+                  </p>
+                )}
+              </div>
+
+              <div className="flex gap-4">
+                <div className="w-1/2">
+                  <label className={labelClass}>Expiry Date*</label>
+                  <input
+                    type="text"
+                    name="expiryDate"
+                    value={formData.expiryDate}
+                    onChange={handleInputChange}
+                    placeholder="MM/YY"
+                    className={inputClass(!!errors.expiryDate)}
+                    maxLength={5}
                   />
+                  {errors.expiryDate && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.expiryDate}
+                    </p>
+                  )}
                 </div>
-                <p className="text-gray-500 text-xs mt-1">
-                  💳 For testing: 4242 4242 4242 4242, any future date, any 3-digit CVC
-                </p>
+                <div className="w-1/2">
+                  <label className={labelClass}>CVC/CVV*</label>
+                  <input
+                    type="text"
+                    name="cvv"
+                    value={formData.cvv}
+                    onChange={handleInputChange}
+                    placeholder="123"
+                    className={inputClass(!!errors.cvv)}
+                    maxLength={4}
+                  />
+                  {errors.cvv && (
+                    <p className="text-red-500 text-xs mt-1">{errors.cvv}</p>
+                  )}
+                </div>
               </div>
 
               <div className="flex items-center gap-2 text-secondary text-sm pt-2">

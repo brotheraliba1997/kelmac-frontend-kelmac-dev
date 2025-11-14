@@ -31,13 +31,12 @@ export default function CourseFeesSummary({
 }: CourseFeesSummaryProps) {
   const [couponCode, setCouponCode] = useState("");
   const [selectedCourse, setSelectedCourse] = useState<any>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // Only access localStorage on the client side
     if (typeof window !== "undefined") {
-      const course = JSON.parse(
-        localStorage.getItem("selectedCourse") || "{}"
-      );
+      const course = JSON.parse(localStorage.getItem("selectedCourse") || "{}");
       setSelectedCourse(course);
     }
   }, []);
@@ -51,12 +50,19 @@ export default function CourseFeesSummary({
   const taxAmount = (subtotal * taxRate) / 100;
   const total = subtotal + taxAmount;
 
-  const handleContinue = () => {
-    if (onFormSubmit) {
-      // Call the form submit function instead of navigation
-      onFormSubmit();
-    } else if (onContinue) {
-      onContinue();
+  const handleContinue = async () => {
+    setIsSubmitting(true);
+    try {
+      if (onFormSubmit) {
+        // Call the form submit function instead of navigation
+        await onFormSubmit();
+      } else if (onContinue) {
+        await onContinue();
+      }
+    } catch (error) {
+      console.error("Error during submission:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -115,11 +121,25 @@ export default function CourseFeesSummary({
           <div className="mt-4">
             <Button
               spanclassName="px-15"
-              className="gap-3 justify-center items-center w-full"
-              text={continueButtonText}
+              className={`gap-3 justify-center items-center w-full ${
+                isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+              }`}
+              text={isSubmitting ? "Processing..." : continueButtonText}
               href={onFormSubmit || onContinue ? undefined : continueButtonHref}
-              onClick={onFormSubmit || onContinue ? handleContinue : undefined}
-              icon={<IconArrowRight className="stroke-primary" />}
+              onClick={
+                isSubmitting
+                  ? undefined
+                  : onFormSubmit || onContinue
+                  ? handleContinue
+                  : undefined
+              }
+              icon={
+                isSubmitting ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent" />
+                ) : (
+                  <IconArrowRight className="stroke-primary" />
+                )
+              }
               color="primary"
             />
           </div>
