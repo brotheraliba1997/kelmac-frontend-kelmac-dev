@@ -142,6 +142,37 @@ export const courseApi = createApi({
         { type: "Courses", id: "LIST" },
       ],
     }),
+
+    // Get all class schedules with pagination and filters
+    getAllClassSchedules: builder.query<
+      {
+        data: any[];
+        hasNextPage: boolean;
+        page: number;
+        limit: number;
+        total: number;
+      },
+      {
+        search?: string;
+        status?: string;
+        studentId?: string;
+        limit?: number;
+        page?: number;
+      } | void
+    >({
+      query: (params) => {
+        if (!params) return "/class-schedule/paginated/list";
+        const queryParams: any = {};
+        if (params.search) queryParams.search = params.search;
+        if (params.status) queryParams.status = params.status;
+        if (params.studentId) queryParams.studentId = params.studentId;
+        if (params.limit) queryParams.limit = params.limit;
+        if (params.page) queryParams.page = params.page;
+        const queryString = new URLSearchParams(queryParams).toString();
+        return `/class-schedule/paginated/list?${queryString}`;
+      },
+      providesTags: [{ type: "Courses", id: "LIST" }],
+    }),
   }),
 });
 
@@ -154,4 +185,5 @@ export const {
   useCreateBookingMutation,
   useUpdateCourseMutation,
   useDeleteCourseMutation,
+  useGetAllClassSchedulesQuery,
 } = courseApi;

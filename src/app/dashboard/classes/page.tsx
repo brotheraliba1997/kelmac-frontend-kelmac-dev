@@ -5,185 +5,151 @@ import Table from "@/components/table/index";
 
 import Link from "next/link";
 import { GetUserRoleName, GetUserStatusName } from "@/lib/getUserRoleName";
+import { FaTrash } from "react-icons/fa6";
+import { useGetAllClassSchedulesQuery } from "@/store/api/courseApi";
+import { useSelector } from "react-redux";
 // import { useGetUsersQuery } from "@/app/redux/services/userApi";
 
 export default function UserDashboard() {
   // const { data, error } = useGetUsersQuery({});
 
   // console.log("data from users page==>", data);
-  const allUsers = [
-    {
-      id: 1,
-      firstName: "Hamza",
-      lastName: "Ali",
-      email: "hamza@example.com",
-      role: "Admin",
-      status: "Active",
-    },
-    {
-      id: 2,
-      firstName: "Usman",
-      lastName: "Khan",
-      email: "usman@example.com",
-      role: "Student",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      firstName: "Ali",
-      lastName: "Raza",
-      email: "ali.raza@example.com",
-      role: "Instructor",
-      status: "Active",
-    },
-    {
-      id: 4,
-      firstName: "Ahsan",
-      lastName: "Qureshi",
-      email: "ahsan.q@example.com",
-      role: "Corporate",
-      status: "Blocked",
-    },
-    {
-      id: 5,
-      firstName: "Taha",
-      lastName: "Malik",
-      email: "taha.malik@example.com",
-      role: "Student",
-      status: "Active",
-    },
-    {
-      id: 6,
-      firstName: "Bilal",
-      lastName: "Shahid",
-      email: "bilal.shahid@example.com",
-      role: "Instructor",
-      status: "Active",
-    },
-    {
-      id: 7,
-      firstName: "Zain",
-      lastName: "Ahmad",
-      email: "zain.ahmad@example.com",
-      role: "Corporate",
-      status: "Pending",
-    },
-    {
-      id: 8,
-      firstName: "Imran",
-      lastName: "Khalid",
-      email: "imran.k@example.com",
-      role: "Admin",
-      status: "Active",
-    },
-    {
-      id: 9,
-      firstName: "Saad",
-      lastName: "Hassan",
-      email: "saad.h@example.com",
-      role: "Student",
-      status: "Pending",
-    },
-    {
-      id: 10,
-      firstName: "Hassan",
-      lastName: "Butt",
-      email: "hassan.b@example.com",
-      role: "Instructor",
-      status: "Active",
-    },
-    {
-      id: 11,
-      firstName: "Nabeel",
-      lastName: "Iqbal",
-      email: "nabeel.i@example.com",
-      role: "Corporate",
-      status: "Blocked",
-    },
-  ];
-
+  const auth = useSelector((state: any) => state?.auth);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
-  const [isLoading, setIsLoading] = useState(true);
+  const [pageSize, setPageSize] = useState(10);
 
-  const totalEntries = allUsers.length;
+  const { data, isLoading, error } = useGetAllClassSchedulesQuery({
+    // search: "",
+    // status: "1",
+    studentId: auth?.user?.id || "",
+    limit: pageSize,
+    page: page,
+  });
+
+  console.log("Class Schedule Data:", data);
+
+  const classes = (data as any)?.data || [];
+  const totalEntries = (data as any)?.total || classes.length;
   const totalPages = Math.ceil(totalEntries / pageSize);
-
-  const indexOfLastItem = page * pageSize;
-  const indexOfFirstItem = indexOfLastItem - pageSize;
-  const currentData = allUsers.slice(indexOfFirstItem, indexOfLastItem);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 700);
-    return () => clearTimeout(timer);
-  }, [page, pageSize]);
 
   const columns = [
     {
-      displayName: "Client",
+      displayName: "Course",
       displayField: (e: any) => (
-        <div className="d-flex align-items-center gap-2">
-          <div className="fw-semibold text-capitalize">
-            {e?.firstName} {e?.lastName}
-          </div>
+        <div className="fw-semibold text-capitalize">
+          {e?.course?.title || "—"}
         </div>
       ),
       searchable: true,
     },
 
     {
-      displayName: "Email",
+      displayName: "Instructor",
       displayField: (e: any) => (
-        <div className="text-lowercase">{e?.email}</div>
+        <div className="fw-medium text-primary">
+          {e?.instructor?.firstName
+            ? `${e.instructor.firstName} ${e.instructor.lastName}`
+            : "—"}
+        </div>
+      ),
+      searchable: true,
+    },
+    {
+      displayName: "Student",
+      displayField: (e: any) => (
+        <div className="fw-medium text-primary">
+          {e?.students?.find((x: any) => x.id === auth?.user?.id)?.firstName
+            ? `${
+                e?.students?.find((x: any) => x.id === auth?.user?.id)
+                  ?.firstName
+              } ${
+                e?.students?.find((x: any) => x.id === auth?.user?.id)?.lastName
+              }`
+            : "—"}
+        </div>
+      ),
+      searchable: true,
+    },
+    {
+      displayName: "Date",
+      displayField: (e: any) => (
+        <span className="badge bg-light text-dark">{e?.date || "—"}</span>
       ),
       searchable: true,
     },
 
     {
-      displayName: "Role",
+      displayName: "Time",
       displayField: (e: any) => (
-        <span className="inline-block bg-blue-500 text-white text-xs font-medium px-2 py-1 rounded capitalize">
-          {GetUserRoleName(e?.role?._id)}
-        </span>
+        <span className="badge bg-info text-dark">{e?.time || "—"}</span>
       ),
       searchable: true,
+    },
+
+    {
+      displayName: "Duration",
+      displayField: (e: any) => (
+        <span className="badge bg-secondary">{e?.duration || 0} min</span>
+      ),
+      searchable: false,
+    },
+
+    {
+      displayName: "Meet Link",
+      displayField: (e: any) => (
+        <a
+          href={e?.googleMeetLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-decoration-none text-primary fw-medium"
+        >
+          {e?.googleMeetLink ? "Join Meeting" : "—"}
+        </a>
+      ),
+      searchable: false,
     },
 
     {
       displayName: "Status",
-      displayField: (e: any) => {
-        const statusName = GetUserStatusName(e?.status?.id);
-
-        return (
-          <>
-            {statusName === "Active" && (
-              <span className="inline-block bg-green-500 text-white text-xs font-medium px-2 py-1 rounded capitalize">
-                {statusName}
-              </span>
-            )}
-            {statusName === "Blocked" && (
-              <span className="inline-block bg-red-500 text-white text-xs font-medium px-2 py-1 rounded capitalize">
-                {statusName}
-              </span>
-            )}
-            {statusName === "Pending" && (
-              <span className="inline-block bg-yellow-400 text-gray-800 text-xs font-medium px-2 py-1 rounded capitalize">
-                {statusName}
-              </span>
-            )}
-            {statusName === "unknown" && (
-              <span className="inline-block bg-gray-400 text-white text-xs font-medium px-2 py-1 rounded capitalize">
-                Unknown
-              </span>
-            )}
-          </>
-        );
-      },
+      displayField: (e: any) =>
+        e?.status === "scheduled" ? (
+          <span className="badge bg-success">Scheduled</span>
+        ) : e?.status === "cancelled" ? (
+          <span className="badge bg-danger">Cancelled</span>
+        ) : (
+          <span className="badge bg-warning text-dark">{e?.status || "—"}</span>
+        ),
       searchable: true,
     },
+
+    // {
+    //   displayName: "Actions",
+    //   displayField: (e: any) => (
+    //     <div className="d-flex gap-3">
+    //       <FaEye
+    //         className="text-primary"
+    //         style={{ cursor: "pointer" }}
+    //         //   onClick={() => handleView?.(e)}
+    //         title="View"
+    //       />
+
+    //       <Link href={`/dashboard/class-schedule/${e?.id}`}>
+    //         <FaEdit
+    //           className="text-success"
+    //           style={{ cursor: "pointer" }}
+    //           title="Edit"
+    //         />
+    //       </Link>
+
+    //       <FaTrash
+    //         className="text-danger"
+    //         style={{ cursor: "pointer" }}
+    //         //   onClick={() => handleDelete?.(e)}
+    //         title="Delete"
+    //       />
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (
@@ -218,9 +184,9 @@ export default function UserDashboard() {
 
           <div className="bg-white rounded-md shadow-md overflow-hidden">
             <Table
-              title="Users List"
+              title="Class Schedules"
               columns={columns}
-              dataSource={allUsers ?? []}
+              dataSource={classes ?? []}
               isLoading={isLoading}
               totalPages={totalPages}
               totalEntries={totalEntries}
