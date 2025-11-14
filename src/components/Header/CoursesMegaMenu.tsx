@@ -14,7 +14,7 @@ export default function CoursesMegaMenu() {
     async function fetchCourses() {
       try {
         const res = await fetch(
-          "http://localhost:5000/api/v1/courses/grouped/by-category",
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/courses/grouped/by-category`,
           {
             cache: "no-store",
           }
