@@ -394,16 +394,16 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
                     options={{
                       style: {
                         base: {
-                          fontSize: '14px',
-                          color: '#1f2937',
-                          '::placeholder': {
-                            color: '#9ca3af',
+                          fontSize: "14px",
+                          color: "#1f2937",
+                          "::placeholder": {
+                            color: "#9ca3af",
                           },
-                          fontFamily: 'system-ui, -apple-system, sans-serif',
+                          fontFamily: "system-ui, -apple-system, sans-serif",
                         },
                         invalid: {
-                          color: '#ef4444',
-                          iconColor: '#ef4444',
+                          color: "#ef4444",
+                          iconColor: "#ef4444",
                         },
                       },
                       hidePostalCode: true,
@@ -411,7 +411,8 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
                   />
                 </div>
                 <p className="text-gray-500 text-xs mt-1">
-                  💳 For testing: 4242 4242 4242 4242, any future date, any 3-digit CVC
+                  💳 For testing: 4242 4242 4242 4242, any future date, any
+                  3-digit CVC
                 </p>
               </div>
 
