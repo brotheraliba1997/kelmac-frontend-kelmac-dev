@@ -13,6 +13,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    // "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "plugins": [
       {
         "name": "next"
@@ -22,6 +24,12 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/meeting-confirmed"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/meeting-confirmed"
+  ],
   "exclude": ["node_modules"]
 }

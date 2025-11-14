@@ -213,8 +213,7 @@ export default function ConfirmBooking({
       {showPopup && (
         <DateSelectionPopup
           course={course}
-          timetable={timetable || []} 
-         
+          timetable={timetable || []}
           onClose={handlePopupClose}
         />
       )}

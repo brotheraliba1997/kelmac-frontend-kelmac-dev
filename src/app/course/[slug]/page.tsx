@@ -49,51 +49,51 @@ export default function CoursePage() {
       : "Failed to load course"
     : null;
 
-  const sessions: CourseSessionProps[] = [
-    {
-      label: "Mar 15-19, 2025",
-      date: "Mar 15-19, 2025",
-      time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
-      sessionBadge: "Full Week",
-      sessionBadgeType: "green",
-      href: "#",
-      seatsLeft: 4,
-    },
-    {
-      label: "Apr 8-9, 15-16, 2025",
-      date: "Apr 8-9, 15-16, 2025",
-      time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
-      sessionBadge: "Split Week",
-      sessionBadgeType: "purple",
-      href: "#",
-      seatsLeft: 4,
-    },
-    {
-      label: "May 1-5, 2025",
-      date: "May 1-5, 2025",
-      time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
-      sessionBadge: "Weekend",
-      sessionBadgeType: "yellow",
-      href: "#",
-      seatsLeft: 4,
-    },
-    {
-      label: "May 1-5, 2025",
-      date: "May 1-5, 2025",
-      time: "6:00 PM - 9:00 PM (Eastern Time GMT-5)",
-      sessionBadge: "Evening",
-      sessionBadgeType: "red",
-      href: "#",
-      seatsLeft: 4,
-    },
-  ];
+  // const sessions: CourseSessionProps[] = [
+  //   {
+  //     label: "Mar 15-19, 2025",
+  //     date: "Mar 15-19, 2025",
+  //     time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
+  //     sessionBadge: "Full Week",
+  //     sessionBadgeType: "green",
+  //     href: "#",
+  //     seatsLeft: 4,
+  //   },
+  //   {
+  //     label: "Apr 8-9, 15-16, 2025",
+  //     date: "Apr 8-9, 15-16, 2025",
+  //     time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
+  //     sessionBadge: "Split Week",
+  //     sessionBadgeType: "purple",
+  //     href: "#",
+  //     seatsLeft: 4,
+  //   },
+  //   {
+  //     label: "May 1-5, 2025",
+  //     date: "May 1-5, 2025",
+  //     time: "9:00 AM - 4:30 PM (Eastern Time GMT-5)",
+  //     sessionBadge: "Weekend",
+  //     sessionBadgeType: "yellow",
+  //     href: "#",
+  //     seatsLeft: 4,
+  //   },
+  //   {
+  //     label: "May 1-5, 2025",
+  //     date: "May 1-5, 2025",
+  //     time: "6:00 PM - 9:00 PM (Eastern Time GMT-5)",
+  //     sessionBadge: "Evening",
+  //     sessionBadgeType: "red",
+  //     href: "#",
+  //     seatsLeft: 4,
+  //   },
+  // ];
 
   const [isQuestionsModalOpen, setIsQuestionsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchActive, setIsSearchActive] = useState(false);
   const coursesRef = useRef<HTMLDivElement>(null);
   const searchBarRef = useRef<HTMLDivElement>(null);
-
+  const [timetableId, setTimetableId] = useState<string>("");
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -220,10 +220,15 @@ export default function CoursePage() {
             <Button
               iconclassName="p-0 bg-primary"
               spanclassName="px-2"
-              onClick={() => setShowConfirm(true)}
-              text="Book Now"
+              onClick={() => {
+                const tabsSection = document.querySelector(
+                  "[data-tabs-section]"
+                );
+                tabsSection?.scrollIntoView({ behavior: "smooth" });
+              }}
+              text="See Details"
               color="white"
-              icon={<IconArrowRight className="stroke-white " />}
+              icon={<IconArrowDown className="stroke-white " />}
             />
           </div>
         </div>
@@ -241,9 +246,24 @@ export default function CoursePage() {
                 headingClassName="text-primary"
               />
               <div className="space-y-4">
-                {course.timeTable.map((session, index) => (
-                  <CourseSession key={index} {...session} />
-                ))}
+                {course.timeTable && course.timeTable.length > 0 ? (
+                  course.timeTable.map((session, index) => (
+                    <CourseSession
+                      timetableId={timetableId}
+                      setTimetableId={setTimetableId}
+                      showConfirm={showConfirm}
+                      setShowConfirm={setShowConfirm}
+                      key={index}
+                      timetable={session}
+                      course={course}
+                      {...session}
+                    />
+                  ))
+                ) : (
+                  <p className="text-gray-600">
+                    No sessions available at this time.
+                  </p>
+                )}
               </div>
             </div>
 
@@ -339,7 +359,7 @@ export default function CoursePage() {
         </div>
       </section>
 
-      <section>
+      <section data-tabs-section>
         <Tabs
           tabs={[
             {
@@ -430,7 +450,7 @@ export default function CoursePage() {
         />
       )}
 
-      {showConfirm && (
+      {showConfirm && course && course.timeTable && (
         <ConfirmBooking
           timetable={course.timeTable}
           course={course}

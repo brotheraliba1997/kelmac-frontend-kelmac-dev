@@ -57,19 +57,21 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
     const elements = useElements();
 
     const [courseId, setSelectedCourse] = useState("");
+    const [timetableId, setTimetableId] = useState("");
 
     useEffect(() => {
-      const course: any = JSON.parse(
-        localStorage.getItem("selectedCourse") || "{}"
-      );
-      const courseId = course?.id || "";
-      setSelectedCourse(courseId);
+      if (typeof window !== "undefined") {
+        const course: any = JSON.parse(
+          localStorage.getItem("selectedCourse") || "{}"
+        );
+        const courseId = course?.id || "";
+        setSelectedCourse(courseId);
+        const ttId = localStorage.getItem("selectedTimetableId") || "";
+        setTimetableId(ttId);
+      }
     }, []);
 
     const { data, error, refetch } = useGetCourseByIdQuery(courseId);
-
-    const timetableId = localStorage.getItem("selectedTimetableId") || "";
-    console.log(timetableId, "timetableId");
 
     // Validation functions
     const validateCardholderName = (name: string): string | null => {
@@ -244,10 +246,10 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
       }
 
       if (!stripe || !elements) {
-        setErrors({
-          general: "Stripe is not properly loaded. Please refresh the page.",
-        });
-        toast.error("Payment system not ready. Please refresh the page.");
+        // setErrors({
+        //   general: "Stripe is not properly loaded. Please refresh the page.",
+        // });
+        // toast.error("Payment system not ready. Please refresh the page.");
         return;
       }
 
@@ -264,13 +266,19 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
       }
 
       setIsSubmitting(true);
+      const regularFee = data?.price || 0;
+      const discountedPrice = data?.discountedPrice || regularFee;
+      // const discount = regularFee - discountedPrice;
 
+      const subtotal = discountedPrice + 99 + 99;
+      const taxAmount = (subtotal * 10) / 100;
+      const total = subtotal + taxAmount;
       try {
         // 1️⃣ Create payment intent
         const res: any = await createPayment({
           courseId,
           userId: auth?.user?.id,
-          amount: data?.price,
+          amount: total,
           currency: data?.currency || "usd",
           metadata: {
             cardholderName: formData.cardholderName,
@@ -317,7 +325,6 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
             {
               course: courseId,
               instructor: (data?.instructor as any)?.id,
-              // instructor: data?.instructor?.id,
               students: auth?.user?.id,
               date: formatted?.date,
               time: timeWithZero,

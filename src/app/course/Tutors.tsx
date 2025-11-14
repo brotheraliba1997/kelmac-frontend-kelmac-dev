@@ -67,7 +67,10 @@ export default function Tutors({ course }: TutorsProps) {
                 </div>
                 <div className="main-container primary-py relative z-10 flex items-end justify-end">
                   <div className="text-white w-full md:w-[60%] space-y-4 md:pl-12">
-                    <h2 className="text-4xl font-semibold">Gerard Kelly</h2>
+                    <h2 className="text-4xl font-semibold">
+                      {course?.instructor?.firstName}{" "}
+                      {course?.instructor?.lastName}
+                    </h2>
                     <p className="md:text-lg text-xl">
                       CQI-IRCA Certified Lead Auditor & Trainer
                     </p>
