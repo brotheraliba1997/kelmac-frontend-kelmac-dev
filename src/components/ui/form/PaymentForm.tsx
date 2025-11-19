@@ -15,6 +15,8 @@ import { useGetCourseByIdQuery } from "@/store/api/courseApi";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import ImageUploader from "@/components/ui/ImageUploader";
+import PayorderPopup from "@/components/ui/PayorderPopup";
 
 interface PaymentFormRef {
   submitPayment: () => void;
@@ -40,6 +42,9 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
     const [errors, setErrors] = useState<FormErrors>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // Payorder popup state
+    const [showPayorderPopup, setShowPayorderPopup] = useState(false);
+
     const auth = useSelector((state: any) => state?.auth);
 
     const [createPayment, { isLoading, isSuccess, isError }] =
@@ -53,11 +58,13 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
 
     useEffect(() => {
       if (typeof window !== "undefined") {
-        const course: any = JSON.parse(
-          localStorage.getItem("selectedCourse") || "{}"
-        );
-        const courseId = course?.id || "";
+        // const course: any = JSON.parse(
+        //   localStorage.getItem("selectedCourse") || "{}"
+        // );
+        const courseId: any = localStorage.getItem("selectedCourseId");
+
         setSelectedCourse(courseId);
+
         const ttId = localStorage.getItem("selectedTimetableId") || "";
         setTimetableId(ttId);
       }
@@ -277,6 +284,13 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
       }
     };
 
+    // Handle successful Payorder submission
+    const handlePayorderSuccess = (data: any) => {
+      console.log("Payorder submitted successfully:", data);
+      // Optionally redirect to confirmation page
+      router.push("/registration/confirmation");
+    };
+
     // Expose the payment function to parent components
     useImperativeHandle(ref, () => ({
       submitPayment: () => handlePay(),
@@ -324,218 +338,242 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
     //   };
 
     return (
-      <div className="max-w-2xl space-y-5">
-        {/* General Error Message */}
-        {errors.general && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-800 text-sm">{errors.general}</p>
-          </div>
-        )}
-
-        {/* CREDIT / DEBIT CARD */}
-        <div
-          className={selectedMethod === "credit" ? activeCard : baseCard}
-          onClick={() => setSelectedMethod("credit")}
-        >
-          <div className="flex items-center justify-between mb-6">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                value="credit"
-                checked={selectedMethod === "credit"}
-                onChange={() => setSelectedMethod("credit")}
-                className="sr-only"
-              />
-              <RadioCircle checked={selectedMethod === "credit"} />
-              <span className="font-semibold text-[18px] text-gray-900">
-                Credit/Debit Card
-              </span>
-            </label>
-
-            {/* Payment method icons */}
-            <div className="flex items-center space-x-2">
-              <IconVisa className="h-6" />
-              <IconMastercard className="h-6" />
-              <IconMastercard2 className="h-6" />
-              <IconPaypal className="h-6" />
+      <>
+        <div className="max-w-2xl space-y-5">
+          {/* General Error Message */}
+          {errors.general && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-800 text-sm">{errors.general}</p>
             </div>
-          </div>
+          )}
 
-          {/* Expandable credit card input fields */}
+          {/* CREDIT / DEBIT CARD */}
           <div
-            className={`transition-all duration-500 ease-in-out ${
-              selectedMethod === "credit"
-                ? "max-h-[800px] opacity-100"
-                : "max-h-0 opacity-0"
-            }`}
+            className={selectedMethod === "credit" ? activeCard : baseCard}
+            onClick={() => setSelectedMethod("credit")}
           >
-            <div className="space-y-4 pt-1">
-              <div>
-                <label className={labelClass}>Cardholder Name*</label>
+            <div className="flex items-center justify-between mb-6">
+              <label className="flex items-center gap-3 cursor-pointer">
                 <input
-                  type="text"
-                  name="cardholderName"
-                  value={formData.cardholderName}
-                  onChange={handleInputChange}
-                  placeholder="Enter cardholder name"
-                  className={inputClass(!!errors.cardholderName)}
+                  type="radio"
+                  value="credit"
+                  checked={selectedMethod === "credit"}
+                  onChange={() => setSelectedMethod("credit")}
+                  className="sr-only"
                 />
-                {errors.cardholderName && (
-                  <p className="text-red-500 text-xs mt-1">
-                    {errors.cardholderName}
+                <RadioCircle checked={selectedMethod === "credit"} />
+                <span className="font-semibold text-[18px] text-gray-900">
+                  Credit/Debit Card
+                </span>
+              </label>
+
+              {/* Payment method icons */}
+              <div className="flex items-center space-x-2">
+                <IconVisa className="h-6" />
+                <IconMastercard className="h-6" />
+                <IconMastercard2 className="h-6" />
+                <IconPaypal className="h-6" />
+              </div>
+            </div>
+
+            {/* Expandable credit card input fields */}
+            <div
+              className={`transition-all duration-500 ease-in-out ${
+                selectedMethod === "credit"
+                  ? "max-h-[800px] opacity-100"
+                  : "max-h-0 opacity-0"
+              }`}
+            >
+              <div className="space-y-4 pt-1">
+                <div>
+                  <label className={labelClass}>Cardholder Name*</label>
+                  <input
+                    type="text"
+                    name="cardholderName"
+                    value={formData.cardholderName}
+                    onChange={handleInputChange}
+                    placeholder="Enter cardholder name"
+                    className={inputClass(!!errors.cardholderName)}
+                  />
+                  {errors.cardholderName && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.cardholderName}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className={labelClass}>Card Details*</label>
+                  <div className="w-full border rounded-lg p-3 bg-white border-gray-300 focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all">
+                    <CardElement
+                      options={{
+                        style: {
+                          base: {
+                            fontSize: "14px",
+                            color: "#1f2937",
+                            "::placeholder": {
+                              color: "#9ca3af",
+                            },
+                            fontFamily: "system-ui, -apple-system, sans-serif",
+                          },
+                          invalid: {
+                            color: "#ef4444",
+                            iconColor: "#ef4444",
+                          },
+                        },
+                        hidePostalCode: true,
+                      }}
+                    />
+                  </div>
+                  <p className="text-gray-500 text-xs mt-1">
+                    💳 For testing: 4242 4242 4242 4242, any future date, any
+                    3-digit CVC
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 text-secondary text-sm pt-2">
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span>Payment information is secure and encrypted</span>
+                </div>
+
+                {/* Status messages */}
+                {isSuccess && (
+                  <p className="text-green-600 mt-2 text-sm">
+                    Payment created successfully!
+                  </p>
+                )}
+                {isError && (
+                  <p className="text-red-500 mt-2 text-sm">
+                    Failed to create payment
                   </p>
                 )}
               </div>
+            </div>
+          </div>
 
-              <div>
-                <label className={labelClass}>Card Details*</label>
-                <div className="w-full border rounded-lg p-3 bg-white border-gray-300 focus-within:border-secondary focus-within:ring-1 focus-within:ring-secondary transition-all">
-                  <CardElement
-                    options={{
-                      style: {
-                        base: {
-                          fontSize: "14px",
-                          color: "#1f2937",
-                          "::placeholder": {
-                            color: "#9ca3af",
-                          },
-                          fontFamily: "system-ui, -apple-system, sans-serif",
-                        },
-                        invalid: {
-                          color: "#ef4444",
-                          iconColor: "#ef4444",
-                        },
-                      },
-                      hidePostalCode: true,
-                    }}
-                  />
+          {/* BANK TRANSFER */}
+          <div
+            className={selectedMethod === "bank" ? activeCard : baseCard}
+            onClick={() => setSelectedMethod("bank")}
+          >
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="radio"
+                  value="bank"
+                  checked={selectedMethod === "bank"}
+                  onChange={() => setSelectedMethod("bank")}
+                  className="sr-only"
+                />
+                <RadioCircle checked={selectedMethod === "bank"} />
+                <span className="font-semibold text-[18px] text-gray-900">
+                  Bank Transfer
+                </span>
+              </label>
+              <div className="flex items-center">
+                <IconBank className="h-8 text-blue-600" />
+              </div>
+            </div>
+          </div>
+
+          {/* STRIPE */}
+          <div
+            className={selectedMethod === "stripe" ? activeCard : baseCard}
+            onClick={() => setSelectedMethod("stripe")}
+          >
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="radio"
+                  value="stripe"
+                  checked={selectedMethod === "stripe"}
+                  onChange={() => setSelectedMethod("stripe")}
+                  className="sr-only"
+                />
+                <RadioCircle checked={selectedMethod === "stripe"} />
+                <span className="font-semibold text-[18px] text-gray-900">
+                  Stripe
+                </span>
+              </label>
+              <div className="flex items-center">
+                <div className="px-3 py-1 bg-purple-100 rounded text-purple-700 font-medium text-sm">
+                  stripe
                 </div>
-                <p className="text-gray-500 text-xs mt-1">
-                  💳 For testing: 4242 4242 4242 4242, any future date, any
-                  3-digit CVC
+              </div>
+            </div>
+            {selectedMethod === "stripe" && (
+              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-blue-800 text-sm">
+                  You will be redirected to the PayPal website after submitting
+                  your order
                 </p>
               </div>
+            )}
+          </div>
 
-              <div className="flex items-center gap-2 text-secondary text-sm pt-2">
-                <svg
-                  className="w-4 h-4"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+          {/* PAYORDER */}
+          <div
+            className={selectedMethod === "payorder" ? activeCard : baseCard}
+            onClick={() => setSelectedMethod("payorder")}
+          >
+            <div className="flex items-center justify-between">
+              <label
+                className="flex items-center gap-3 cursor-pointer"
+                onClick={() => setSelectedMethod("payorder")}
+              >
+                <input
+                  type="radio"
+                  value="payorder"
+                  checked={selectedMethod === "payorder"}
+                  onChange={() => setSelectedMethod("payorder")}
+                  className="sr-only"
+                />
+                <RadioCircle checked={selectedMethod === "payorder"} />
+                <span className="font-semibold text-[18px] text-gray-900">
+                  Payorder
+                </span>
+              </label>
+            </div>
+            {selectedMethod === "payorder" && (
+              <div className="mt-4 space-y-3">
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-blue-800 text-sm">
+                    Submit your bank slip and payorder number to complete the
+                    payment
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowPayorderPopup(true)}
+                  className="w-full bg-secondary text-white py-3 px-4 rounded-lg font-semibold hover:bg-secondary/90 transition-colors"
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span>Payment information is secure and encrypted</span>
+                  Upload Bank Slip & PO Number
+                </button>
               </div>
-
-              {/* Status messages */}
-              {isSuccess && (
-                <p className="text-green-600 mt-2 text-sm">
-                  Payment created successfully!
-                </p>
-              )}
-              {isError && (
-                <p className="text-red-500 mt-2 text-sm">
-                  Failed to create payment
-                </p>
-              )}
-            </div>
+            )}
           </div>
         </div>
 
-        {/* BANK TRANSFER */}
-        <div
-          className={selectedMethod === "bank" ? activeCard : baseCard}
-          onClick={() => setSelectedMethod("bank")}
-        >
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                value="bank"
-                checked={selectedMethod === "bank"}
-                onChange={() => setSelectedMethod("bank")}
-                className="sr-only"
-              />
-              <RadioCircle checked={selectedMethod === "bank"} />
-              <span className="font-semibold text-[18px] text-gray-900">
-                Bank Transfer
-              </span>
-            </label>
-            <div className="flex items-center">
-              <IconBank className="h-8 text-blue-600" />
-            </div>
-          </div>
-        </div>
-
-        {/* STRIPE */}
-        <div
-          className={selectedMethod === "stripe" ? activeCard : baseCard}
-          onClick={() => setSelectedMethod("stripe")}
-        >
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                value="stripe"
-                checked={selectedMethod === "stripe"}
-                onChange={() => setSelectedMethod("stripe")}
-                className="sr-only"
-              />
-              <RadioCircle checked={selectedMethod === "stripe"} />
-              <span className="font-semibold text-[18px] text-gray-900">
-                Stripe
-              </span>
-            </label>
-            <div className="flex items-center">
-              <div className="px-3 py-1 bg-purple-100 rounded text-purple-700 font-medium text-sm">
-                stripe
-              </div>
-            </div>
-          </div>
-          {selectedMethod === "stripe" && (
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-blue-800 text-sm">
-                You will be redirected to the PayPal website after submitting
-                your order
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* PAYORDER */}
-        <div
-          className={selectedMethod === "payorder" ? activeCard : baseCard}
-          onClick={() => setSelectedMethod("payorder")}
-        >
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="radio"
-                value="payorder"
-                checked={selectedMethod === "payorder"}
-                onChange={() => setSelectedMethod("payorder")}
-                className="sr-only"
-              />
-              <RadioCircle checked={selectedMethod === "payorder"} />
-              <span className="font-semibold text-[18px] text-gray-900">
-                Payorder
-              </span>
-            </label>
-          </div>
-          {selectedMethod === "payorder" && (
-            <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-blue-800 text-sm">
-                You will be redirected to the PayPal website after submitting
-                your order
-              </p>
-            </div>
-          )}
-        </div>
-      </div>
+        {/* Payorder Popup Component */}
+        <PayorderPopup
+          isOpen={showPayorderPopup}
+          onClose={() => setShowPayorderPopup(false)}
+          courseId={courseId}
+          studentId={auth?.user?.id || ""}
+          financialContactId={auth?.user?.id}
+          onSuccess={handlePayorderSuccess}
+        />
+      </>
     );
   }
 );

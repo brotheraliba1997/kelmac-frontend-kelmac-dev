@@ -6,7 +6,7 @@ import { baseQueryWithAuth } from "./api";
 export const stripeApi = createApi({
   reducerPath: "stripeApi",
   baseQuery: baseQueryWithAuth,
-  tagTypes: ["StripePayment", "StripeCustomer"],
+  tagTypes: ["StripePayment", "StripeCustomer", "Payorder"],
   endpoints: (builder) => ({
     createPaymentIntent: builder.mutation<any, Record<string, any>>({
       query: (body) => ({
@@ -78,6 +78,43 @@ export const stripeApi = createApi({
         body,
       }),
     }),
+
+    // 🔹 Create Payorder
+    createPayorder: builder.mutation<any, Record<string, any>>({
+      query: (body) => ({
+        url: "/purchase-orders",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [{ type: "Payorder", id: "LIST" }],
+    }),
+
+    // 🔹 Get Payorder by ID
+    getPayorderById: builder.query<any, string>({
+      query: (id) => `/purchase-orders/${id}`,
+      providesTags: (result, error, id) => [{ type: "Payorder", id }],
+    }),
+
+    // 🔹 Get All Payorders
+    getAllPayorders: builder.query<any, void>({
+      query: () => `/purchase-orders`,
+      providesTags: [{ type: "Payorder", id: "LIST" }],
+    }),
+
+    // 🔹 Update Payorder Status
+    updatePayorderStatus: builder.mutation<any, { id: string; status: string }>(
+      {
+        query: ({ id, ...body }) => ({
+          url: `/purchase-orders/${id}/status`,
+          method: "PATCH",
+          body,
+        }),
+        invalidatesTags: (result, error, { id }) => [
+          { type: "Payorder", id },
+          { type: "Payorder", id: "LIST" },
+        ],
+      }
+    ),
   }),
 });
 
@@ -91,4 +128,8 @@ export const {
   useCreateCustomerMutation,
   useGetCustomerByIdQuery,
   useTriggerWebhookMutation,
+  useCreatePayorderMutation,
+  useGetPayorderByIdQuery,
+  useGetAllPayordersQuery,
+  useUpdatePayorderStatusMutation,
 } = stripeApi;
