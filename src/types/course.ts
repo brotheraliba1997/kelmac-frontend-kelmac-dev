@@ -1,7 +1,7 @@
 // Course types based on the backend schema
 
 export interface CourseSession {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   sessionType:
@@ -21,6 +21,15 @@ export interface CourseSession {
   order: number;
   dayGroup: string;
   dayNumber: number;
+  timeBlocks: {
+    startDate: string;
+    endDate: string;
+    startTime: string;
+    endTime: string;
+    timeZone: string;
+  }[];
+  seatsLeft: number;
+  type: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -58,10 +58,10 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
 
     useEffect(() => {
       if (typeof window !== "undefined") {
-        // const course: any = JSON.parse(
-        //   localStorage.getItem("selectedCourse") || "{}"
-        // );
-        const courseId: any = localStorage.getItem("selectedCourseId");
+        const course: any = JSON.parse(
+          localStorage.getItem("selectedCourse") || "{}"
+        );
+        const courseId: any = course.id;
 
         setSelectedCourse(courseId);
 

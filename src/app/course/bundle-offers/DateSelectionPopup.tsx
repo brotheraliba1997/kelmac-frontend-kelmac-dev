@@ -7,6 +7,8 @@ import Link from "next/link";
 import { Course } from "@/types/course";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import { useCreateBookingMutation } from "@/store/api/courseApi";
+import { toast } from "react-hot-toast";
 
 interface DateOption {
   date: string;
@@ -17,11 +19,17 @@ interface DateOption {
 interface DateSelectionPopupProps {
   onClose: () => void;
   course?: Course;
-  timetable: {
+  sessions?: {
     id: string;
-    date: string;
-    description: string;
-    time: string;
+    timeBlocks: {
+      startDate: string;
+      endDate: string;
+      startTime: string;
+      endTime: string;
+      timeZone: string;
+    }[];
+    seatsLeft: number;
+    type: string;
   }[];
 }
 
@@ -64,14 +72,56 @@ function getBadgeStyles(type: string) {
 
 export default function DateSelectionPopup({
   onClose,
-  timetable,
+  sessions,
   course,
 }: DateSelectionPopupProps) {
   const [selectedOption, setSelectedOption] = useState<string>("");
-
-  const handleDateSelect = (id: string) => {
-    // const uniqueKey = `${date} ${time}`;
+  const auth = useSelector((state: any) => state?.auth);
+  const [createBooking, { isLoading: isBookingLoading }] =
+    useCreateBookingMutation();
+  const router = useRouter();
+  const handleDateSelect = async (id: string) => {
     setSelectedOption(id);
+    if (!course || !sessions) return;
+    localStorage.setItem(
+      "selectedCourse",
+      JSON.stringify({
+        id: course.id,
+        discountedPrice: course.discountedPrice,
+        price: course.price,
+      })
+    );
+
+    localStorage.setItem("selectedTimetableId", selectedOption);
+
+    if (auth?.user?.id && course?.id && selectedOption) {
+      try {
+        await createBooking({
+          courseId: course.id,
+          studentId: auth.user.id,
+          timeTableId: selectedOption,
+        }).unwrap();
+      } catch (bookingError: any) {
+        console.error("Booking error:", bookingError);
+        if (bookingError?.data?.message || bookingError?.message) {
+          if (
+            bookingError?.data?.message ===
+            "already you have booked this course or same other course"
+          ) {
+            toast.error(
+              "You have not booked twice courses. Please check dashboard."
+            );
+            router.push("/dashboard/classes");
+          } else {
+            toast.error(bookingError?.data?.message);
+          }
+        } else {
+          toast.error("Booking failed. Please try again later.");
+        }
+        return;
+      }
+    }
+    onClose();
   };
   const formattedDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -83,9 +133,6 @@ export default function DateSelectionPopup({
     return date.toLocaleDateString(undefined, options);
   };
 
-  const auth = useSelector((state: any) => state?.auth);
-
-  // Load selected timetable ID from localStorage on mount
   useEffect(() => {
     const savedTimetableId = localStorage.getItem("selectedTimetableId");
     if (savedTimetableId) {
@@ -100,6 +147,19 @@ export default function DateSelectionPopup({
   //   router.push("/registration/basicinfo");
   // }
 
+  // const handleClick = () => {
+  //   if (!course || !sessions) return;
+  //   localStorage.setItem(
+  //     "selectedCourse",
+  //     JSON.stringify({
+  //       id: course.id,
+  //       discountedPrice: course.discountedPrice,
+  //       price: course.price,
+  //     })
+  //   );
+  //   localStorage.setItem("selectedTimetableId", selectedOption);
+  //   onClose();
+  // };
   return (
     <div className="fixed inset-0 z-[10000] bg-black/50 backdrop-blur-sm flex items-center justify-center p-6">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
@@ -119,8 +179,7 @@ export default function DateSelectionPopup({
         </div>
 
         <div className="bg-secondary rounded-b-2xl p-5 space-y-2 w-full">
-          {timetable.map((option: any, index: number) => {
-            // const uniqueKey = `${option.date} ${option.time}`;
+          {sessions?.map((option: any, index: number) => {
             const isSelected = selectedOption === option.id;
 
             return (
@@ -139,19 +198,7 @@ export default function DateSelectionPopup({
                       ? "/registration/payment"
                       : "/registration/basicinfo"
                   }
-                  onClick={() => {
-                    if (!course) return;
-                    localStorage.setItem(
-                      "selectedCourse",
-                      JSON.stringify({
-                        id: course.id,
-                        discountedPrice: course.discountedPrice,
-                        price: course.price,
-                      })
-                    );
-                    localStorage.setItem("selectedTimetableId", option.id);
-                    onClose();
-                  }}
+                  // onClick={handleClick}
                   className="block"
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -162,19 +209,18 @@ export default function DateSelectionPopup({
                             isSelected ? "text-white" : "text-gray-900"
                           }`}
                         >
-                          {formattedDate(option.date)}
+                          {/* {formattedDate(option.date)} */}
+                          {formattedDate(option.timeBlocks[0].startDate)}
                         </h3>
-                        {option.description && (
+                        {option.type && (
                           <span
                             className={`px-3 py-1 rounded-md text-xs font-medium ${
                               isSelected
                                 ? "bg-white/20 text-white"
-                                : getBadgeStyles(
-                                    option.description.split(",")[0]
-                                  )
+                                : getBadgeStyles(option.type)
                             }`}
                           >
-                            {option.description.split(",")[0]}
+                            {option.type}
                           </span>
                         )}
                       </div>
@@ -190,11 +236,12 @@ export default function DateSelectionPopup({
                             isSelected ? "text-white/90" : "text-gray-600"
                           }`}
                         >
-                          {option.time}
+                          {option.timeBlocks[0].startTime} -{" "}
+                          {option.timeBlocks[0].endTime} (
+                          {option.timeBlocks[0].timeZone})
                         </span>
                       </div>
                     </div>
-
                     {isSelected && (
                       <Iconcheckmark className="w-6 h-6 text-white" />
                     )}

@@ -17,13 +17,25 @@ interface ConfirmBookingProps {
     description: string;
     time: string;
   }[];
+  sessions?: {
+    id: string;
+    timeBlocks: {
+      startDate: string;
+      endDate: string;
+      startTime: string;
+      endTime: string;
+      timeZone: string;
+    }[];
+    seatsLeft: number;
+    type: string;
+  }[];
 }
 
 export default function ConfirmBooking({
   onClose,
   onConfirm,
   course,
-  timetable,
+  sessions,
 }: ConfirmBookingProps) {
   const [mounted, setMounted] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -213,7 +225,7 @@ export default function ConfirmBooking({
       {showPopup && (
         <DateSelectionPopup
           course={course}
-          timetable={timetable || []}
+          sessions={sessions || []}
           onClose={handlePopupClose}
         />
       )}

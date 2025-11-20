@@ -21,11 +21,17 @@ export type CourseSessionProps = {
   seatsLeft?: number;
   description?: string;
   course?: Course;
-  timetable?: {
+  session?: {
     id: string;
-    date: string;
-    description: string;
-    time: string;
+    timeBlocks: {
+      startDate: string;
+      endDate: string;
+      startTime: string;
+      endTime: string;
+      timeZone: string;
+    }[];
+    seatsLeft: number;
+    type: string;
   };
   timetableId?: string;
   setTimetableId?: React.Dispatch<React.SetStateAction<string>>;
@@ -34,23 +40,15 @@ export type CourseSessionProps = {
 };
 
 export function CourseSession({
-  timetable,
+  session,
   course,
   timetableId,
   setTimetableId,
   showConfirm,
   setShowConfirm,
-  // label = "CourseSession",
-  // date = "Mar 15-19, 2025",
-  // time = "9:00 AM - 4:30 PM (Eastern Time (GMT-5))",
-  // description = "Full Week",
-  // sessionBadge = "Split Week",
-  // sessionBadgeType = "purple",
-  // href = "/registration/basicinfo",
   className = "",
-  seatsLeft,
 }: CourseSessionProps) {
-  const isSelected = timetableId === timetable?.id;
+  const isSelected = timetableId === session?.id;
 
   const CourseSessionClasses = cn(
     "bg-white rounded-xl p-4 md:p-7 grid grid-cols-1 md:grid-cols-4 items-center justify-center shadow-[0_15px_30px_0_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_0_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer",
@@ -58,29 +56,13 @@ export function CourseSession({
       "border-2 border-primary bg-primary/5 shadow-[0_20px_40px_0_rgba(0,0,0,0.12)]",
     className
   );
-  // const colorMap = {
-  //   purple: "text-[#9747FF] bg-[#9747FF]/15",
-  //   green: "bg-[#DCFCE7] text-[#15803D]",
-  //   yellow: "bg-[#FFFBEB] text-[#C69311]",
-  //   red: "bg-[#E6647A1F]/12 text-[#E6647A1F]",
-  // };
-  // const sessionBadgeTypeClasses = cn(
-  //   "px-3 py-1 text-[12px] font-medium flex items-center justify-center rounded-lg",
-  //   colorMap[sessionBadgeType]
-  // );
 
-  // Early return if timetable is not provided
-  if (!timetable) {
+  if (!session) {
     return null;
   }
 
-  const { date, description, time } = timetable;
-  // const [selectedOption, setSelectedOption] = useState<string>("");
+  const { type, seatsLeft } = session;
 
-  // const handleDateSelect = (date: string, time: string) => {
-  //   const uniqueKey = `${date} ${time}`;
-  //   setSelectedOption(uniqueKey);
-  // };
   const formattedDate = (dateStr: string) => {
     const date = new Date(dateStr);
     const options: Intl.DateTimeFormatOptions = {
@@ -102,7 +84,7 @@ export function CourseSession({
   const auth = useSelector((state: any) => state?.auth);
   const router = useRouter();
   const handleClick = () => {
-    if (!course || !timetable) return;
+    if (!course || !session) return;
 
     localStorage.setItem(
       "selectedCourse",
@@ -112,19 +94,14 @@ export function CourseSession({
         price: course.price,
       })
     );
-    localStorage.setItem("selectedTimetableId", timetable.id);
+    localStorage.setItem("selectedTimetableId", session.id);
 
     setShowConfirm?.(true);
-    // if (auth?.user?.id) {
-    //   router.push("/registration/payment");
-    // } else {
-    //   router.push("/registration/basicinfo");
-    // }
   };
 
   return (
     <div
-      onClick={() => setTimetableId?.(timetable.id)}
+      onClick={() => setTimetableId?.(session.id)}
       className={CourseSessionClasses + " relative"}
     >
       {seatsLeft && (
@@ -135,21 +112,22 @@ export function CourseSession({
       <div className="col-span-3 space-y-4">
         <div className="flex flex-wrap gap-3 items-center">
           <h3 className="font-semibold text-2xl text-black">
-            {formattedDate(date)}
+            {formattedDate(session.timeBlocks[0].startDate)}
           </h3>
           <div
             className={` px-3 py-1 rounded-md text-xs font-medium ${getBadgeStyles(
-              description.split(",")[0]
+              type
             )}`}
           >
-            {/* {getBadgeStyles()} */}
-            {description.split(",")[0]}
-            {/* {getBadgeStyles(description.split(",")[0])} */}
+            {type}
           </div>
         </div>
         <div className="flex flex-wrap gap-3 items-center">
           <IconClock />
-          <span className="md:text-lg font-medium text-primary/75">{time}</span>
+          <span className="md:text-lg font-medium text-primary/75">
+            {session.timeBlocks[0].startTime} - {session.timeBlocks[0].endTime}{" "}
+            ({session.timeBlocks[0].timeZone})
+          </span>
         </div>
       </div>
       <div className="text-end">

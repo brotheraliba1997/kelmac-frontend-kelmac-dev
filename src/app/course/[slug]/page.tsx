@@ -27,7 +27,10 @@ import QuestionsModal from "@/components/ui/questions/QuestionsModal";
 import type { FormData } from "@/data/questionTypes";
 import { useState, useRef, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { useGetCourseBySlugQuery } from "@/store/api/courseApi";
+import {
+  useGetAllCoursesQuery,
+  useGetCourseBySlugQuery,
+} from "@/store/api/courseApi";
 import ConfirmBooking from "../bundle-offers/BookingConfirmationModal";
 
 export default function CoursePage() {
@@ -94,22 +97,23 @@ export default function CoursePage() {
   const coursesRef = useRef<HTMLDivElement>(null);
   const searchBarRef = useRef<HTMLDivElement>(null);
   const [timetableId, setTimetableId] = useState<string>("");
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        searchBarRef.current &&
-        !searchBarRef.current.contains(event.target as Node)
-      ) {
-        clearSearch();
-      }
-    };
-    if (isSearchActive) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isSearchActive]);
+
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (
+  //       searchBarRef.current &&
+  //       !searchBarRef.current.contains(event.target as Node)
+  //     ) {
+  //       clearSearch();
+  //     }
+  //   };
+  //   if (isSearchActive) {
+  //     document.addEventListener("mousedown", handleClickOutside);
+  //   }
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [isSearchActive]);
 
   const handleQuestionSubmit = async (data: FormData) => {
     try {
@@ -119,31 +123,40 @@ export default function CoursePage() {
     }
   };
 
-  const filteredCourses =
-    isSearchActive && searchQuery
-      ? coursesItems.filter(
-          (course) =>
-            course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            course.description
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase()) ||
-            course.category.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : coursesItems;
+  // const filteredCourses =
+  //   isSearchActive && searchQuery
+  //     ? coursesItems.filter(
+  //         (course) =>
+  //           course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //           course.description
+  //             .toLowerCase()
+  //             .includes(searchQuery.toLowerCase()) ||
+  //           course.category.toLowerCase().includes(searchQuery.toLowerCase())
+  //       )
+  //     : coursesItems;
 
-  const handleSearchClick = () => {
-    setIsSearchActive(true);
-    coursesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+  // const handleSearchClick = () => {
+  //   setIsSearchActive(true);
+  //   coursesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  // };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
+  // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSearchQuery(e.target.value);
+  // };
 
-  const clearSearch = () => {
-    setSearchQuery("");
-    setIsSearchActive(false);
-  };
+  // const clearSearch = () => {
+  //   setSearchQuery("");
+  //   setIsSearchActive(false);
+  // };
+
+  const {
+    data: coursesData,
+    isLoading: coursesLoading,
+    error: coursesError,
+  } = useGetAllCoursesQuery({
+    page: 1,
+    limit: 3,
+  });
   const [showConfirm, setShowConfirm] = useState(false);
   const handleConfirm = () => {
     console.log("Booking confirmed!");
@@ -246,17 +259,16 @@ export default function CoursePage() {
                 headingClassName="text-primary"
               />
               <div className="space-y-4">
-                {course.timeTable && course.timeTable.length > 0 ? (
-                  course.timeTable.map((session, index) => (
+                {course.sessions && course.sessions.length > 0 ? (
+                  course.sessions.map((session, index) => (
                     <CourseSession
                       timetableId={timetableId}
                       setTimetableId={setTimetableId}
                       showConfirm={showConfirm}
                       setShowConfirm={setShowConfirm}
                       key={index}
-                      timetable={session}
+                      session={session}
                       course={course}
-                      {...session}
                     />
                   ))
                 ) : (
@@ -372,11 +384,11 @@ export default function CoursePage() {
               label: "Instructors",
               content: <Tutors course={course} />,
             },
-            {
-              id: "syllabus",
-              label: "Syllabus Breakdown",
-              content: <Syllabus course={course} />,
-            },
+            // {
+            //   id: "syllabus",
+            //   label: "Syllabus Breakdown",
+            //   content: <Syllabus course={course} />,
+            // },
             { id: "faqs", label: "FAQs", content: <Faqs course={course} /> },
           ]}
           className="mt-10"
@@ -394,16 +406,17 @@ export default function CoursePage() {
             ref={coursesRef}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {filteredCourses.map((course) => (
+            {coursesData?.data?.map((course: any) => (
               <CourseCard
-                key={course.id}
-                category={course.category}
+                key={course._id}
+                category={course?.category?.name || "General"}
                 title={course.title}
                 description={course.description}
-                hours={course.hours}
-                lessons={course.lessons}
-                mode={course.mode}
-                imageUrl={course.imageUrl}
+                hours={course.snapshot?.totalDuration?.toString() || "N/A"}
+                lessons={course.snapshot?.totalLectures || 0}
+                mode={course.snapshot?.skillLevel || "Online"}
+                imageUrl={course.thumbnailUrl}
+                slug={course.slug}
               />
             ))}
           </div>
@@ -450,9 +463,9 @@ export default function CoursePage() {
         />
       )}
 
-      {showConfirm && course && course.timeTable && (
+      {showConfirm && course && course.sessions && (
         <ConfirmBooking
-          timetable={course.timeTable}
+          sessions={course.sessions}
           course={course}
           onClose={() => setShowConfirm(false)}
           onConfirm={handleConfirm}

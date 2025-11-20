@@ -63,17 +63,17 @@ export default function AllCoursesPage() {
   }));
 
   // Debug logging
-  useEffect(() => {
-    console.log("Selected Category:", selectedCategory);
-    console.log("Available Categories:", availableCategories);
-    console.log("Courses Data:", coursesData);
-    console.log("Query params:", {
-      page: 1,
-      limit: 50,
-      ...(selectedCategory !== "" ? { category: selectedCategory } : {}),
-      ...(debouncedSearch !== "" ? { search: debouncedSearch } : {}),
-    });
-  }, [selectedCategory, availableCategories, debouncedSearch, coursesData]);
+  // useEffect(() => {
+  //   console.log("Selected Category:", selectedCategory);
+  //   console.log("Available Categories:", availableCategories);
+  //   console.log("Courses Data:", coursesData);
+  //   console.log("Query params:", {
+  //     page: 1,
+  //     limit: 50,
+  //     ...(selectedCategory !== "" ? { category: selectedCategory } : {}),
+  //     ...(debouncedSearch !== "" ? { search: debouncedSearch } : {}),
+  //   });
+  // }, [selectedCategory, availableCategories, debouncedSearch, coursesData]);
 
   const visibleCourses = courses.slice(0, visibleCount);
   const hasMoreCourses = visibleCount < courses.length;
@@ -363,7 +363,7 @@ export default function AllCoursesPage() {
                   <div
                     className="rounded-4xl min-h-[280px] flex flex-col items-center justify-center text-center relative overflow-hidden group cursor-pointer transition-transform hover:scale-105"
                     onClick={() => {
-                      handleCategorySelect(category.slug);
+                      handleCategorySelect(category.id);
                       // Scroll to courses section
                       document
                         .getElementById("courses-section")
