@@ -106,11 +106,14 @@ export default function DateSelectionPopup({
         if (bookingError?.data?.message || bookingError?.message) {
           if (
             bookingError?.data?.message ===
-            "already you have booked this course or same other course"
+              "already you have booked this course or same other course" ||
+            bookingError?.data?.message ===
+              "Payment has already been used by this student"
           ) {
             toast.error(
               "You have not booked twice courses. Please check dashboard."
             );
+            onClose();
             router.push("/dashboard/classes");
           } else {
             toast.error(bookingError?.data?.message);

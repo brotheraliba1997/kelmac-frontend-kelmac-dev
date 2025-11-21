@@ -15,16 +15,6 @@ import ResourcesMegaMenu from "./ResourcesMegaMenu";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, user } from "@/store/slices/auth";
 
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About Us", mega: "about" },
-  { href: "/courses", label: "Courses", mega: "courses" },
-  { href: "/corporate", label: "Corporate", mega: "corporate" },
-  { href: "/resources", label: "Resources", mega: "resources" },
-  { href: "/contact-us", label: "Contact" },
-  { href: "/dashboard", label: "Dashboard" },
-];
-
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -38,6 +28,15 @@ export default function Header() {
     router.push("/");
     dispatch(logout());
   };
+  const navLinks = [
+    { href: "/", label: "Home" },
+    { href: "/about", label: "About Us", mega: "about" },
+    { href: "/courses", label: "Courses", mega: "courses" },
+    { href: "/corporate", label: "Corporate", mega: "corporate" },
+    { href: "/resources", label: "Resources", mega: "resources" },
+    { href: "/contact-us", label: "Contact" },
+    ...(auth?.user?.id ? [{ href: "/dashboard", label: "Dashboard" }] : []),
+  ];
   // i would like to add login logout button based on auth state
 
   return (

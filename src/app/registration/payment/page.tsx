@@ -99,7 +99,7 @@ export default function payemntInfo({
             <h1 className="text-4xl md:text-6xl font-hedvig leading-snug">
               Registration Form
             </h1>
-            <div className="mt-4 flex items-center">
+            {/* <div className="mt-4 flex items-center">
               <div
                 className="bg-white/5 rounded-lg flex items-center py-2 px-4 text-white space-x-4 relative z-20"
                 ref={dropdownRef}
@@ -153,7 +153,7 @@ export default function payemntInfo({
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

@@ -3,6 +3,7 @@ import { IconArrowRight, IconCalender } from "@/components/icons/icons";
 import { Heading } from "@/components/ui/common/Heading";
 import axios from "axios";
 import { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 interface RegistrationCompleteProps {
   userId: string;
@@ -66,6 +67,7 @@ const generateMockData = (): RegistrationCompleteProps => {
 
 export default function RegistrationComplete() {
   // const [data] = useState<RegistrationCompleteProps>(generateMockData());
+  const auth = useSelector((state: any) => state?.auth);
 
   const [data, setData] = useState<any | []>([]);
   const [loading, setLoading] = useState(true);
@@ -140,14 +142,14 @@ export default function RegistrationComplete() {
               Registration Form
             </h1>
 
-            <div className="mt-6 flex items-center">
+            {/* <div className="mt-6 flex items-center">
               <div
                 className="bg-white/5 rounded-lg flex items-center py-3 px-6 text-white space-x-4 relative z-20"
                 ref={dropdownRef}
               >
                 <IconCalender width={22} height={22} className="mr-2" />
                 <div className="flex flex-col leading-tight">
-                  {/* <span className="text-lg font-semibold">{selectedSession}</span> */}
+                  <span className="text-lg font-semibold">{selectedSession}</span>
                   <span className="text-sm text-white/80">
                     {data.course?.title}
                   </span>
@@ -179,7 +181,7 @@ export default function RegistrationComplete() {
 
                 {isOpen && (
                   <div className="absolute top-full right-0 bg-white rounded-lg shadow-xl text-black w-64 overflow-hidden animate-fadeIn z-50">
-                    {/* {sessions.map((session, idx) => (
+                    {sessions.map((session, idx) => (
 											<button
 												key={idx}
 												onClick={() => handleSelect(session)}
@@ -191,11 +193,11 @@ export default function RegistrationComplete() {
 											>
 												{session}
 											</button>
-										))} */}
+										))}
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -240,7 +242,7 @@ export default function RegistrationComplete() {
               headingClassName="text-primary"
             />
             <p className="text-lg text-primary mb-4 font-semibold">
-              User ID # {data.id}
+              User ID # {auth?.user?.id}
             </p>
             <p className=" text-black">
               A confirmation email has been sent to your registered email
