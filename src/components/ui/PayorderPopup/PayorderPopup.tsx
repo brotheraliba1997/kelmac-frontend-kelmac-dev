@@ -1,8 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { toast } from "react-hot-toast";
 import ImageUploader from "@/components/ui/ImageUploader";
 import { useCreatePayorderMutation } from "@/store/api/stripeApi";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { useGetCourseByIdQuery } from "@/store";
 
 interface PayorderPopupProps {
   isOpen: boolean;
@@ -78,6 +81,9 @@ const PayorderPopup: React.FC<PayorderPopupProps> = ({
     }
   };
 
+  const { data: courseData } = useGetCourseByIdQuery(courseId);
+  const auth = useSelector((state: any) => state?.auth);
+
   // Handle form submission
   const handleSubmit = async () => {
     // Validation
@@ -92,11 +98,12 @@ const PayorderPopup: React.FC<PayorderPopupProps> = ({
     }
 
     setIsSubmitting(true);
-
+    const timetableId = localStorage.getItem("selectedTimetableId");
     try {
       // Create PO with the uploaded file URL using RTK mutation
       const poData = {
         poNumber: poNumber.trim(),
+        instructor: (courseData?.instructor as any)?.id,
         studentId: studentId,
         courseId: courseId,
         financialContactId: financialContactId || studentId,
@@ -112,7 +119,46 @@ const PayorderPopup: React.FC<PayorderPopupProps> = ({
       if (onSuccess) {
         onSuccess(poResponse);
       }
+      const data = poResponse.data;
+      const session = courseData?.sessions?.find((x) => x.id === timetableId)
+        ?.timeBlocks[0];
+      //   const formatted = {
+      //     date: new Date(DateAndTime?.date).toISOString().split("T")[0], // "2025-11-17"
+      //     time: DateAndTime?.time
+      //       .split("-")[0]
+      //       .trim()
+      //       .replace("AM", "")
+      //       .replace("PM", "")
+      //       .trim(),
+      //   };
 
+      //   const [hour, minute] = session?.startTime.split(":").map(Number);
+      //   const timeWithZero = `${hour < 10 ? "0" + hour : hour}:${
+      //     minute < 10 ? "0" + minute : minute
+      //   }`;
+
+      // 3️⃣ Create class schedule
+
+      try {
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/class-schedule`,
+          {
+            course: courseId,
+            sessionId: timetableId,
+            instructor: (courseData?.instructor as any)?.id,
+            students: auth?.user?.id,
+            date: session?.startDate,
+            time: session?.startTime,
+            duration: 60,
+            securityKey: "a6d2b99a-f81a-4cb5-a123-984e07fd9e33",
+            status: "scheduled",
+            progress: 0,
+          }
+        );
+      } catch (scheduleError: any) {
+        console.error("Class schedule creation failed:", scheduleError);
+        throw new Error("Failed to create class schedule");
+      }
       // Reset and close
       resetForm();
       onClose();

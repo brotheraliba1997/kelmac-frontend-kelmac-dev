@@ -178,31 +178,32 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
             "Payment intent creation failed - no client secret received"
           );
         }
+        const session = data?.sessions?.find((x) => x.id === timetableId)
+          ?.timeBlocks[0];
+        // const DateAndTime: any = data?.timeTable?.find(
+        //   (item: any) => item?.id === timetableId
+        // );
 
-        const DateAndTime: any = data?.timeTable?.find(
-          (item: any) => item?.id === timetableId
-        );
+        // if (!DateAndTime) {
+        //   throw new Error("Selected time slot not found");
+        // }
 
-        if (!DateAndTime) {
-          throw new Error("Selected time slot not found");
-        }
+        // console.log(DateAndTime, "DateAndTime");
 
-        console.log(DateAndTime, "DateAndTime");
+        // const formatted = {
+        //   date: new Date(DateAndTime?.date).toISOString().split("T")[0], // "2025-11-17"
+        //   time: DateAndTime?.time
+        //     .split("-")[0]
+        //     .trim()
+        //     .replace("AM", "")
+        //     .replace("PM", "")
+        //     .trim(),
+        // };
 
-        const formatted = {
-          date: new Date(DateAndTime?.date).toISOString().split("T")[0], // "2025-11-17"
-          time: DateAndTime?.time
-            .split("-")[0]
-            .trim()
-            .replace("AM", "")
-            .replace("PM", "")
-            .trim(),
-        };
-
-        const [hour, minute] = formatted.time.split(":").map(Number);
-        const timeWithZero = `${hour < 10 ? "0" + hour : hour}:${
-          minute < 10 ? "0" + minute : minute
-        }`;
+        // const [hour="", minute=0] = session?.startTime.split(":").map(Number);
+        // const timeWithZero = `${hour < 10 ? "0" + hour : hour}:${
+        //   minute < 10 ? "0" + minute : minute
+        // }`;
 
         // 3️⃣ Create class schedule
 
@@ -211,11 +212,12 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}/class-schedule`,
             {
               course: courseId,
+              sessionId: timetableId,
               instructor: (data?.instructor as any)?.id,
               students: auth?.user?.id,
-              date: formatted?.date,
-              time: timeWithZero,
-              duration: data?.sessions?.[0]?.duration,
+              date: session?.startDate,
+              time: session?.startTime,
+              duration: 60,
               securityKey: "a6d2b99a-f81a-4cb5-a123-984e07fd9e33",
               status: "scheduled",
               progress: 0,
