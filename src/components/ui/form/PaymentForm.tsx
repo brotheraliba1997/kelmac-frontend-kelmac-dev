@@ -219,7 +219,7 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
               time: session?.startTime,
               duration: 60,
               securityKey: "a6d2b99a-f81a-4cb5-a123-984e07fd9e33",
-              status: "scheduled",
+              status: "pending",
               progress: 0,
             }
           );
