@@ -215,11 +215,12 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
               sessionId: timetableId,
               instructor: (data?.instructor as any)?.id,
               students: auth?.user?.id,
+              // students: [{ id: auth?.user?.id, status: "pending" }],
               date: session?.startDate,
               time: session?.startTime,
               duration: 60,
               securityKey: "a6d2b99a-f81a-4cb5-a123-984e07fd9e33",
-              status: "pending",
+              status: "scheduled",
               progress: 0,
             }
           );
