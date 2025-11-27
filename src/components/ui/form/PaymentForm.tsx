@@ -11,7 +11,10 @@ import { useCreatePaymentIntentMutation } from "@/store/api/stripeApi";
 import { useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useRegisterInterpreterMutation } from "@/store/api/authApi";
-import { useGetCourseByIdQuery } from "@/store/api/courseApi";
+import {
+  useCreateBookingMutation,
+  useGetCourseByIdQuery,
+} from "@/store/api/courseApi";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -54,7 +57,7 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
     const elements = useElements();
 
     const [courseId, setSelectedCourse] = useState("");
-    const [timetableId, setTimetableId] = useState("");
+    const [sessionId, setTimetableId] = useState("");
 
     useEffect(() => {
       if (typeof window !== "undefined") {
@@ -65,7 +68,7 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
 
         setSelectedCourse(courseId);
 
-        const ttId = localStorage.getItem("selectedTimetableId") || "";
+        const ttId = localStorage.getItem("selectedSessionId") || "";
         setTimetableId(ttId);
       }
     }, []);
@@ -119,6 +122,10 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
     };
 
     // 2️⃣ Find date/time from timeTable
+    const [createBooking, { isLoading: isBookingLoading }] =
+      useCreateBookingMutation();
+
+    let booking: any = {};
 
     const handlePay = async () => {
       console.log("Initiating payment...", stripe, elements);
@@ -153,6 +160,37 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
       }
 
       setIsSubmitting(true);
+
+      // const session = data?.sessions?.find((x) => x.id === sessionId)
+      //   ?.timeBlocks[0];
+
+      const course: any = JSON.parse(
+        localStorage.getItem("selectedCourse") || "{}"
+      );
+      const sessionId = localStorage.getItem("selectedSessionId") || "";
+      if (auth?.user?.id && course?.id && sessionId) {
+        try {
+          booking = await createBooking({
+            courseId: course.id,
+            studentId: auth?.user?.id,
+            sessionId: sessionId,
+            timeTableId: sessionId,
+            paymentMethod: "stripe",
+            status: "pending",
+            notes: "Excited to start the class!",
+          }).unwrap();
+          console.log("Booking created:", booking);
+        } catch (error: any) {
+          console.error("Booking error:", error);
+          if (error?.data?.message) {
+            toast.error(error.data.message);
+          } else {
+            toast.error("Booking failed. Please contact support.");
+          }
+          return;
+        }
+      }
+
       const regularFee = data?.price || 0;
       const discountedPrice = data?.discountedPrice || regularFee;
       // const discount = regularFee - discountedPrice;
@@ -167,6 +205,7 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
           userId: auth?.user?.id,
           amount: total,
           currency: data?.currency || "usd",
+          status: "pending",
           metadata: {
             cardholderName: formData.cardholderName,
             paymentMethod: selectedMethod,
@@ -177,56 +216,6 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
           throw new Error(
             "Payment intent creation failed - no client secret received"
           );
-        }
-        const session = data?.sessions?.find((x) => x.id === timetableId)
-          ?.timeBlocks[0];
-        // const DateAndTime: any = data?.timeTable?.find(
-        //   (item: any) => item?.id === timetableId
-        // );
-
-        // if (!DateAndTime) {
-        //   throw new Error("Selected time slot not found");
-        // }
-
-        // console.log(DateAndTime, "DateAndTime");
-
-        // const formatted = {
-        //   date: new Date(DateAndTime?.date).toISOString().split("T")[0], // "2025-11-17"
-        //   time: DateAndTime?.time
-        //     .split("-")[0]
-        //     .trim()
-        //     .replace("AM", "")
-        //     .replace("PM", "")
-        //     .trim(),
-        // };
-
-        // const [hour="", minute=0] = session?.startTime.split(":").map(Number);
-        // const timeWithZero = `${hour < 10 ? "0" + hour : hour}:${
-        //   minute < 10 ? "0" + minute : minute
-        // }`;
-
-        // 3️⃣ Create class schedule
-
-        try {
-          await axios.post(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/class-schedule`,
-            {
-              course: courseId,
-              sessionId: timetableId,
-              instructor: (data?.instructor as any)?.id,
-              students: auth?.user?.id,
-              // students: [{ id: auth?.user?.id, status: "pending" }],
-              date: session?.startDate,
-              time: session?.startTime,
-              duration: 60,
-              securityKey: "a6d2b99a-f81a-4cb5-a123-984e07fd9e33",
-              status: "scheduled",
-              progress: 0,
-            }
-          );
-        } catch (scheduleError: any) {
-          console.error("Class schedule creation failed:", scheduleError);
-          throw new Error("Failed to create class schedule");
         }
 
         // 4️⃣ Confirm payment with Stripe
@@ -265,7 +254,7 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
           });
 
           // Optionally redirect to success page
-          router.push("/registration/confirmation");
+          router.push(`/registration/confirmation/${booking?.id}`);
         }
       } catch (err: any) {
         console.error("Error in payment process:", err);
@@ -291,7 +280,7 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
     const handlePayorderSuccess = (data: any) => {
       console.log("Payorder submitted successfully:", data);
       // Optionally redirect to confirmation page
-      router.push("/registration/confirmation");
+      router.push(`/registration/confirmation/${booking?.id}`);
     };
 
     // Expose the payment function to parent components

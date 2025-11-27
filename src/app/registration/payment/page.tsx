@@ -177,7 +177,7 @@ export default function payemntInfo({
             showCouponInput={true}
             showContinueButton={true}
             continueButtonText="Pay & Confirm"
-            continueButtonHref="/registration/confirmation"
+            // continueButtonHref="/registration/confirmation"
             onFormSubmit={() => paymentFormRef.current?.submitPayment()}
           />
           {/* <div className="w-full lg:w-1/3 flex flex-col items-center">

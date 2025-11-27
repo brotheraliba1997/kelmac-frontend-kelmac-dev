@@ -58,7 +58,7 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
     const elements = useElements();
 
     const [courseId, setSelectedCourse] = useState("");
-    const [timetableId, setTimetableId] = useState("");
+    const [sessionId, setTimetableId] = useState("");
 
     useEffect(() => {
       if (typeof window !== "undefined") {
@@ -67,7 +67,7 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
         );
         const courseId = course?.id || "";
         setSelectedCourse(courseId);
-        const ttId = localStorage.getItem("selectedTimetableId") || "";
+        const ttId = localStorage.getItem("selectedSessionId") || "";
         setTimetableId(ttId);
       }
     }, []);
@@ -294,7 +294,7 @@ const PaymentForm = forwardRef<PaymentFormRef, PaymentFormProps>(
         }
 
         const DateAndTime: any = data?.timeTable?.find(
-          (item: any) => item?.id === timetableId
+          (item: any) => item?.id === sessionId
         );
 
         if (!DateAndTime) {

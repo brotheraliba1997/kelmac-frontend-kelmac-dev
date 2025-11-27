@@ -15,7 +15,7 @@ export const courseApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Course", "Courses", "Category", "Categories"],
+  tagTypes: ["Course", "Courses", "Category", "Categories", "Booking"],
   endpoints: (builder) => ({
     // Get course by slug
     getCourseBySlug: builder.query<Course, string>({
@@ -114,7 +114,10 @@ export const courseApi = createApi({
       }),
       invalidatesTags: [{ type: "Courses", id: "LIST" }],
     }),
-
+    getBookingById: builder.query<Booking, string>({
+      query: (id) => `/bookings/${id}`,
+      providesTags: (result, error, id) => [{ type: "Booking", id }],
+    }),
     // Update a course (if needed)
     updateCourse: builder.mutation<
       Course,
@@ -183,6 +186,7 @@ export const {
   useGetCategoriesQuery,
   useCreateCourseMutation,
   useCreateBookingMutation,
+  useGetBookingByIdQuery,
   useUpdateCourseMutation,
   useDeleteCourseMutation,
   useGetAllClassSchedulesQuery,

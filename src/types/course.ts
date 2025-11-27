@@ -35,11 +35,16 @@ export interface CourseSession {
 }
 
 export interface Booking {
-  id: any;
-  courseId: string;
-  studentId: string;
+  id: string;
+  courseId: Course | string;
+  studentId: User | string;
+  sessionId: CourseSession | string;
   timeTableId: string;
+  paymentMethod: string;
   status: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface SessionTopic {
@@ -112,7 +117,7 @@ export interface Course {
   slug: string;
   subtitle: string;
   description: string;
-  instructor: User;
+  instructor: User | string;
   category: Category;
   subcategories: string[];
   topics: string[];

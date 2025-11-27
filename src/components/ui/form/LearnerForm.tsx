@@ -65,8 +65,6 @@ const LearnerForm = forwardRef<LearnerFormRef, LearnerFormProps>(
 
     const [registerInterpreter, { isLoading }] =
       useRegisterInterpreterMutation();
-    const [createBooking, { isLoading: isBookingLoading }] =
-      useCreateBookingMutation();
 
     // Validation helper functions
     const validateEmail = (email: string): boolean => {
@@ -219,33 +217,6 @@ const LearnerForm = forwardRef<LearnerFormRef, LearnerFormProps>(
         const registrationResponse = await registerInterpreter(
           registrationData
         ).unwrap();
-
-        console.log("Registration successful:", registrationResponse);
-
-        // Get course and timetable data from localStorage
-        const course: any = JSON.parse(
-          localStorage.getItem("selectedCourse") || "{}"
-        );
-        const timetableId = localStorage.getItem("selectedTimetableId") || "";
-
-        // Create booking if registration successful
-        if (registrationResponse?.user?.id && course?.id && timetableId) {
-          try {
-            await createBooking({
-              courseId: course.id,
-              studentId: registrationResponse.user.id,
-              timeTableId: timetableId,
-            }).unwrap();
-          } catch (bookingError: any) {
-            console.error("Booking error:", bookingError);
-            toast.error(
-              "Registration successful, but booking failed. Please contact support."
-            );
-            return;
-          }
-        }
-
-        toast.success("Registration successful! Please check your email.");
 
         // Reset form
         setFormData({

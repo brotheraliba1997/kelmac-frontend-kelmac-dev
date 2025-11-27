@@ -33,7 +33,7 @@ export type CourseSessionProps = {
     seatsLeft: number;
     type: string;
   };
-  timetableId?: string;
+  sessionId?: string;
   setTimetableId?: React.Dispatch<React.SetStateAction<string>>;
   showConfirm?: boolean;
   setShowConfirm?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -42,13 +42,13 @@ export type CourseSessionProps = {
 export function CourseSession({
   session,
   course,
-  timetableId,
+  sessionId,
   setTimetableId,
   showConfirm,
   setShowConfirm,
   className = "",
 }: CourseSessionProps) {
-  const isSelected = timetableId === session?.id;
+  const isSelected = sessionId === session?.id;
 
   const CourseSessionClasses = cn(
     "bg-white rounded-xl p-4 md:p-7 grid grid-cols-1 md:grid-cols-4 items-center justify-center shadow-[0_15px_30px_0_rgba(0,0,0,0.05)] hover:shadow-[0_20px_40px_0_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer",
@@ -94,7 +94,7 @@ export function CourseSession({
         price: course.price,
       })
     );
-    localStorage.setItem("selectedTimetableId", session.id);
+    localStorage.setItem("selectedSessionId", session.id);
 
     setShowConfirm?.(true);
   };
