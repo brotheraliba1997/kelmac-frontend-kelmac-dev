@@ -13,6 +13,7 @@ import { Tabs } from "@/components/ui/common/Tabs";
 import Overview from "../Overview";
 import Tutors from "../Tutors";
 import Faqs from "../Faqs";
+
 import Syllabus from "../Syllabus";
 import { coursesItems } from "@/data/home";
 import {
@@ -32,6 +33,7 @@ import {
   useGetCourseBySlugQuery,
 } from "@/store/api/courseApi";
 import ConfirmBooking from "../bundle-offers/BookingConfirmationModal";
+import Methodology from "../Methodology";
 
 export default function CoursePage() {
   const params = useParams();
@@ -122,32 +124,6 @@ export default function CoursePage() {
       console.error("Error submitting form:", error);
     }
   };
-
-  // const filteredCourses =
-  //   isSearchActive && searchQuery
-  //     ? coursesItems.filter(
-  //         (course) =>
-  //           course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  //           course.description
-  //             .toLowerCase()
-  //             .includes(searchQuery.toLowerCase()) ||
-  //           course.category.toLowerCase().includes(searchQuery.toLowerCase())
-  //       )
-  //     : coursesItems;
-
-  // const handleSearchClick = () => {
-  //   setIsSearchActive(true);
-  //   coursesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  // };
-
-  // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setSearchQuery(e.target.value);
-  // };
-
-  // const clearSearch = () => {
-  //   setSearchQuery("");
-  //   setIsSearchActive(false);
-  // };
 
   const {
     data: coursesData,
@@ -378,6 +354,11 @@ export default function CoursePage() {
               id: "overview",
               label: "Overview",
               content: <Overview course={course} />,
+            },
+            {
+              id: "methodology",
+              label: "Methodology",
+              content: <Methodology />,
             },
             {
               id: "instructors",

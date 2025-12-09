@@ -18,6 +18,7 @@ interface DateOption {
 
 interface DateSelectionPopupProps {
   onClose: () => void;
+  onCloseParent?: () => void; // optional hook to close parent modal too
   course?: Course;
   sessions?: {
     id: string;
@@ -72,27 +73,34 @@ function getBadgeStyles(type: string) {
 
 export default function DateSelectionPopup({
   onClose,
+  onCloseParent,
   sessions,
   course,
 }: DateSelectionPopupProps) {
   const [selectedOption, setSelectedOption] = useState<string>("");
   const auth = useSelector((state: any) => state?.auth);
-  const [createBooking, { isLoading: isBookingLoading }] =
-    useCreateBookingMutation();
   const router = useRouter();
+  // const [createBooking, { isLoading: isBookingLoading }] =
+  //   useCreateBookingMutation();
+  // const router = useRouter();
   const handleDateSelect = async (id: string) => {
     setSelectedOption(id);
-    if (!course || !sessions) return;
-    localStorage.setItem(
-      "selectedCourse",
-      JSON.stringify({
-        id: course.id,
-        discountedPrice: course.discountedPrice,
-        price: course.price,
-      })
-    );
+    const nextPath = auth?.user?.id
+      ? "/registration/payment"
+      : "/registration/basicinfo";
 
-    localStorage.setItem("selectedSessionId", selectedOption);
+    if (course && sessions) {
+      localStorage.setItem(
+        "selectedCourse",
+        JSON.stringify({
+          id: course.id,
+          discountedPrice: course.discountedPrice,
+          price: course.price,
+        })
+      );
+
+      localStorage.setItem("selectedSessionId", id);
+    }
 
     // if (auth?.user?.id && course?.id && selectedOption) {
     //   try {
@@ -125,6 +133,8 @@ export default function DateSelectionPopup({
     //   }
     // }
     onClose();
+    if (onCloseParent) onCloseParent();
+    router.push(nextPath);
   };
   const formattedDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -195,61 +205,51 @@ export default function DateSelectionPopup({
                     : "bg-white text-gray-900 hover:shadow-md"
                 }`}
               >
-                <Link
-                  href={
-                    auth?.user?.id
-                      ? "/registration/payment"
-                      : "/registration/basicinfo"
-                  }
-                  // onClick={handleClick}
-                  className="block"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-center gap-3 flex-wrap">
-                        <h3
-                          className={`text-xl font-semibold ${
-                            isSelected ? "text-white" : "text-gray-900"
-                          }`}
-                        >
-                          {/* {formattedDate(option.date)} */}
-                          {formattedDate(option.timeBlocks[0].startDate)}
-                        </h3>
-                        {option.type && (
-                          <span
-                            className={`px-3 py-1 rounded-md text-xs font-medium ${
-                              isSelected
-                                ? "bg-white/20 text-white"
-                                : getBadgeStyles(option.type)
-                            }`}
-                          >
-                            {option.type}
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <Clock
-                          className={`w-4 h-4 ${
-                            isSelected ? "text-white/80" : "text-gray-400"
-                          }`}
-                        />
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1 space-y-2">
+                    <div className="flex items-center gap-3 flex-wrap">
+                      <h3
+                        className={`text-xl font-semibold ${
+                          isSelected ? "text-white" : "text-gray-900"
+                        }`}
+                      >
+                        {/* {formattedDate(option.date)} */}
+                        {formattedDate(option.timeBlocks[0].startDate)}
+                      </h3>
+                      {option.type && (
                         <span
-                          className={`text-sm font-medium ${
-                            isSelected ? "text-white/90" : "text-gray-600"
+                          className={`px-3 py-1 rounded-md text-xs font-medium ${
+                            isSelected
+                              ? "bg-white/20 text-white"
+                              : getBadgeStyles(option.type)
                           }`}
                         >
-                          {option.timeBlocks[0].startTime} -{" "}
-                          {option.timeBlocks[0].endTime} (
-                          {option.timeBlocks[0].timeZone})
+                          {option.type}
                         </span>
-                      </div>
+                      )}
                     </div>
-                    {isSelected && (
-                      <Iconcheckmark className="w-6 h-6 text-white" />
-                    )}
+
+                    <div className="flex items-center gap-2">
+                      <Clock
+                        className={`w-4 h-4 ${
+                          isSelected ? "text-white/80" : "text-gray-400"
+                        }`}
+                      />
+                      <span
+                        className={`text-sm font-medium ${
+                          isSelected ? "text-white/90" : "text-gray-600"
+                        }`}
+                      >
+                        {option.timeBlocks[0].startTime} -{" "}
+                        {option.timeBlocks[0].endTime} (
+                        {option.timeBlocks[0].timeZone})
+                      </span>
+                    </div>
                   </div>
-                </Link>
+                  {isSelected && (
+                    <Iconcheckmark className="w-6 h-6 text-white" />
+                  )}
+                </div>
               </div>
             );
           })}
