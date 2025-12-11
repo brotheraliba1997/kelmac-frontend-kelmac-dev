@@ -1,9 +1,13 @@
 import React from 'react'
-import UserDashboard from './classes/page'
+import ClassSchedule from './class-schedule/page'
+import MainDashboardcomponent from '@/components/dashboard/MainDashboard-component'
+
 
 function User() {
   return (
-   <UserDashboard />
+    // <ClassSchedule/>
+
+    <MainDashboardcomponent />
   )
 }
 

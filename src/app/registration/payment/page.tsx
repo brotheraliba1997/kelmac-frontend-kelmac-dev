@@ -33,11 +33,7 @@ const dummyCourse: Course = {
   couponDiscount: 50,
 };
 
-export default function payemntInfo({
-  course = dummyCourse,
-}: {
-  course?: Course;
-}) {
+export default function payemntInfo(course:any) {
   const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY! // 👈 your Stripe public key
   );

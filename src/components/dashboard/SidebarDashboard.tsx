@@ -17,7 +17,7 @@ export default function SidebarDashboard() {
   const pathName = usePathname();
 
   return (
-    <div className="w-64 h-screen bg-gray-800 text-white flex flex-col shadow-lg">
+    <div className="w-64 h-100vh bg-gray-800 text-white flex flex-col shadow-lg">
       <div className="flex-1 overflow-y-auto">
         <ul className="space-y-1 p-4">
           {array
