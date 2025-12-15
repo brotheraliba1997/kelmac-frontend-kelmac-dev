@@ -149,9 +149,9 @@ export default function RegistrationComplete() {
     course?.sessions.length > 0
       ? course?.sessions?.find(
           (session: CourseSession) => session.id === bookingData?.sessionId
-        )?.timeBlocks[0]
+        )
       : null;
-
+  const timeBlocks = session?.timeBlocks[0] || null;
   const regularFee = course?.price || 0;
   const discountedPrice = course?.discountedPrice || regularFee;
 
@@ -240,13 +240,13 @@ export default function RegistrationComplete() {
                   <div className="flex mb-4">
                     <dt className="text-black/80 font-medium w-40">Date:</dt>
                     <dd className="text-primary font-semibold">
-                      {session.startDate}
+                      {timeBlocks.startDate}
                     </dd>
                   </div>
                   <div className="flex mb-4">
                     <dt className="text-black/80 font-medium w-40">Time:</dt>
                     <dd className="text-primary font-semibold">
-                      {session.startTime} - {session.endTime}
+                      {timeBlocks.startTime} - {timeBlocks.endTime}
                     </dd>
                   </div>
                   <div className="flex mb-4">
@@ -260,8 +260,8 @@ export default function RegistrationComplete() {
                       Instructor:
                     </dt>
                     <dd className="text-primary capitalize font-semibold">
-                      {course?.instructor?.firstName || ""}{" "}
-                      {course?.instructor?.lastName || ""}
+                      {session?.instructor?.firstName || ""}{" "}
+                      {session?.instructor?.lastName || ""}
                     </dd>
                   </div>
                   {/* <div className="flex mb-4">
