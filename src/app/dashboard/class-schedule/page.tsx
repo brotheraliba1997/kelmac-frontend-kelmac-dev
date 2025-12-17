@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { FaEye, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 
@@ -10,6 +11,7 @@ import { useGetAllClassSchedulesQuery } from "@/store/api/courseApi";
 import DynamicTable from "@/components/table/DynamicTable";
 
 function ClassSchedule() {
+  const router = useRouter();
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
@@ -23,55 +25,42 @@ function ClassSchedule() {
   const indexOfFirstItem = indexOfLastItem - pageSize;
   const currentData = schedules.slice(indexOfFirstItem, indexOfLastItem);
 
-  console.log(currentData, "currentData");
-  let allTimeBlocks: any[] = [];
-
-  for (const item of currentData) {
-    if (item?.course?.sessions) {
-      for (const session of item.course.sessions) {
-        if (session?.timeBlocks && Array.isArray(session.timeBlocks)) {
-          allTimeBlocks = [...allTimeBlocks, ...session.timeBlocks];
-        }
-      }
-    }
-  }
-
-  console.log(allTimeBlocks, "allTimeBlocks");
-
   const columns = [
     {
-      key: "StartDate",
-      label: "Start Date",
+      key: "course",
+      label: "Course",
       render: (item: any) => (
         <div className="font-semibold text-gray-900 capitalize">
-          {item?.startDate || "—"}
+          {item?.course?.title || "—"}
         </div>
       ),
     },
     {
-      key: "EndDate",
-      label: "End Date",
+      key: "instructor",
+      label: "Instructor",
       render: (item: any) => (
         <div className="text-primary-600 font-medium">
-          {item?.endDate || "—"}
+          {item?.instructor?.firstName
+            ? `${item.instructor.firstName} ${item.instructor.lastName}`
+            : "—"}
         </div>
       ),
     },
     {
-      key: "Start Time",
-      label: "Start Time",
+      key: "date",
+      label: "Date",
       render: (item: any) => (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-          {item?.startTime || "—"}
+          {item?.date || "—"}
         </span>
       ),
     },
     {
-      key: "End Time",
-      label: "End Time",
+      key: "time",
+      label: "Time",
       render: (item: any) => (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-sky-100 text-sky-800">
-          {item?.endTime || "—"}
+          {item?.time || "—"}
         </span>
       ),
     },
@@ -80,23 +69,42 @@ function ClassSchedule() {
       label: "Duration",
       render: (item: any) => (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-500 text-white">
-          {item?.duration || "4:00"} hr
+          {item?.duration || 0} min
         </span>
       ),
     },
-
+  
     {
-      key: "googleMeetLink",
-      label: "Meet Link",
+      key: "status",
+      label: "Status",
+      render: (item: any) => {
+        let bgColor = "bg-gray-500";
+        if (item?.status === "scheduled") bgColor = "bg-green-500";
+        else if (item?.status === "cancelled") bgColor = "bg-red-500";
+        else if (item?.status === "completed") bgColor = "bg-blue-500";
+
+        return (
+          <span
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${bgColor} text-white`}
+          >
+            {item?.status?.charAt(0).toUpperCase() + item?.status?.slice(1) ||
+              "—"}
+          </span>
+        );
+      },
+    },
+    {
+      key: "actions",
+      label: "Actions",
       render: (item: any) => (
-        <Link
-          href={"https://meet.google.com"}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-primary-600 hover:text-primary-700 font-medium text-sm  hover:underline cursor-pointer"
-        >
-          Join Meeting
-        </Link>
+        <div className="flex items-center gap-3">
+          <button
+            title="View"
+            className="text-primary-600 hover:text-primary-700"
+          >
+            <FaEye className="text-lg" />
+          </button>
+        </div>
       ),
     },
   ];
@@ -113,11 +121,22 @@ function ClassSchedule() {
       }}
     >
       <div className="content container-fluid">
+        {/* Title and Add Button Header */}
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Class Schedule</h1>
+          <Link
+            href="/dashboard/class-schedule/create"
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            <FaPlus className="text-sm" />
+            <span>Add Schedule</span>
+          </Link>
+        </div>
+
         <DynamicTable
-          data={allTimeBlocks}
+          data={currentData}
           columns={columns}
           loading={isLoading}
-          pageTitle="Session Class Schedule"
           error={error ? "Failed to load schedules" : null}
           pagination={{
             total: totalEntries,
@@ -128,8 +147,6 @@ function ClassSchedule() {
             onPageSizeChange: setPageSize,
             pageSizeOptions: [5, 10, 20, 50],
           }}
-          onAdd={() => {}}
-          addButtonLabel="Add Schedule"
         />
       </div>
     </div>

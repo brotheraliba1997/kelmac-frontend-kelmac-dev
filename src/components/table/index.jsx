@@ -11,7 +11,7 @@ function Table({
   title,
   columns,
   dataSource,
-
+ 
   isLoading,
   totalPages,
   totalEntries,
@@ -36,79 +36,121 @@ function Table({
   };
 
   return (
-    <div className="w-full p-4">
-      <div className="max-w-[1200px] mx-auto">
-        {/* Card Header */}
-
-        {/* Card Body */}
-        <div className="p-4 min-h-[200px] relative">
-          {/* Table Head / Page Size Selector */}
-          <TableHead
-            pageSize={pageSize}
-            setPageSize={setPageSize}
-            setPage={setPage}
-          />
-
-          {/* Loading & Empty States */}
-          {isLoading &&
-          dataSource &&
-          Array.isArray(dataSource) &&
-          dataSource.length === 0 ? (
-            <div className="flex items-center justify-center h-48">
-              <DotsLoader dark size={40} />
-            </div>
-          ) : dataSource &&
-            Array.isArray(dataSource) &&
-            dataSource.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-48 text-gray-500">
-              <p>Data not found</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto my-3 relative">
-              {/* Table loader overlay */}
-              {isLoading && (
-                <div className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-10">
-                  <DotsLoader dark size={40} />
+    <div className="row">
+      <div className="col-md-12 col-sm-12">
+        <div className="card">
+          {title && (
+            <div className="card-header">
+              <div className="row">
+                <div className="col">
+                  <h5 className="card-title">{title}</h5>
                 </div>
-              )}
-
-              <table className="min-w-full border border-gray-200 divide-y divide-gray-200">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">
-                      S.No
-                    </th>
-                    {columns &&
-                      Array.isArray(columns) &&
-                      columns.map((x, i) => (
-                        <th
-                          key={i}
-                          className="px-4 py-2 text-left text-sm font-medium text-gray-700"
-                        >
-                          {x.displayName}
-                        </th>
-                      ))}
-                  </tr>
-                </thead>
-
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {dataSource &&
+              </div>
+            </div>
+          )}
+          <div className="card-body h-100">
+            {" "}
+            <TableHead
+              pageSize={pageSize}
+              setPageSize={setPageSize}
+              setPage={setPage}
+            />
+            {/* <h2>{title}</h2> */}
+            {isLoading &&
+            dataSource &&
+            Array.isArray(dataSource) &&
+            dataSource?.length == 0 ? (
+              <DotsLoader dark size={40} />
+            ) : // <div className=" mx-auto d-flex align-items-center justify-content-center">
+            //   <img
+            //     width="40%"
+            //     className="mx-auto"
+            //     src="https://hackernoon.com/images/0*4Gzjgh9Y7Gu8KEtZ.gif"
+            //     alt="Loading..."
+            //   />
+            // </div>
+            dataSource &&
+              Array.isArray(dataSource) &&
+              dataSource?.length == 0 ? (
+              <div className="d-flex flex-column align-items-center justify-content-center w-100">
+                {/* <img
+              src={DataNotFound}
+              width="200"
+              className="mx-auto"
+              alt="No Data Found :("
+            /> */}
+                <p>Data not found</p>
+              </div>
+            ) : (
+              <div className="table-responsive my-3 position-relative">
+                {isLoading && (
+                  <div className="table-loader-bg">
+                    <DotsLoader dark size={40} />
+                  </div>
+                )}
+                <div
+                  id="dataTableBuilder_processing"
+                  className="dataTables_processing"
+                  style={{ display: "none" }}
+                >
+                  Processing...
+                </div>
+                <table
+                  className="table table-stripped table-hover"
+                  id="dataTableBuilder"
+                  role="grid"
+                  aria-describedby="dataTableBuilder_info"
+                  // style={{ width: 1171 }}
+                >
+                  <thead className="thead-light">
+                    <tr role="row">
+                      <th
+                        title="No"
+                        width={60}
+                        // className="sorting"
+                        rowSpan={1}
+                        colSpan={1}
+                        // style={{ width: 60 }}
+                        aria-label="No"
+                      >
+                        {" "}
+                        S.No
+                      </th>
+                      {columns && Array.isArray(columns) && columns.length > 0
+                        ? columns.map((x, i) => (
+                            <th
+                              title="No"
+                              // width={60}
+                              // className="sorting"
+                              rowSpan={1}
+                              colSpan={1}
+                              // style={{ width: 60 }}
+                              aria-label="No"
+                              key={i}
+                            >
+                              {x.displayName}
+                            </th>
+                          ))
+                        : null}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataSource &&
                     Array.isArray(dataSource) &&
-                    dataSource.length > 0 &&
-                    dataSource.map((rowData, i) => (
-                      <TableRow
-                        srNo={indexOfFirstItem + i + 1}
-                        key={i}
-                        index={i}
-                        rowData={rowData}
-                        columns={columns}
-                      />
-                    ))}
-                </tbody>
-              </table>
+                    dataSource.length > 0
+                      ? dataSource.map((rowData, i) => (
+                          <TableRow
+                            srNo={indexOfFirstItem + i + 1}
+                            key={i}
+                            index={i}
+                            rowData={rowData}
+                            columns={columns}
+                          />
+                        ))
+                      : null}
+                  </tbody>
+                </table>
 
-              {/* Pagination */}
-              <div className="mt-4">
                 <TablePagination
                   page={page}
                   pageSize={pageSize}
@@ -118,8 +160,8 @@ function Table({
                   totalEntries={totalEntries}
                 />
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -32,11 +32,7 @@ const dummyCourse: Course = {
   couponDiscount: 50,
 };
 
-export default function BasicInfo({
-  course = dummyCourse,
-}: {
-  course?: Course;
-}) {
+export default function BasicInfo(course:any) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSession, setSelectedSession] = useState(course.date);
