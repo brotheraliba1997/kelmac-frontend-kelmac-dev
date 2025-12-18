@@ -1,18 +1,47 @@
-'use client';
+"use client";
 import Button from "@/components/ui/button/Button";
-import React from 'react';
-import { corporateAuditingFields } from '@/data/auditingform';
-import { IconChevronDown, IconX, IconArrowRight } from '@tabler/icons-react';
+import React from "react";
+import { corporateAuditingFields } from "@/data/auditingform";
+import { IconChevronDown, IconX, IconArrowRight } from "@tabler/icons-react";
+import { EnquiryPayload } from "@/store/api/enquiriesApi";
 
 interface Props {
+  formData: Partial<EnquiryPayload>;
+  updateFormData: (data: Partial<EnquiryPayload>) => void;
   onBack: () => void;
   onNext: () => void;
 }
 
-const CorporateAuditingModal: React.FC<Props> = ({ onBack, onNext }) => {
+const CorporateAuditingModal: React.FC<Props> = ({
+  formData,
+  updateFormData,
+  onBack,
+  onNext,
+}) => {
   const mid = Math.ceil(corporateAuditingFields.length / 2);
   const leftFields = corporateAuditingFields.slice(0, mid);
   const rightFields = corporateAuditingFields.slice(mid);
+
+  // Map field labels to formData keys
+  const fieldKeyMap: Record<string, string> = {
+    "Please select a Scheme": "scheme",
+    "Please select Organization Type": "organizationType",
+    Language: "language",
+    "Certifications held (if any)": "certificationsHeld",
+    Delivery: "delivery",
+    "Please select an Industry": "industry",
+    "Number of Locations/Suppliers": "numberOfLocations",
+    "Hours of Operation": "hoursOfOperation",
+    "Certified Scope": "certifiedScope",
+    "Auditing delivery": "auditingDelivery",
+  };
+
+  const handleSelectChange = (label: string, value: string) => {
+    const key = fieldKeyMap[label];
+    if (key) {
+      updateFormData({ [key]: value });
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
@@ -31,19 +60,29 @@ const CorporateAuditingModal: React.FC<Props> = ({ onBack, onNext }) => {
 
         <div className="p-6 bg-white">
           <p className="text-gray-600 mb-8">
-            Our auditing services ensure that organizations maintain financial integrity,
-            compliance, and operational efficiency. We help identify risks, streamline processes,
-            and provide actionable insights to strengthen governance and accountability.
+            Our auditing services ensure that organizations maintain financial
+            integrity, compliance, and operational efficiency. We help identify
+            risks, streamline processes, and provide actionable insights to
+            strengthen governance and accountability.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               {leftFields.map((field, index) => (
                 <div key={index} className="mb-4 relative">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">{field.label}</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    {field.label}
+                  </label>
                   <select
                     className="w-full p-2 text-sm rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#6488E6] text-gray-600 appearance-none pr-8 border border-gray-300"
-                    defaultValue=""
+                    value={
+                      formData[
+                        fieldKeyMap[field.label] as keyof EnquiryPayload
+                      ] || ""
+                    }
+                    onChange={(e) =>
+                      handleSelectChange(field.label, e.target.value)
+                    }
                   >
                     <option value="" disabled hidden>
                       Select from the list
@@ -66,10 +105,19 @@ const CorporateAuditingModal: React.FC<Props> = ({ onBack, onNext }) => {
             <div>
               {rightFields.map((field, index) => (
                 <div key={index} className="mb-4 relative">
-                  <label className="block text-sm font-bold text-gray-700 mb-2">{field.label}</label>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    {field.label}
+                  </label>
                   <select
                     className="w-full p-2 text-sm rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#6488E6] text-gray-600 appearance-none pr-8 border border-gray-300"
-                    defaultValue=""
+                    value={
+                      formData[
+                        fieldKeyMap[field.label] as keyof EnquiryPayload
+                      ] || ""
+                    }
+                    onChange={(e) =>
+                      handleSelectChange(field.label, e.target.value)
+                    }
                   >
                     <option value="" disabled hidden>
                       Select from the list

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState } from "react";
 import HoverImageCard from "../HoverImageCard/HoverImageCard";
@@ -10,6 +10,7 @@ import CorporateTraining from "@/app/modal/training/form1";
 import CorporateTrainingModal from "@/app/modal/training/form2";
 import ScheduleMeeting from "@/app/modal/auditing/ScheduleMeeting";
 import { IconX } from "@tabler/icons-react";
+import { EnquiryPayload } from "@/store/api/enquiriesApi";
 
 interface CorporateModalProps {
   onClose: () => void;
@@ -18,7 +19,18 @@ interface CorporateModalProps {
 export default function CorporateModal({ onClose }: CorporateModalProps) {
   const [currentService, setCurrentService] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [showScheduleMeeting, setShowScheduleMeeting] = useState<boolean>(false);
+  const [showScheduleMeeting, setShowScheduleMeeting] =
+    useState<boolean>(false);
+
+  // Centralized form data state
+  const [formData, setFormData] = useState<Partial<EnquiryPayload>>({
+    enquiryType: currentService?.toLowerCase() as
+      | "auditing"
+      | "consulting"
+      | "training"
+      | undefined,
+  });
+  console.log("Current Form Data:", formData);
 
   const services = [
     { title: "Auditing", image: "/images/auditingform.png" },
@@ -30,19 +42,33 @@ export default function CorporateModal({ onClose }: CorporateModalProps) {
     setCurrentService(service);
     setCurrentStep(1);
     setShowScheduleMeeting(false);
+    // Set enquiry type based on service
+    setFormData((prev) => ({
+      ...prev,
+      enquiryType: service.toLowerCase() as
+        | "auditing"
+        | "consulting"
+        | "training",
+    }));
   };
 
   const handleBackToServices = () => {
     setCurrentService(null);
     setCurrentStep(1);
     setShowScheduleMeeting(false);
+    setFormData({ enquiryType: undefined });
   };
 
   const handleCloseAll = () => {
     setCurrentService(null);
     setCurrentStep(1);
     setShowScheduleMeeting(false);
+    setFormData({ enquiryType: undefined });
     onClose();
+  };
+
+  const updateFormData = (data: Partial<EnquiryPayload>) => {
+    setFormData((prev) => ({ ...prev, ...data }));
   };
 
   return (
@@ -80,12 +106,16 @@ export default function CorporateModal({ onClose }: CorporateModalProps) {
         <>
           {currentStep === 1 && (
             <CorporateAuditing
+              formData={formData}
+              updateFormData={updateFormData}
               onNext={() => setCurrentStep(2)}
               onClose={handleBackToServices}
             />
           )}
           {currentStep === 2 && (
             <CorporateAuditingModal
+              formData={formData}
+              updateFormData={updateFormData}
               onBack={() => setCurrentStep(1)}
               onNext={() => setShowScheduleMeeting(true)}
             />
@@ -97,12 +127,16 @@ export default function CorporateModal({ onClose }: CorporateModalProps) {
         <>
           {currentStep === 1 && (
             <CorporateConsulting
+              formData={formData}
+              updateFormData={updateFormData}
               onNext={() => setCurrentStep(2)}
               onClose={handleBackToServices}
             />
           )}
           {currentStep === 2 && (
             <CorporateConsultingModal
+              formData={formData}
+              updateFormData={updateFormData}
               onBack={() => setCurrentStep(1)}
               onNext={() => setShowScheduleMeeting(true)}
             />
@@ -114,12 +148,16 @@ export default function CorporateModal({ onClose }: CorporateModalProps) {
         <>
           {currentStep === 1 && (
             <CorporateTraining
+              formData={formData}
+              updateFormData={updateFormData}
               onNext={() => setCurrentStep(2)}
               onClose={handleBackToServices}
             />
           )}
           {currentStep === 2 && (
             <CorporateTrainingModal
+              formData={formData}
+              updateFormData={updateFormData}
               onBack={() => setCurrentStep(1)}
               onNext={() => setShowScheduleMeeting(true)}
             />
@@ -128,7 +166,7 @@ export default function CorporateModal({ onClose }: CorporateModalProps) {
       )}
 
       {showScheduleMeeting && (
-        <ScheduleMeeting onClose={handleCloseAll} />
+        <ScheduleMeeting formData={formData} onClose={handleCloseAll} />
       )}
     </>
   );

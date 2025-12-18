@@ -7,6 +7,7 @@ import { authAPI } from "./api/authApi";
 import auth from "./slices/auth";
 import { stripeApi } from "./api/stripeApi";
 import { classScheduleApi } from "./api/classScheduleApi";
+import { enquiriesApi } from "./api/enquiriesApi";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     [authAPI.reducerPath]: authAPI.reducer,
     [stripeApi.reducerPath]: stripeApi.reducer,
     [classScheduleApi.reducerPath]: classScheduleApi.reducer,
+    [enquiriesApi.reducerPath]: enquiriesApi.reducer,
   },
 
   middleware: (getDefaultMiddleware) =>
@@ -24,7 +26,8 @@ export const store = configureStore({
       .concat(userAPI.middleware)
       .concat(authAPI.middleware)
       .concat(stripeApi.middleware)
-      .concat(classScheduleApi.middleware),
+      .concat(classScheduleApi.middleware)
+      .concat(enquiriesApi.middleware),
 });
 
 setupListeners(store.dispatch);

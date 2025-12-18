@@ -1,15 +1,39 @@
-'use client';
+"use client";
 import Button from "@/components/ui/button/Button";
-import React from 'react';
-import { corporateTrainingFields } from '@/data/trainingform';
-import { IconChevronDown, IconX, IconArrowRight } from '@tabler/icons-react';
+import React from "react";
+import { corporateTrainingFields } from "@/data/trainingform";
+import { IconChevronDown, IconX, IconArrowRight } from "@tabler/icons-react";
+import { EnquiryPayload } from "@/store/api/enquiriesApi";
 
 interface Props {
+  formData: Partial<EnquiryPayload>;
+  updateFormData: (data: Partial<EnquiryPayload>) => void;
   onBack: () => void;
   onNext: () => void;
 }
 
-const CorporateTrainingModal: React.FC<Props> = ({ onBack, onNext }) => {
+const CorporateTrainingModal: React.FC<Props> = ({
+  formData,
+  updateFormData,
+  onBack,
+  onNext,
+}) => {
+  // Map field labels to formData keys
+  const fieldKeyMap: Record<string, string> = {
+    "Please select a Scheme": "scheme",
+    "Please select a Training Category": "trainingCategory",
+    "Please select a Training Type": "trainingType",
+    "Please select Training delivery": "trainingDelivery",
+    "Number of Learners": "numberOfLearners",
+    "Preferred Learning Event Date": "preferredLearningDate",
+  };
+
+  const handleFieldChange = (label: string, value: string | number) => {
+    const key = fieldKeyMap[label];
+    if (key) {
+      updateFormData({ [key]: value });
+    }
+  };
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full mx-4 overflow-hidden">
@@ -27,10 +51,11 @@ const CorporateTrainingModal: React.FC<Props> = ({ onBack, onNext }) => {
 
         <div className="p-6 bg-white">
           <p className="text-gray-600 mb-8">
-            We deliver tailored corporate training programs designed to upskill your workforce and 
-            drive organizational excellence. From leadership development and technical skills to 
-            compliance and soft skills training, our expert-led sessions combine practical knowledge 
-            with real-world application.
+            We deliver tailored corporate training programs designed to upskill
+            your workforce and drive organizational excellence. From leadership
+            development and technical skills to compliance and soft skills
+            training, our expert-led sessions combine practical knowledge with
+            real-world application.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -39,17 +64,28 @@ const CorporateTrainingModal: React.FC<Props> = ({ onBack, onNext }) => {
                 <label className="block text-sm font-bold text-gray-700 mb-2">
                   {field.label}
                 </label>
-                {field.type === 'select' ? (
+                {field.type === "select" ? (
                   <>
                     <select
                       className="w-full p-3 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#6488E6] text-gray-500 appearance-none pr-10 border border-gray-300"
-                      defaultValue=""
+                      value={
+                        formData[
+                          fieldKeyMap[field.label] as keyof EnquiryPayload
+                        ] || ""
+                      }
+                      onChange={(e) =>
+                        handleFieldChange(field.label, e.target.value)
+                      }
                     >
                       <option value="" disabled hidden>
                         Select from the list
                       </option>
                       {field.options?.map((option, i) => (
-                        <option key={i} value={option} className="text-gray-700">
+                        <option
+                          key={i}
+                          value={option}
+                          className="text-gray-700"
+                        >
                           {option}
                         </option>
                       ))}
@@ -60,24 +96,46 @@ const CorporateTrainingModal: React.FC<Props> = ({ onBack, onNext }) => {
                       className="absolute right-3 top-11 text-[#6488E6] pointer-events-none"
                     />
                   </>
-                ) : field.type === 'number' ? (
+                ) : field.type === "number" ? (
                   <input
                     type="number"
                     className="w-full p-3 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#6488E6] text-gray-700 border border-gray-300"
-                    defaultValue={field.defaultValue}
+                    value={
+                      formData[
+                        fieldKeyMap[field.label] as keyof EnquiryPayload
+                      ] || ""
+                    }
+                    onChange={(e) =>
+                      handleFieldChange(field.label, parseInt(e.target.value))
+                    }
                     min="1"
                     placeholder={field.placeholder}
                   />
-                ) : field.type === 'date' ? (
+                ) : field.type === "date" ? (
                   <input
                     type="date"
                     className="w-full p-3 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#6488E6] text-gray-700 border border-gray-300"
-                    defaultValue={field.defaultValue as string}
+                    value={
+                      (formData[
+                        fieldKeyMap[field.label] as keyof EnquiryPayload
+                      ] as string) || undefined
+                    }
+                    onChange={(e) =>
+                      handleFieldChange(field.label, e.target.value)
+                    }
                   />
                 ) : (
                   <input
                     type="text"
                     className="w-full p-3 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#6488E6] text-gray-700 border border-gray-300"
+                    value={
+                      formData[
+                        fieldKeyMap[field.label] as keyof EnquiryPayload
+                      ] || ""
+                    }
+                    onChange={(e) =>
+                      handleFieldChange(field.label, e.target.value)
+                    }
                     placeholder={field.placeholder}
                   />
                 )}

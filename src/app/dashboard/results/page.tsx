@@ -14,7 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
-import Table from "@/components/table/index";
+import DynamicTable from "@/components/table/DynamicTable";
 import { Course } from "@/types/course";
 
 interface StudentInfo {
@@ -337,15 +337,18 @@ export default function ResultsPage() {
 
   const columns = [
     {
-      displayName: "Course title",
-      displayField: (e: ResultData) => (
+      key: "courseId.title",
+      label: "Course Title",
+      sortable: true,
+      render: (e: ResultData) => (
         <div className="font-medium text-gray-900">{e.courseId.title}</div>
       ),
-      searchable: true,
     },
     {
-      displayName: "Student",
-      displayField: (e: ResultData) => (
+      key: "studentId.firstName",
+      label: "Student",
+      sortable: true,
+      render: (e: ResultData) => (
         <div className="flex items-center gap-2">
           <User className="w-4 h-4 text-gray-400" />
           <span className="text-gray-700">
@@ -353,11 +356,12 @@ export default function ResultsPage() {
           </span>
         </div>
       ),
-      searchable: true,
     },
     {
-      displayName: "Status",
-      displayField: (e: ResultData) => {
+      key: "status",
+      label: "Status",
+      sortable: true,
+      render: (e: ResultData) => {
         const statusStyles = {
           PASS: "bg-green-100 text-green-700 border-green-200",
           FAIL: "bg-red-100 text-red-700 border-red-200",
@@ -374,11 +378,12 @@ export default function ResultsPage() {
           </span>
         );
       },
-      searchable: true,
     },
     {
-      displayName: "Attendance",
-      displayField: (e: ResultData) => (
+      key: "attendancePercentage",
+      label: "Attendance",
+      sortable: true,
+      render: (e: ResultData) => (
         <div className="flex items-center gap-2">
           <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-[100px]">
             <div
@@ -397,20 +402,22 @@ export default function ResultsPage() {
           </span>
         </div>
       ),
-      searchable: false,
     },
     {
-      displayName: "Present/Total",
-      displayField: (e: ResultData) => (
+      key: "presentCount",
+      label: "Present/Total",
+      sortable: true,
+      render: (e: ResultData) => (
         <span className="text-sm text-gray-700">
           {e.presentCount}/{e.totalClasses}
         </span>
       ),
-      searchable: false,
     },
     {
-      displayName: "Certificate",
-      displayField: (e: ResultData) => (
+      key: "certificateIssued",
+      label: "Certificate",
+      sortable: true,
+      render: (e: ResultData) => (
         <div>
           {e.certificateIssued ? (
             <span className="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
@@ -422,11 +429,11 @@ export default function ResultsPage() {
           )}
         </div>
       ),
-      searchable: false,
     },
     {
-      displayName: "Actions",
-      displayField: (e: ResultData) => (
+      key: "actions",
+      label: "Actions",
+      render: (e: ResultData) => (
         <button
           onClick={() => handleViewResult(e)}
           className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
@@ -435,7 +442,6 @@ export default function ResultsPage() {
           View Details
         </button>
       ),
-      searchable: false,
     },
   ];
 
@@ -457,17 +463,23 @@ export default function ResultsPage() {
           </div>
 
           <div className="bg-white rounded-md shadow-md overflow-hidden">
-            <Table
-              title="Course Results"
+            <DynamicTable
+              data={results}
               columns={columns}
-              dataSource={results.length > 0 ? results : []}
-              isLoading={isLoading}
-              totalPages={totalPages}
-              totalEntries={totalEntries}
-              page={page}
-              setPage={setPage}
-              pageSize={pageSize}
-              setPageSize={setPageSize}
+              loading={isLoading}
+              pageTitle="Course Results"
+              error={null}
+              pagination={{
+                total: totalEntries,
+                currentPage: page,
+                totalPages: totalPages,
+                pageSize: pageSize,
+                onPageChange: setPage,
+                onPageSizeChange: setPageSize,
+                pageSizeOptions: [5, 10, 20, 50],
+              }}
+              onAdd={() => {}}
+              addButtonLabel="Add Result"
             />
           </div>
         </div>
